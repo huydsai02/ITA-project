@@ -75,11 +75,7 @@ def FindPath(maze):
 
 if __name__ == '__main__':
     b = CreateMaze()
-    a = np.array(b[0].matrix)
-    print(a)
-    print(b[1:])
-    c = (b[0].matrix, b[1], b[2], b[3], b[4])
-    print(FindPath(c))
+    print(FindPath(b))
 
     # maze = CreateMaze()
     # print(IsLogical(maze, 'L'))
