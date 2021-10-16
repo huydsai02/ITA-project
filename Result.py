@@ -6,11 +6,13 @@ from p import *
 
 # Gọi mê cung và thông tin mê cung
 maze = CreateMaze()
-xs, ys = maze.get_start_point()
-xf, yf = maze.get_end_point()
+xs, ys = maze.start_point
+xf, yf = maze.end_point
 road = maze.path
 list_maze = maze.get_list_maze()
 n = maze.n
+Solution = FindPath(maze)
+
 
 # Màu
 color = (0,0,0)
@@ -18,7 +20,6 @@ color1 = (255,9,9)
 color_start = (100,100,100)
 color_end = (255,0,0)
 
-print(FindPath(maze))
 
 # Thông số cửa sổ
 pygame.init()
@@ -36,12 +37,25 @@ while True:
   for i in range(n):
     for j in range(n):
       if list_maze[i][j] == 1:
-        pygame.draw.rect(DISPLAYSURF, color, (j * square, i * square, square, square))
-      if (i,j) in road:
-        pygame.draw.rect(DISPLAYSURF, (255,255,0), (j * square, i * square, square, square/10))
+        pygame.draw.rect(DISPLAYSURF, color, (i * square, j * square, square, square))
+  pygame.draw.rect(DISPLAYSURF, color_start, (xs * square, ys * square, square, square))
+  pygame.draw.rect(DISPLAYSURF, color_end, (xf * square, yf * square, square, square))
+  for i in [Solution[0]]:
+    lst = [(xs, ys)]
+    xt, yt = xs, ys
+    for j in i:
+      if j == 'U':
+        yt-=1
+      elif j == 'D':
+        yt+=1
+      elif j == 'R':
+        xt+=1
+      elif j == 'L':
+        xt-=1
+      lst.append((xt, yt))
+    for (x, y) in lst:
+      pygame.draw.circle(DISPLAYSURF, (0, 0, 255), (x*square + square/2, y*square + square/2), square/4, square//4)
 
-  pygame.draw.rect(DISPLAYSURF, color_start, (ys * square, xs * square, square, square))
-  pygame.draw.rect(DISPLAYSURF, color_end, (yf * square, xf * square, square, square))
   
   for event in pygame.event.get():
       if event.type == QUIT:
