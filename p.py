@@ -44,7 +44,7 @@ def FindPath(maze):
                 if IsDone(maze, npath):
                     if 'DU' not in npath and 'UD' not in npath and 'RL' not in npath and 'LR' not in npath:
                         solutions.append(npath)
-                        print(npath)
+                        
         step += 1
         if step > 25:
             return solutions
