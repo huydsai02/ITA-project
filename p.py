@@ -1,11 +1,12 @@
 import numpy as np
+import math
 from CreateMatrix import *
 
 def CreateMaze(): #return [maze, xs, ys, xf,yf]
     matrix = Maze()
     maze = matrix.CreateMaze()
     n = matrix.n
-    return (matrix, 0, 0, n-1, n-1)
+    return (maze, 0, 0, n-1, n-1)
     
 def IsLogical(maze, path):
     xs, ys = maze[1], maze[2]
@@ -27,35 +28,55 @@ def IsDone(maze, solution):
         return True
     return False
 
+def IsNotLoop(maze, path):
+    lst = [0]
+    c = 0
+    for i in path:
+        if i == 'L':
+            c+=1
+        elif i == 'R':
+            c-=1
+        elif i == 'D':
+            c+=math.pi
+        elif i == 'U':
+            c-=math.pi
+        if c in lst:
+            return False
+        else:
+            lst.append(c)
+    return True        
+
 def FindPath(maze):
     paths = ['']
     choices = ['L', 'R', 'U', 'D']
     solutions = []
     step = 0
+    num0 = sum(i.count(0) for i in maze[0])
     while True:
         temp = paths[:]
         paths = []
         for path in temp:
             for choice in choices:
                 npath = path + choice
-                if IsLogical(maze, npath):
-                    if 'DU' not in npath and 'UD' not in npath and 'RL' not in npath and 'LR' not in npath:#######
+                if IsLogical(maze, npath) and IsNotLoop(maze, path):
+                    if 'DU' not in npath and 'UD' not in npath and 'RL' not in npath and 'LR' not in npath:#or get some point
                         paths.append(npath)
-                if IsDone(maze, npath):
-                    if 'DU' not in npath and 'UD' not in npath and 'RL' not in npath and 'LR' not in npath:
-                        solutions.append(npath)
-                        
+                        if IsDone(maze, npath):
+                            solutions.append(npath)
+                            print(npath)
         step += 1
-        if step > 25:
+        if step > 2*num0:
             return solutions
     return 'not solvable'
 
 
 
-
 if __name__ == '__main__':
     b = CreateMaze()
-    a = np.array(b[0].matrix)
+    a = np.array(b[0])
     print(a)
     print(b[1:])
     print(FindPath(b))
+
+    # maze = CreateMaze()
+    # print(IsLogical(maze, 'L'))
