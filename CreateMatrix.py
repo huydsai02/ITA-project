@@ -13,7 +13,7 @@ class Maze(object):
     list_coordinate = []
     
     # a càng lớn thì càng nhiều gạch và ngược lại (0 < a < 1)
-    a = 3/5
+    a = 2/5
     self.brick = int(((self.n)**2) * a)
     self.randomlist = random.sample(range(1, (self.n)**2 - 1) , self.brick)
     for _ in self.randomlist:
