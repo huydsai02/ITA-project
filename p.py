@@ -38,7 +38,8 @@ def FindPath(maze):
             for choice in choices:
                 npath = path + choice
                 if IsLogical(maze, npath):
-                    paths.append(npath)
+                    if 'DU' not in npath and 'UD' not in npath and 'RL' not in npath and 'LR' not in npath:                    
+                        paths.append(npath)
                 if IsDone(maze, npath):
                     if 'DU' not in npath and 'UD' not in npath and 'RL' not in npath and 'LR' not in npath:
                         solutions.append(npath)
