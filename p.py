@@ -6,7 +6,7 @@ def CreateMaze(): #return [maze, xs, ys, xf,yf]
     matrix = Maze()
     maze = matrix.CreateMaze()
     n = matrix.n
-    return (maze, 0, 0, n-1, n-1)
+    return (matrix, 0, 0, n-1, n-1)
     
 def IsLogical(maze, path):
     xs, ys = maze[1], maze[2]
@@ -73,7 +73,7 @@ def FindPath(maze):
 
 if __name__ == '__main__':
     b = CreateMaze()
-    a = np.array(b[0])
+    a = np.array(b[0].matrix)
     print(a)
     print(b[1:])
     print(FindPath(b))
