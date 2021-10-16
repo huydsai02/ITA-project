@@ -10,7 +10,7 @@ def CreateMaze(): #return [maze, xs, ys, xf,yf]
     
 def IsLogical(maze, path):
     xs, ys = maze.get_start_point()
-    list_maze = maze.matrix
+    list_maze = maze.get_list_maze()
     x = path.count('R') - path.count('L') + xs
     y = path.count('D') - path.count('U') + ys
     if x < 0 or x >= len(list_maze[0]):
@@ -53,7 +53,7 @@ def FindPath(maze):
     choices = ['L', 'R', 'U', 'D']
     solutions = []
     step = 0
-    num0 = sum(i.count(0) for i in maze.matrix)
+    num0 = sum(i.count(0) for i in maze.get_list_maze())
     while True:
         temp = paths[:]
         paths = []

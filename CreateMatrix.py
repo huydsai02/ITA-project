@@ -14,6 +14,9 @@ class Maze(object):
   
   def get_end_point(self):
     return self.end_point
+
+  def get_list_maze(self):
+    return self.matrix
   
   def RandomBrick(self):
     # Tạo ra các bức tường ngẫu nhiên

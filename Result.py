@@ -9,7 +9,7 @@ maze = CreateMaze()
 xs, ys = maze.start_point
 xf, yf = maze.end_point
 road = maze.path
-list_maze = maze.matrix
+list_maze = maze.get_list_maze()
 n = maze.n
 
 # Màu
