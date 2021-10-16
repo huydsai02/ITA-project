@@ -1,3 +1,4 @@
+import numpy as np
 from CreateMatrix import *
 
 def CreateMaze(): #return [maze, xs, ys, xf,yf]
@@ -38,20 +39,23 @@ def FindPath(maze):
             for choice in choices:
                 npath = path + choice
                 if IsLogical(maze, npath):
-                    if 'DU' not in npath and 'UD' not in npath and 'RL' not in npath and 'LR' not in npath:                    
+                    if 'DU' not in npath and 'UD' not in npath and 'RL' not in npath and 'LR' not in npath:
                         paths.append(npath)
                 if IsDone(maze, npath):
                     if 'DU' not in npath and 'UD' not in npath and 'RL' not in npath and 'LR' not in npath:
                         solutions.append(npath)
+                        print(npath)
         step += 1
-        if step > 100:
+        if step > 25:
             return solutions
     return 'not solvable'
 
 
 
-if __name__ == '__main__':
-    print(FindPath(CreateMaze()))
 
-    # maze = CreateMaze()
-    # print(IsLogical(maze, 'L'))
+if __name__ == '__main__':
+    b = CreateMaze()
+    a = np.array(b[0].matrix)
+    print(a)
+    print(b[1:])
+    print(FindPath(b))
