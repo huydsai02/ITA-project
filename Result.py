@@ -6,8 +6,8 @@ from p import *
 
 # Gọi mê cung và thông tin mê cung
 maze = CreateMaze()
-xs, ys = maze.start_point
-xf, yf = maze.end_point
+xs, ys = maze.get_start_point()
+xf, yf = maze.get_end_point()
 road = maze.path
 list_maze = maze.get_list_maze()
 n = maze.n
