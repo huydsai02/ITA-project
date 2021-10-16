@@ -6,6 +6,8 @@ from p import *
 
 # Gọi ma trận
 info_maze = CreateMaze()
+xs, ys = info_maze[0].start_point
+xf, yf = info_maze[0].end_point
 road = info_maze[0].path
 maze = info_maze[0].matrix
 data = (maze, info_maze[1],info_maze[2],info_maze[3],info_maze[4])
@@ -42,8 +44,8 @@ while True:
       if (i,j) in road:
         pygame.draw.rect(DISPLAYSURF, (255,255,0), (j * square, i * square, square, square/10))
 
-  pygame.draw.rect(DISPLAYSURF, color_start, (0, 0, square, square))
-  pygame.draw.rect(DISPLAYSURF, color_end, ((n-1) * square, (n-1) * square, square, square))
+  pygame.draw.rect(DISPLAYSURF, color_start, (ys * square, xs * square, square, square))
+  pygame.draw.rect(DISPLAYSURF, color_end, (yf * square, xf * square, square, square))
   
   for event in pygame.event.get():
       if event.type == QUIT:

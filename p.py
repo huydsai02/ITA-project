@@ -6,7 +6,9 @@ def CreateMaze(): #return [maze, xs, ys, xf,yf]
     matrix = Maze()
     maze = matrix.CreateMaze()
     n = matrix.n
-    return (matrix, 0, 0, n-1, n-1)
+    xs, ys = matrix.start_point
+    xf, yf = matrix.end_point
+    return (matrix, xs, ys, xf,yf)
     
 def IsLogical(maze, path):
     xs, ys = maze[1], maze[2]

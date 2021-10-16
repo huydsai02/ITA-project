@@ -7,6 +7,8 @@ class Maze(object):
     # self.n là kích thước của mê cung
     self.n = 10
     self.matrix = [[0 if (i * j) % 2 == 0 else 1 for i in range(self.n)] for j in range(self.n)]
+    self.start_point = (0, randint(0, self.n - 1))
+    self.end_point = (self.n-1, randint(0, self.n - 1))
   
   def RandomBrick(self):
     # Tạo ra các bức tường ngẫu nhiên
@@ -47,8 +49,9 @@ class Maze(object):
   def CreateRoad(self):
     n = self.n
     path = []
-    start_point = (0,0)
-    end_point = (n - 1, n - 1)
+
+    start_point = self.start_point
+    end_point = self.end_point
 
     # Tạo ra những điểm phải đi qua
     if n % 2 == 0:
