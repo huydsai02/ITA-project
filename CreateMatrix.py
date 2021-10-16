@@ -3,13 +3,16 @@ from random import randint
 
 class Maze(object):
   def __init__(self):
+    
+    # self.n là kích thước của mê cung
     self.n = 10
     self.matrix = [[0 if (i * j) % 2 == 0 else 1 for i in range(self.n)] for j in range(self.n)]
-    # print(self.n)
   
   def RandomBrick(self):
     # Tạo ra các bức tường ngẫu nhiên
     list_coordinate = []
+    
+    # a càng lớn thì càng nhiều gạch và ngược lại (0 < a < 1)
     a = 3/5
     self.brick = int(((self.n)**2) * a)
     self.randomlist = random.sample(range(1, (self.n)**2 - 1) , self.brick)
@@ -35,10 +38,11 @@ class Maze(object):
           self.matrix[i][j] = 0
           if i == n-1 and (i-1,j) not in r:
             self.matrix[i-1][j] = 1
-
-
-
+      
     return self.matrix
+
+
+
 
   def CreateRoad(self):
     n = self.n
