@@ -78,7 +78,8 @@ if __name__ == '__main__':
     a = np.array(b[0].matrix)
     print(a)
     print(b[1:])
-    print(FindPath(b))
+    c = (b[0].matrix, b[1], b[2], b[3], b[4])
+    print(FindPath(c))
 
     # maze = CreateMaze()
     # print(IsLogical(maze, 'L'))
