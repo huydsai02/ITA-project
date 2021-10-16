@@ -38,6 +38,8 @@ while True:
     for j in range(n):
       if list_maze[i][j] == 1:
         pygame.draw.rect(DISPLAYSURF, color, (i * square, j * square, square, square))
+      if (i,j) in road:
+        pygame.draw.rect(DISPLAYSURF, (255,255,0), (i * square, j * square, square, square/10))
   pygame.draw.rect(DISPLAYSURF, color_start, (xs * square, ys * square, square, square))
   pygame.draw.rect(DISPLAYSURF, color_end, (xf * square, yf * square, square, square))
   for i in [Solution[0]]:
