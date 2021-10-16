@@ -4,17 +4,13 @@ from CreateMatrix import *
 from p import *
 
 
-# Gọi ma trận
-info_maze = CreateMaze()
-xs, ys = info_maze[0].start_point
-xf, yf = info_maze[0].end_point
-road = info_maze[0].path
-maze = info_maze[0].matrix
-data = (maze, info_maze[1],info_maze[2],info_maze[3],info_maze[4])
-n = len(maze)
-
-
-
+# Gọi mê cung và thông tin mê cung
+maze = CreateMaze()
+xs, ys = maze.start_point
+xf, yf = maze.end_point
+road = maze.path
+list_maze = maze.matrix
+n = maze.n
 
 # Màu
 color = (0,0,0)
@@ -22,7 +18,7 @@ color1 = (255,9,9)
 color_start = (100,100,100)
 color_end = (255,0,0)
 
-print(FindPath(data))
+print(FindPath(maze))
 
 # Thông số cửa sổ
 pygame.init()
@@ -39,7 +35,7 @@ while True:
     pygame.draw.line(DISPLAYSURF ,color1,(i * square, 0),(i * square,SIZE))
   for i in range(n):
     for j in range(n):
-      if maze[i][j] == 1:
+      if list_maze[i][j] == 1:
         pygame.draw.rect(DISPLAYSURF, color, (j * square, i * square, square, square))
       if (i,j) in road:
         pygame.draw.rect(DISPLAYSURF, (255,255,0), (j * square, i * square, square, square/10))

@@ -3,27 +3,27 @@ import math
 from CreateMatrix import *
 
 def CreateMaze(): #return [maze, xs, ys, xf,yf]
-    matrix = Maze()
-    maze = matrix.CreateMaze()
-    n = matrix.n
-    xs, ys = matrix.start_point
-    xf, yf = matrix.end_point
-    return (matrix, xs, ys, xf,yf)
+    maze = Maze()
+    maze.CreateMaze()
+    return maze
+
     
 def IsLogical(maze, path):
-    xs, ys = maze[1], maze[2]
+    xs, ys = maze.get_start_point()
+    list_maze = maze.matrix
     x = path.count('R') - path.count('L') + xs
     y = path.count('D') - path.count('U') + ys
-    if x < 0 or x >= len(maze[0][0]):
+    if x < 0 or x >= len(list_maze[0]):
         return False
-    elif y < 0 or y>= len(maze[0]):
+    elif y < 0 or y>= len(list_maze):
         return False
-    elif maze[0][y][x] == 1:
+    elif list_maze[y][x] == 1:
         return False
     return True
 
 def IsDone(maze, solution):
-    xs, ys, xf, yf = maze[1], maze[2], maze[3], maze[4]
+    xs, ys = maze.get_start_point()
+    xf, yf = maze.get_end_point()
     x = solution.count('R') - solution.count('L') + xs
     y = solution.count('D') - solution.count('U') + ys    
     if (x, y) == (xf, yf):
@@ -53,7 +53,7 @@ def FindPath(maze):
     choices = ['L', 'R', 'U', 'D']
     solutions = []
     step = 0
-    num0 = sum(i.count(0) for i in maze[0])
+    num0 = sum(i.count(0) for i in maze.matrix)
     while True:
         temp = paths[:]
         paths = []
@@ -65,7 +65,7 @@ def FindPath(maze):
                         paths.append(npath)
                         if IsDone(maze, npath):
                             solutions.append(npath)
-                            print(npath)
+                            # print(npath)
         step += 1
         if step > 2*num0:
             return solutions
