@@ -68,13 +68,18 @@ def FindPath(maze):
                             # print(npath)
         step += 1
         if step > 2*num0:
-            return solutions
+            s = list(set(solutions))
+            return s
     return 'not solvable'
 
 
 
 if __name__ == '__main__':
     b = CreateMaze()
+    a = np.array(b.get_list_maze())
+    print(a)
+    print(b.get_start_point())
+    print(b.get_end_point())
     print(FindPath(b))
 
     # maze = CreateMaze()
