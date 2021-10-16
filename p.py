@@ -17,18 +17,9 @@ def IsLogical(maze, path):
         return False
     elif y < 0 or y>= len(list_maze):
         return False
-    elif list_maze[y][x] == 1:
+    elif list_maze[x][y] == 1:
         return False
     return True
-
-def IsDone(maze, solution):
-    xs, ys = maze.get_start_point()
-    xf, yf = maze.get_end_point()
-    x = solution.count('R') - solution.count('L') + xs
-    y = solution.count('D') - solution.count('U') + ys    
-    if (x, y) == (xf, yf):
-        return True
-    return False
 
 def IsNotLoop(maze, path):
     lst = [0]
@@ -48,6 +39,15 @@ def IsNotLoop(maze, path):
             lst.append(c)
     return True        
 
+def IsSolution(maze, solution):
+    xs, ys = maze.get_start_point()
+    xf, yf = maze.get_end_point()
+    x = solution.count('R') - solution.count('L') + xs
+    y = solution.count('D') - solution.count('U') + ys    
+    if (x, y) == (xf, yf):
+        return True
+    return False
+
 def FindPath(maze):
     paths = ['']
     choices = ['L', 'R', 'U', 'D']
@@ -62,25 +62,20 @@ def FindPath(maze):
                 npath = path + choice
                 if IsLogical(maze, npath) and IsNotLoop(maze, path):
                     if 'DU' not in npath and 'UD' not in npath and 'RL' not in npath and 'LR' not in npath:#or get some point
-                        paths.append(npath)
-                        if IsDone(maze, npath):
+                        if IsSolution(maze, npath):
                             solutions.append(npath)
-                            # print(npath)
+                        else:
+                            paths.append(npath)
         step += 1
         if step > 2*num0:
-            s = list(set(solutions))
-            return s
+            return solutions
     return 'not solvable'
 
 
 
 if __name__ == '__main__':
     b = CreateMaze()
-    a = np.array(b.get_list_maze())
+    a = np.array(b.get_list_maze()).T
     print(a)
-    print(b.get_start_point())
-    print(b.get_end_point())
+    print(b.get_start_point(), b.get_end_point())
     print(FindPath(b))
-
-    # maze = CreateMaze()
-    # print(IsLogical(maze, 'L'))
