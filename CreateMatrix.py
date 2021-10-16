@@ -5,7 +5,7 @@ class Maze(object):
   def __init__(self):
     # self.n là kích thước của mê cung
     self.n = 10
-    self.matrix = [[0 if (i * j) % 2 == 0 else 1 for i in range(self.n)] for j in range(self.n)]
+    self.matrix = [[0 for i in range(self.n)] for j in range(self.n)]
     self.start_point = (randint(0, self.n - 1), randint(0, self.n - 1))
     self.end_point = (randint(0, self.n - 1), randint(0, self.n - 1))
 
