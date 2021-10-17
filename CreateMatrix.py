@@ -27,6 +27,14 @@ class Maze(object):
   def get_end_point(self):
     return self.end_point
 
+  def set_start_point(self,coor):
+    self.start_point = coor
+    return self.get_start_point()
+
+  def set_end_point(self, coor):
+    self.end_point = coor
+    return self.get_end_point()
+
   def get_list_maze(self):
     return self.matrix
 
@@ -91,3 +99,22 @@ class Maze(object):
         if m[i][j] == 0:
           self.list_point[i][j] = randint(20,40)
     return self.list_point
+
+  def test(self, status = True):
+    if status:
+      size = self.get_size()
+      self.matrix = [[1 if (i*j) % 2 != 0 else 0 for i in range(size)] for j in range(size)]
+      s = [1,1]
+      while (s[0] * s[1]) % 2 == 1:
+        s[0] = randint(0, size-1)
+        s[1] = randint(0, size-1)
+
+      e = [1,1]
+      while (e[0] * e[1]) % 2 == 1 and s != e:
+        e[0] = randint(0, size-1)
+        e[1] = randint(0, size-1)
+
+      self.set_start_point(tuple(s))
+      self.set_end_point(tuple(e))
+      self.Set_start_end_in_matrix()
+      self.Create_list_point()
