@@ -12,7 +12,6 @@ road = maze.path
 list_maze = maze.get_list_maze()
 n = maze.n
 Solution = FindPath(maze)
-print(Solution)
 
 print(Solution)
 
