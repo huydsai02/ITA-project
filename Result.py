@@ -23,6 +23,7 @@ color = (255,255,190)
 color1 = (255,9,9)
 color_start = (100,100,100)
 color_end = (255,0,0)
+BACKGROUND_COLOR = (255, 255, 255)
 
 # Thông số cửa sổ
 pygame.init()
@@ -40,7 +41,11 @@ brick = pygame.transform.scale(img, (square - 2*decrease, square - 2*decrease))
 font = pygame.font.Font('freesansbold.ttf', 10)
 def write_score(maze, x, y):
   info = maze.get_list_point()[x][y]
-  text = font.render(str(info), True, (255,0,0))
+  if info != 0:
+    s = str(info)
+  else:
+    s = ""
+  text = font.render(s, True, (255,0,0))
   return text
 
 def ShowInfo(Info, size=30):
@@ -49,7 +54,7 @@ def ShowInfo(Info, size=30):
   return text
 
 while True:
-  DISPLAYSURF.fill((255, 255, 255))
+  DISPLAYSURF.fill(BACKGROUND_COLOR)
   for i in range(n):
     for j in range(n):
       if list_maze[i][j] == 1:
