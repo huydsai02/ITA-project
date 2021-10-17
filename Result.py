@@ -4,8 +4,12 @@ from CreateMatrix import *
 from p import *
 
 
-# Gọi mê cung và thông tin mê cung
+# Gọi mê cung. Nếu muốn thay đổi size và số lượng gạch thì thêm 2 đối số nữa vào. 
+# vị trí 1: size, vị trí 2: phân số (0<x<1)
+# VD: maze = CreateMaze(20,4/5)
 maze = CreateMaze()
+
+# Thông tin mê cung
 xs, ys = maze.get_start_point()
 xf, yf = maze.get_end_point()
 road = maze.path
