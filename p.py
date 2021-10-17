@@ -89,6 +89,7 @@ def FindCoordinatePath(maze, solutions):
 
 def Optimal_result(maze, paths):
     highest_score = 0
+    optimal_path = []
     for path in paths:
         score = 0
         for coor in path:
