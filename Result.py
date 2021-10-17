@@ -32,7 +32,7 @@ DISPLAYSURF = pygame.display.set_mode((SIZE, SIZE + square))
 pygame.display.set_caption('Hello world!')
 
 #Upload image
-img = pygame.image.load("./img/brick.png")# replace by ur path
+img = pygame.image.load("/Users/phong/Documents/pog/ITAproject/brick.png")
 decrease = 1
 brick = pygame.transform.scale(img, (square - 2*decrease, square - 2*decrease))
 
@@ -69,30 +69,6 @@ while True:
     pygame.draw.circle(DISPLAYSURF, (0, 0, 255), (x*square + square/2, y*square + square/2), square/4, square//4)
   DISPLAYSURF.blit(ShowInfo(f'The highest score is {int(highest_score)} with {len_of_best} steps and {int(point_of_best)} points', size=15), (square/2, SIZE))
 
-  for event in pygame.event.get():
-      if event.type == QUIT:
-          pygame.quit()
-          sys.exit()
-  pygame.display.update()
-
-while True:
-  DISPLAYSURF.fill((255, 255, 255))
-  for i in range(n):
-    for j in range(n):
-      if list_maze[i][j] == 1:
-        DISPLAYSURF.blit(brick, (i * square + decrease, j * square + decrease))
-      if list_maze[i][j] == 0:
-        pygame.draw.rect(DISPLAYSURF, color, (i * square + decrease, j * square + decrease, square - 2 * decrease, square - 2 * decrease))
-
-  pygame.draw.rect(DISPLAYSURF, color_start, (xs * square, ys * square, square, square))
-  pygame.draw.rect(DISPLAYSURF, color_end, (xf * square, yf * square, square, square))
-
-  for x,y in optimal_path:
-    pygame.draw.circle(DISPLAYSURF, (0, 0, 255), (x*square + square/2, y*square + square/2), square/4, square//4)
-  for i in range(n):
-    for j in range(n):
-      if list_maze[i][j] == 0:
-        DISPLAYSURF.blit(write_score(maze,i,j), (i * square + decrease, j * square + decrease))
   for event in pygame.event.get():
       if event.type == QUIT:
           pygame.quit()
