@@ -15,6 +15,10 @@ class Maze(object):
     size = self.get_size()
     self.matrix = [[0] * size[1] for _ in range(size[0])]
     path = []
+
+    if hard >= min(size) or hard < 2:
+      hard = 4
+
     if have_path == True: 
       self.point_have_to_go(n = hard)
       path = self.path_through_point()
