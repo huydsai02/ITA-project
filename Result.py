@@ -7,7 +7,7 @@ from p import *
 # Gọi mê cung. Nếu muốn thay đổi size và số lượng gạch thì thêm 2 đối số nữa vào. 
 # vị trí 1: size, vị trí 2: phân số (0<x<1), vị trí 3: yêu cầu số 0, 1, 2 (nếu index = 0 thì là ma trận cũ, 1 là test 1, 2 là test 2)
 # VD: maze = CreateMaze(20,4/5)
-maze = CreateMaze(size = 10, index = 0)
+maze = CreateMaze(size = 15, index = 1)
 
 # Thông tin mê cung
 xs, ys = maze.get_start_point()
@@ -23,6 +23,7 @@ color = (255,255,190)
 color1 = (255,9,9)
 color_start = (100,100,100)
 color_end = (255,0,0)
+BACKGROUND_COLOR = (255, 255, 255)
 
 # Thông số cửa sổ
 pygame.init()
@@ -32,7 +33,7 @@ DISPLAYSURF = pygame.display.set_mode((SIZE, SIZE + square))
 pygame.display.set_caption('Hello world!')
 
 #Upload image
-img = pygame.image.load("/Users/phong/Documents/pog/ITAproject/brick.png")
+img = pygame.image.load("./img/brick.png")# replace by ur path
 decrease = 1
 brick = pygame.transform.scale(img, (square - 2*decrease, square - 2*decrease))
 
@@ -40,7 +41,11 @@ brick = pygame.transform.scale(img, (square - 2*decrease, square - 2*decrease))
 font = pygame.font.Font('freesansbold.ttf', 10)
 def write_score(maze, x, y):
   info = maze.get_list_point()[x][y]
-  text = font.render(str(info), True, (255,0,0))
+  if info != 0:
+    s = str(info)
+  else:
+    s = ""
+  text = font.render(s, True, (255,0,0))
   return text
 
 def ShowInfo(Info, size=30):
@@ -49,7 +54,7 @@ def ShowInfo(Info, size=30):
   return text
 
 while True:
-  DISPLAYSURF.fill((255, 255, 255))
+  DISPLAYSURF.fill(BACKGROUND_COLOR)
   for i in range(n):
     for j in range(n):
       if list_maze[i][j] == 1:
@@ -67,10 +72,12 @@ while True:
 
   for x,y in PathConvert(maze, optimal_path):
     pygame.draw.circle(DISPLAYSURF, (0, 0, 255), (x*square + square/2, y*square + square/2), square/4, square//4)
-  DISPLAYSURF.blit(ShowInfo(f'The highest score is {int(highest_score)} with {len_of_best} steps and {int(point_of_best)} points', size=15), (square/2, SIZE))
+  DISPLAYSURF.blit(ShowInfo(f'The highest score is {round(highest_score,2)} with {len_of_best} steps and {int(point_of_best)} points', size=15), (square/2, SIZE))
 
   for event in pygame.event.get():
       if event.type == QUIT:
           pygame.quit()
           sys.exit()
   pygame.display.update()
+
+
