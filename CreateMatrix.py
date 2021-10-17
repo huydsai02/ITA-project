@@ -117,7 +117,8 @@ class Maze(object):
         e[1] = randint(0, size-1)
 
       # điều chỉnh a để tăng số gạch (a càng to thì gạch càng nhiều)
-      a = 21
+      a = 50
+      
       while len(p) <= a:
         f = [1,1]
         while (f[0] * f[1]) % 2 == 1 and f not in p:
