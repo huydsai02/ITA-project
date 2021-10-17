@@ -8,6 +8,7 @@ class Maze(object):
     self.start_point = (randint(0, self.get_size() - 1), randint(0, self.get_size() - 1))
     self.end_point = (randint(0, self.get_size() - 1), randint(0, self.get_size() - 1))
     self.matrix = self.CreateMaze()
+    self.test()
     self.list_point = self.Create_list_point()
 
   def test(self):
@@ -18,7 +19,7 @@ class Maze(object):
   
   def get_list_point(self):
     return self.list_point
-    
+
   def get_start_point(self):
     return self.start_point
   

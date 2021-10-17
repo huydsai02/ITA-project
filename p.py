@@ -102,7 +102,6 @@ def Optimal_result(maze, paths):
 
 if __name__ == '__main__':
     b = CreateMaze(6)
-    b.test()
     arr = np.array(b.get_list_maze())
     a = arr.T
     s = FindPath(b)

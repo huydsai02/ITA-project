@@ -33,6 +33,13 @@ img = pygame.image.load("./img/brick.png")
 decrease = 1
 brick = pygame.transform.scale(img, (square - 2*decrease, square - 2*decrease))
 
+# Add score
+font = pygame.font.Font('freesansbold.ttf', 10)
+def write_score(maze, x, y):
+  info = maze.get_list_point()[x][y]
+  text = font.render(str(info), True, (255,0,0))
+  return text
+
 while True:
   DISPLAYSURF.fill((255, 255, 255))
   # for i in range(n):
@@ -69,7 +76,10 @@ while True:
 
   for x,y in optimal_path:
     pygame.draw.circle(DISPLAYSURF, (0, 0, 255), (x*square + square/2, y*square + square/2), square/4, square//4)
-  
+  for i in range(n):
+    for j in range(n):
+      if list_maze[i][j] == 0:
+        DISPLAYSURF.blit(write_score(maze,i,j), (i * square + decrease, j * square + decrease))
   for event in pygame.event.get():
       if event.type == QUIT:
           pygame.quit()
