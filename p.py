@@ -2,10 +2,8 @@ import numpy as np
 import math
 from CreateMatrix import *
 
-def CreateMaze(size = 10, pro_brick = 2/5, index = 0): # pro_brick: proportion of brick (0 < pro_brick < 1)
+def CreateMaze(size = 10, pro_brick = 2/5): # pro_brick: proportion of brick (0 < pro_brick < 1)
     maze = Maze(size, pro_brick)
-    maze.test1(index)
-    maze.test2(index)
     return maze
 
     
@@ -41,6 +39,14 @@ def IsNotLoop(maze, path):
             lst.append(c)
     return True        
 
+def IsRecievedPoint(maze, path):
+    xs, ys = maze.get_start_point()
+    x = path.count('R') - path.count('L') + xs
+    y = path.count('D') - path.count('U') + ys
+    if maze.get_list_point()[x][y] > 0:
+        return True
+    return False
+
 def IsSolution(maze, solution):
     xs, ys = maze.get_start_point()
     xf, yf = maze.get_end_point()
@@ -49,6 +55,21 @@ def IsSolution(maze, solution):
     if (x, y) == (xf, yf):
         return True
     return False
+
+def PathConvert(maze, path):
+    xt, yt = maze.get_start_point()
+    lst_step = [(xt, yt)]
+    for step in path:
+        if step == 'U':
+            yt-= 1
+        elif step =='D':
+            yt+= 1
+        elif step =='L':
+            xt-= 1
+        elif step =='R':
+            xt+= 1
+        lst_step.append((xt, yt))
+    return lst_step
 
 def FindPath(maze):
     paths = ['']
@@ -62,8 +83,8 @@ def FindPath(maze):
         for path in temp:
             for choice in choices:
                 npath = path + choice
-                if IsLogical(maze, npath) and IsNotLoop(maze, path):
-                    if 'DU' not in npath and 'UD' not in npath and 'RL' not in npath and 'LR' not in npath:#or get some point
+                if IsLogical(maze, npath) and IsNotLoop(maze, npath):
+                    if ('DU' not in npath and 'UD' not in npath and 'RL' not in npath and 'LR' not in npath) or IsRecievedPoint(maze, npath):
                         if IsSolution(maze, npath):
                             solutions.append(npath)
                         else:
@@ -73,49 +94,40 @@ def FindPath(maze):
             return solutions
     return 'not solvable'
 
-def FindCoordinatePath(maze, solutions):
-    s = maze.get_start_point()
-    translate = {"L":(-1,0), "R":(1,0), "U":(0,-1), "D":(0,1)}
-    all_path = []
-    for solution in solutions:
-        ns = (s[0], s[1])
-        path = [ns]
-        for c in solution:
-            step = translate[c]
-            ns = (ns[0] + step[0], ns[1] + step[1])
-            path.append(ns)
-        all_path.append(path)
-    
-    return all_path
-
-def Optimal_result(maze, paths):
+def Optimal_result(maze, solutions):
     highest_score = 0
-    optimal_path = []
-    for path in paths:
+    best_solution = solutions[0]
+    for solution in solutions:
         score = 0
-        for coor in path:
-            score += maze.get_list_point()[coor[0]][coor[1]]
-        final_score = score / len(path)
-        if final_score > highest_score:
-            highest_score = final_score
-            optimal_path = path
-    return (highest_score, optimal_path)
-
+        xt, yt = maze.get_start_point()
+        for step in solution:
+            if step == 'U':
+                yt-= 1
+            elif step =='D':
+                yt+= 1
+            elif step =='L':
+                xt-= 1
+            elif step =='R':
+                xt+= 1
+            score+= maze.get_list_point()[xt][yt]
+        if score/len(solution) > highest_score:
+            highest_score = score/len(solution)
+            best_solution = solution
+    return highest_score, best_solution, len(best_solution), highest_score*len(best_solution)
             
 
 if __name__ == '__main__':
-    b = CreateMaze(6)
-    arr = np.array(b.get_list_maze())
-    a = arr.T
-    s = FindPath(b)
-    p = FindCoordinatePath(b,s)
-    r = Optimal_result(b, p)
-    
-    print(a)
-    print(s)
+    maze_info = CreateMaze(10, pro_brick=3/5)
+    maze = np.array(maze_info.get_list_maze()).T
+    lst_point = np.array(maze_info.get_list_point()).T
+    solutions = FindPath(maze_info)
+    the_most = Optimal_result(maze_info, solutions)
 
-    print(arr)
-    print(p)
-    
-    print(list(zip(s,p)))
-    print(r)
+    print(maze)
+    print(maze_info.get_start_point(), maze_info.get_end_point())
+    print(solutions)
+
+    print(lst_point)
+    print(the_most)
+    print('The best solution is', the_most[1], 'with core', the_most[0])
+
