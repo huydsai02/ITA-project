@@ -7,7 +7,7 @@ class Maze(object):
     self.size = size
     self.matrix = self.CreateMaze()
     self.Set_start_end_in_matrix()
-    self.list_point = self.Create_list_point()
+    self.list_point = self.Create_list_point(num = int(self.get_size()[0] * self.get_size()[1] / 10))
 
 
   def CreateMaze(self):
@@ -51,7 +51,7 @@ class Maze(object):
     
     return self.matrix
       
-  def Create_list_point(self, num= 10, ranrange= range(4, 8)):
+  def Create_list_point(self, num = 10, ranrange= range(4, 8)):
     size = self.get_size()
     m = self.get_list_maze()
     self.list_point = [[0 for i in range(size[1])] for j in range(size[0])]
