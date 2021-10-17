@@ -2,9 +2,10 @@ import numpy as np
 import math
 from CreateMatrix import *
 
-def CreateMaze(size = 10, pro_brick = 2/5, test = True): # pro_brick: proportion of brick (0 < pro_brick < 1)
+def CreateMaze(size = 10, pro_brick = 2/5, index = 0): # pro_brick: proportion of brick (0 < pro_brick < 1)
     maze = Maze(size, pro_brick)
-    maze.test(status = test)
+    maze.test1(index)
+    maze.test2(index)
     return maze
 
     

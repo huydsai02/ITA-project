@@ -79,8 +79,8 @@ class Maze(object):
     n = self.get_size()
     path = []
     
-    s = self.start_point
-    e = self.end_point
+    s = self.get_start_point()
+    e = self.get_end_point()
 
     for i in range( min((s[0], e[0])) , max((s[0],e[0])) + 1):
       path.append((i, s[1]))
@@ -100,8 +100,9 @@ class Maze(object):
           self.list_point[i][j] = randint(20,40)
     return self.list_point
 
-  def test(self, status = True):
-    if status:
+# TEST 1:
+  def test1(self, index = 1):
+    if index == 1:
       size = self.get_size()
       self.matrix = [[1 if (i*j) % 2 != 0 else 0 for i in range(size)] for j in range(size)]
       p = []
@@ -129,3 +130,43 @@ class Maze(object):
       self.set_end_point(tuple(e))
       self.Set_start_end_in_matrix()
       self.Create_list_point()
+
+# TEST 2
+  def test2(self, index = 2):
+    if index == 2:
+      size = self.get_size()
+      self.matrix = [[0 for i in range(size)] for j in range(size)]
+      self.set_start_point((randint(0, size-1), randint(0, size-1)))
+      self.set_end_point((randint(0, size-1), randint(0, size-1)))
+      p = []
+
+      # so_cap, sq càng lớn thì càng có khả năng nhiều gạch
+      so_cap = 8
+      sq = 25
+
+      while len(p) <= so_cap:
+        s = (randint(0, size-1), randint(0, size-1))
+        e = (randint(0, size-1), randint(0, size-1))
+        if [s,e] not in p:
+          p.append([s,e])
+
+      path = []
+      for pair in p:
+        s = pair[0]
+        e = pair[1]
+        if (s[0]-e[0])**2 + (s[1]-e[1])**2 >= sq:
+          for i in range( min((s[0], e[0])) , max((s[0],e[0])) + 1):
+            path.append((i, s[1]))
+          for j in range( min((s[1], e[1])) , max((s[1],e[1])) + 1):
+            path.append((e[0], j))
+        else:
+          for i in range( min((s[0], e[0])) , max((s[0],e[0])) + 1):
+            for j in range( min((s[1], e[1])) , max((s[1],e[1])) + 1):
+              path.append((i,j))
+
+      for coor in path:
+        self.matrix[coor[0]][coor[1]] = 1
+      self.Set_start_end_in_matrix()
+      self.Create_list_point()
+      
+
