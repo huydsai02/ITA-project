@@ -98,7 +98,7 @@ def FindPath(maze):
 
 def Optimal_result(maze, solutions):
     highest_score = 0
-    best_solution = solutions[0]
+    best_solution = None
     for solution in solutions:
         score = 0
         xt, yt = maze.get_start_point()
