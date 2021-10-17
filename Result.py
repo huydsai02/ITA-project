@@ -4,7 +4,8 @@ from CreateMatrix import *
 from p import *
 
 # size lấy vào kích cỡ mê cung với tham số thứ nhất là số ô ngang mê cung, tham số thứ 2 là số ô dọc mê cung
-maze = Maze(size = (30,16))
+# Nếu have_path = True thì chắc chắn điểm đầu và điểm cuối sẽ có đường lối, nếu have_path = False thì tùy máy
+maze = Maze(size = (30,16), have_path = True)
 
 # Thông tin mê cung
 xs, ys = maze.get_start_point()
