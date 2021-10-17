@@ -7,7 +7,7 @@ from p import *
 # Gọi mê cung. Nếu muốn thay đổi size và số lượng gạch thì thêm 2 đối số nữa vào. 
 # vị trí 1: size, vị trí 2: phân số (0<x<1), vị trí 3: yêu cầu số 0, 1, 2 (nếu index = 0 thì là ma trận cũ, 1 là test 1, 2 là test 2)
 # VD: maze = CreateMaze(20,4/5)
-maze = CreateMaze(size = 10, index = 0)
+maze = CreateMaze(size = 15, index = 1)
 
 # Thông tin mê cung
 xs, ys = maze.get_start_point()
