@@ -17,6 +17,7 @@ list_maze = maze.get_list_maze()
 n = maze.get_size()
 solutions = FindPath(maze)
 highest_score, optimal_path, len_of_best, point_of_best = Optimal_result(maze, solutions)
+# print(optimal_path)
 
 # Màu
 color = (255,255,190)
