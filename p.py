@@ -2,26 +2,15 @@ import numpy as np
 import math
 from CreateMatrix import *
 
-def CreateMaze(size = 10, pro_brick = 2/5, index = 0): # pro_brick: proportion of brick (0 < pro_brick < 1)
-    maze = Maze(size, pro_brick)
-    maze.test1(index) 
-    maze.test2(index)
-    maze.test3(index)
-    maze.test4(index)
-    maze.test5(index)
-
-    return maze
-
-    
 def IsLogical(maze, path):
     xs, ys = maze.get_start_point()
     list_maze = maze.get_list_maze()
     size = maze.get_size()
     x = path.count('R') - path.count('L') + xs
     y = path.count('D') - path.count('U') + ys
-    if x < 0 or x >= size:
+    if x < 0 or x >= size[0]:
         return False
-    elif y < 0 or y >= size:
+    elif y < 0 or y >= size[1]:
         return False
     elif list_maze[x][y] == 1:
         return False
@@ -123,7 +112,9 @@ def Optimal_result(maze, solutions):
             
 
 if __name__ == '__main__':
-    maze_info = CreateMaze(10, pro_brick=3/5)
+    # size lấy vào kích cỡ mê cung với tham số thứ nhất là số ô ngang mê cung, tham số thứ 2 là số ô dọc mê cung
+    # Nếu đưa về list python thì tham số thứ nhất là số hàng, tham số thứ 2 là số cột
+    maze_info = Maze(size = (10,10))
     maze = np.array(maze_info.get_list_maze()).T
     lst_point = np.array(maze_info.get_list_point()).T
     solutions = FindPath(maze_info)

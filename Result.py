@@ -3,18 +3,14 @@ from pygame.locals import *
 from CreateMatrix import *
 from p import *
 
-
-# Gọi mê cung. Nếu muốn thay đổi size và số lượng gạch thì thêm 2 đối số nữa vào. 
-# vị trí 1: size, vị trí 2: phân số (0<x<1), vị trí 3: yêu cầu số 0, 1, 2 (nếu index = 0 thì là ma trận cũ, 1 là test 1, 2 là test 2)
-# VD: maze = CreateMaze(20,4/5)
-maze = CreateMaze(size = 11, index = 4)
+# size lấy vào kích cỡ mê cung với tham số thứ nhất là số ô ngang mê cung, tham số thứ 2 là số ô dọc mê cung
+maze = Maze(size = (30,16))
 
 # Thông tin mê cung
 xs, ys = maze.get_start_point()
 xf, yf = maze.get_end_point()
-road = maze.path
 list_maze = maze.get_list_maze()
-n = maze.get_size()
+size = maze.get_size()
 solutions = FindPath(maze)
 highest_score, optimal_path, len_of_best, point_of_best = Optimal_result(maze, solutions)
 # print(optimal_path)
@@ -29,8 +25,8 @@ BACKGROUND_COLOR = (255, 255, 255)
 # Thông số cửa sổ
 pygame.init()
 square = 40
-SIZE = square*n
-DISPLAYSURF = pygame.display.set_mode((SIZE, SIZE + square))
+SIZE = (square*size[0], square*size[1] + square)
+DISPLAYSURF = pygame.display.set_mode((SIZE[0], SIZE[1]))
 pygame.display.set_caption('Hello world!')
 
 #Upload image
@@ -56,8 +52,8 @@ def ShowInfo(Info, size=30):
 
 while True:
   DISPLAYSURF.fill(BACKGROUND_COLOR)
-  for i in range(n):
-    for j in range(n):
+  for i in range(size[0]):
+    for j in range(size[1]):
       if list_maze[i][j] == 1:
         DISPLAYSURF.blit(brick, (i * square + decrease, j * square + decrease))
       if list_maze[i][j] == 0:
@@ -66,14 +62,14 @@ while True:
   pygame.draw.rect(DISPLAYSURF, color_start, (xs * square, ys * square, square, square))
   pygame.draw.rect(DISPLAYSURF, color_end, (xf * square, yf * square, square, square))
 
-  for i in range(n):
-    for j in range(n):
+  for i in range(size[0]):
+    for j in range(size[1]):
       if list_maze[i][j] == 0:
         DISPLAYSURF.blit(write_score(maze,i,j), (i * square + decrease, j * square + decrease))
 
   for x,y in PathConvert(maze, optimal_path):
     pygame.draw.circle(DISPLAYSURF, (0, 0, 255), (x*square + square/2, y*square + square/2), square/4, square//4)
-  DISPLAYSURF.blit(ShowInfo(f'The highest score is {round(highest_score,2)} with {len_of_best} steps and {int(point_of_best)} points', size=15), (square/2, SIZE))
+  DISPLAYSURF.blit(ShowInfo(f'The highest score is {round(highest_score,2)} with {len_of_best} steps and {int(point_of_best)} points', size=15), (square/2, SIZE[1] - square))
 
   for event in pygame.event.get():
       if event.type == QUIT:
