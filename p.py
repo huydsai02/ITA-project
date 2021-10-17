@@ -98,7 +98,7 @@ def FindPath(maze):
 
 def Optimal_result(maze, solutions):
     highest_score = 0
-    best_solution = []
+    best_solution = ''
     for solution in solutions:
         score = 0
         xt, yt = maze.get_start_point()
@@ -112,7 +112,7 @@ def Optimal_result(maze, solutions):
             elif step =='R':
                 xt+= 1
             score+= maze.get_list_point()[xt][yt]
-        if score/len(solution) > highest_score:
+        if score/len(solution) >= highest_score:
             highest_score = score/len(solution)
             best_solution = solution
     return highest_score, best_solution, len(best_solution), highest_score*len(best_solution)
