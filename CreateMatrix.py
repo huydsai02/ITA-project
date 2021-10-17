@@ -92,8 +92,19 @@ class Maze(object):
       s = (2*a,2*b)
       if s not in points:
         points.append(s)
-    self.set_start_point(points[0])
-    self.set_end_point(points[-1])
+    maxs = 0
+    for i in range(len(points)-1):
+      for j in range(i + 1, len(points)):
+        f = points[i]
+        t = points[j]
+        cal = (f[0] - t[0])**2 + (f[1] - t[1])**2
+        if cal > maxs:
+          maxs = cal
+          st = points[i]
+          en = points[j]
+
+    self.set_start_point(st)
+    self.set_end_point(en)
     self.points = points
     return self.points
 
