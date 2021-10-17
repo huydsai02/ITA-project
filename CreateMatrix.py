@@ -2,21 +2,21 @@ import random
 from random import randint
 
 class Maze(object):
-  def __init__(self, size = (10,10), have_path = False):
+  def __init__(self, size = (10,10), have_path = False, hard = 4):
     # self.size là kích thước của mê cung, vị trí thứ nhất là chiều ngang mê cung, vị trí thứ hai là chiều dọc mê cung
     self.size = size
-    self.matrix = self.CreateMaze(have_path)
+    self.matrix = self.CreateMaze(have_path, hard)
     self.Set_start_end_in_matrix()
     self.list_point = self.Create_list_point(num = int(self.get_size()[0] * self.get_size()[1] / 10))
 
 
-  def CreateMaze(self, have_path = False):
+  def CreateMaze(self, have_path = False, hard = 4):
     ####### Tạo ra một ma trận 0,1 với 1 là tường
     size = self.get_size()
     self.matrix = [[0] * size[1] for _ in range(size[0])]
     path = []
     if have_path == True: 
-      self.point_have_to_go()
+      self.point_have_to_go(n = hard)
       path = self.path_through_point()
       
     # Tạo ma trận nhị phân
