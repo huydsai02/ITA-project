@@ -42,37 +42,15 @@ def write_score(maze, x, y):
 
 while True:
   DISPLAYSURF.fill((255, 255, 255))
-  # for i in range(n):
-  #   pygame.draw.line(DISPLAYSURF ,color1,(0, i*square),(SIZE,i*square))
-  # for i in range(n):
-  #   pygame.draw.line(DISPLAYSURF ,color1,(i * square, 0),(i * square,SIZE))
   for i in range(n):
     for j in range(n):
       if list_maze[i][j] == 1:
-        # pygame.draw.rect(DISPLAYSURF, color, (i * square, j * square, square, square))
         DISPLAYSURF.blit(brick, (i * square + decrease, j * square + decrease))
-      # if (i,j) in road:
-      #   pygame.draw.rect(DISPLAYSURF, (255,255,0), (i * square, j * square, square, square/10))
       if list_maze[i][j] == 0:
         pygame.draw.rect(DISPLAYSURF, color, (i * square + decrease, j * square + decrease, square - 2 * decrease, square - 2 * decrease))
 
   pygame.draw.rect(DISPLAYSURF, color_start, (xs * square, ys * square, square, square))
   pygame.draw.rect(DISPLAYSURF, color_end, (xf * square, yf * square, square, square))
-  # for i in [Solution[0]]:
-  #   lst = [(xs, ys)]
-  #   xt, yt = xs, ys
-  #   for j in i:
-  #     if j == 'U':
-  #       yt-=1
-  #     elif j == 'D':
-  #       yt+=1
-  #     elif j == 'R':
-  #       xt+=1
-  #     elif j == 'L':
-  #       xt-=1
-  #     lst.append((xt, yt))
-  #   for (x, y) in lst:
-  #     pygame.draw.circle(DISPLAYSURF, (0, 0, 255), (x*square + square/2, y*square + square/2), square/4, square//4)
 
   for x,y in optimal_path:
     pygame.draw.circle(DISPLAYSURF, (0, 0, 255), (x*square + square/2, y*square + square/2), square/4, square//4)
