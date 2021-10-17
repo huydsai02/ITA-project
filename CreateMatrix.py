@@ -90,14 +90,14 @@ class Maze(object):
     self.path = path
     return self.path
 
-  def Create_list_point(self):
+  def Create_list_point(self, num= 10, ranrange= range(4, 8)):
     size = self.get_size()
     m = self.get_list_maze()
     self.list_point = [[0 for i in range(size)] for j in range(size)]
-    for i in range(size):
-      for j in range(size):
-        if m[i][j] == 0:
-          self.list_point[i][j] = randint(20,40)
+    lst = [(i, j) for i in range(size) for j in range(size) if m[i][j] == 0]
+    point_pos = random.sample(lst, num)
+    for i, j in point_pos:
+      self.list_point[i][j] = random.choice(ranrange)
     return self.list_point
 
 # TEST 1:
