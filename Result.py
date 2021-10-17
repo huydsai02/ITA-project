@@ -10,17 +10,16 @@ xs, ys = maze.get_start_point()
 xf, yf = maze.get_end_point()
 road = maze.path
 list_maze = maze.get_list_maze()
-n = maze.n
+n = maze.get_size()
 Solution = FindPath(maze)
 
 print(Solution)
 
 # Màu
-color = (0,0,0)
+color = (255,255,190)
 color1 = (255,9,9)
 color_start = (100,100,100)
 color_end = (255,0,0)
-
 
 # Thông số cửa sổ
 pygame.init()
@@ -29,18 +28,27 @@ SIZE = square*n
 DISPLAYSURF = pygame.display.set_mode((SIZE, SIZE))
 pygame.display.set_caption('Hello world!')
 
+#Upload image
+img = pygame.image.load("./img/brick.png")
+decrease = 1
+brick = pygame.transform.scale(img, (square - 2*decrease, square - 2*decrease))
+
 while True:
   DISPLAYSURF.fill((255, 255, 255))
-  for i in range(n):
-    pygame.draw.line(DISPLAYSURF ,color1,(0, i*square),(SIZE,i*square))
-  for i in range(n):
-    pygame.draw.line(DISPLAYSURF ,color1,(i * square, 0),(i * square,SIZE))
+  # for i in range(n):
+  #   pygame.draw.line(DISPLAYSURF ,color1,(0, i*square),(SIZE,i*square))
+  # for i in range(n):
+  #   pygame.draw.line(DISPLAYSURF ,color1,(i * square, 0),(i * square,SIZE))
   for i in range(n):
     for j in range(n):
       if list_maze[i][j] == 1:
-        pygame.draw.rect(DISPLAYSURF, color, (i * square, j * square, square, square))
-      if (i,j) in road:
-        pygame.draw.rect(DISPLAYSURF, (255,255,0), (i * square, j * square, square, square/10))
+        # pygame.draw.rect(DISPLAYSURF, color, (i * square, j * square, square, square))
+        DISPLAYSURF.blit(brick, (i * square + decrease, j * square + decrease))
+      # if (i,j) in road:
+      #   pygame.draw.rect(DISPLAYSURF, (255,255,0), (i * square, j * square, square, square/10))
+      if list_maze[i][j] == 0:
+        pygame.draw.rect(DISPLAYSURF, color, (i * square + decrease, j * square + decrease, square - 2 * decrease, square - 2 * decrease))
+
   pygame.draw.rect(DISPLAYSURF, color_start, (xs * square, ys * square, square, square))
   pygame.draw.rect(DISPLAYSURF, color_end, (xf * square, yf * square, square, square))
   for i in [Solution[0]]:

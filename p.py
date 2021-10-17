@@ -4,18 +4,18 @@ from CreateMatrix import *
 
 def CreateMaze(): #return [maze, xs, ys, xf,yf]
     maze = Maze()
-    maze.CreateMaze()
     return maze
 
     
 def IsLogical(maze, path):
     xs, ys = maze.get_start_point()
     list_maze = maze.get_list_maze()
+    size = maze.get_size()
     x = path.count('R') - path.count('L') + xs
     y = path.count('D') - path.count('U') + ys
-    if x < 0 or x >= len(list_maze[0]):
+    if x < 0 or x >= size:
         return False
-    elif y < 0 or y>= len(list_maze):
+    elif y < 0 or y >= size:
         return False
     elif list_maze[x][y] == 1:
         return False

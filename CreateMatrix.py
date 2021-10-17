@@ -3,11 +3,12 @@ from random import randint
 
 class Maze(object):
   def __init__(self):
-    # self.n là kích thước của mê cung
-    self.n = 10
-    self.matrix = [[0 for i in range(self.n)] for j in range(self.n)]
-    self.start_point = (randint(0, self.n - 1), randint(0, self.n - 1))
-    self.end_point = (randint(0, self.n - 1), randint(0, self.n - 1))
+    # self.size là kích thước của mê cung
+    self.size = 10
+    self.start_point = (randint(0, self.get_size() - 1), randint(0, self.get_size() - 1))
+    self.end_point = (randint(0, self.get_size() - 1), randint(0, self.get_size() - 1))
+    self.matrix = self.CreateMaze()
+    self.list_point = self.Create_list_point()
 
   def get_start_point(self):
     return self.start_point
@@ -17,27 +18,32 @@ class Maze(object):
 
   def get_list_maze(self):
     return self.matrix
+
+  def get_size(self):
+    return self.size
   
   def RandomBrick(self):
     # Tạo ra các bức tường ngẫu nhiên
     list_coordinate = []
-    
+    size = self.get_size()
     # a càng lớn thì càng nhiều gạch và ngược lại (0 < a < 1)
     a = 3/5
-    self.brick = int(((self.n)**2) * a)
-    self.randomlist = random.sample(range(1, (self.n)**2 - 1) , self.brick)
+    self.brick = int(((size)**2) * a)
+    self.randomlist = random.sample(range(1, (size)**2 - 1) , self.brick)
     for _ in self.randomlist:
-      row = int(_ / self.n)
-      column = _ % self.n
+      row = int(_ / size)
+      column = _ % size
       list_coordinate.append((row, column))
     # print(list_coordinate)
+    self.list_coordinate = list_coordinate
     return list_coordinate
 
   def CreateMaze(self):
     # Tạo ra một ma trận 0,1 với 1 là tường
     l = self.RandomBrick()
     r = self.CreateRoad()
-    n = self.n
+    n = self.get_size()
+    self.matrix = [[0 for i in range(self.size)] for j in range(self.size)]
 
     for a,b in l:
       self.matrix[a][b] = 1
@@ -49,11 +55,9 @@ class Maze(object):
 
     return self.matrix
       
-
   def CreateRoad(self):
-
     # Tạo ra 1 con đường để đi từ điểm đầu đến điểm cuối
-    n = self.n
+    n = self.get_size()
     path = []
     
     s = self.start_point
@@ -66,3 +70,12 @@ class Maze(object):
     
     self.path = path
     return self.path
+
+  def Create_list_point(self):
+    size = self.get_size()
+    self.list_point = [[0 for i in range(size)] for j in range(size)]
+    for i in range(size):
+      for j in range(size):
+        if (i, j) not in self.list_coordinate:
+          self.list_point[i][j] = randint(20,40)
+    return self.list_point
