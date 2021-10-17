@@ -104,6 +104,7 @@ class Maze(object):
     if status:
       size = self.get_size()
       self.matrix = [[1 if (i*j) % 2 != 0 else 0 for i in range(size)] for j in range(size)]
+      p = []
       s = [1,1]
       while (s[0] * s[1]) % 2 == 1:
         s[0] = randint(0, size-1)
@@ -114,6 +115,16 @@ class Maze(object):
         e[0] = randint(0, size-1)
         e[1] = randint(0, size-1)
 
+      # điều chỉnh a để tăng số gạch (a càng to thì gạch càng nhiều)
+      a = 21
+      while len(p) <= a:
+        f = [1,1]
+        while (f[0] * f[1]) % 2 == 1 and f not in p:
+          f[0] = randint(0, size-1)
+          f[1] = randint(0, size-1)
+        p.append(f)
+      for coor in p:
+        self.matrix[coor[0]][coor[1]] = 1
       self.set_start_point(tuple(s))
       self.set_end_point(tuple(e))
       self.Set_start_end_in_matrix()
