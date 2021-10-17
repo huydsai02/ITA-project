@@ -16,7 +16,7 @@ class Maze(object):
     self.matrix = [[0] * size[1] for _ in range(size[0])]
     path = []
 
-    if hard >= min(size) or hard < 2:
+    if hard > min(size) or hard < 2:
       hard = 4
 
     if have_path == True: 
