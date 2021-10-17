@@ -169,5 +169,94 @@ class Maze(object):
         self.matrix[coor[0]][coor[1]] = 1
       self.Set_start_end_in_matrix()
       self.Create_list_point()
+
+  def test3(self, index = 3):
+    if index == 3:
+      size = self.get_size()
+      self.matrix = [[0] * size for _ in range(size)]
+
+      for i in range(1,size):
+        for j in range(1,size):
+          if self.matrix[i-1][j-1] == 0 and self.matrix[i][j-1] == 0 and self.matrix[i-1][j] == 0:
+            self.matrix[i][j] = 1
+          else:
+            r = randint(0,2)
+            if r == 0:
+              self.matrix[i][j] = 1  
+            else:
+              self.matrix[i][j] = 0
       
+      s = [randint(0,size - 1),randint(0, size - 1)]
+      while self.matrix[s[0]][s[1]] == 1:
+        s = [randint(0,size - 1),randint(0, size - 1)]
+      
+      e = [randint(0,size - 1),randint(0, size - 1)]
+      while self.matrix[e[0]][e[1]] == 1:
+        e = [randint(0,size - 1),randint(0, size - 1)]
+      self.Set_start_end_in_matrix()
+      self.Create_list_point()
+
+  def test4(self, index = 4):
+    if index == 4:
+      size = self.get_size()
+      self.matrix = [[0] * size for _ in range(size)]
+
+      for i in range(1,size,2):
+        for j in range(1,size,2):
+          self.matrix[i][j] = 1
+          r = randint(0,1)
+          if r == 0:
+            self.matrix[i][j-1] = 1
+          else:
+            self.matrix[i-1][j] = 1
+      
+      if size % 2 == 1:
+        for i in range(size):
+          if self.matrix[size - 2][i] == 1:
+            self.matrix[size - 1][i] = randint(0,1)
+          if self.matrix[i][size - 2] == 1:
+            self.matrix[i][size - 1] = randint(0,1)
+
+
+      
+      s = [randint(0,size - 1),randint(0, size - 1)]
+      while self.matrix[s[0]][s[1]] == 1:
+        s = [randint(0,size - 1),randint(0, size - 1)]
+      
+      e = [randint(0,size - 1),randint(0, size - 1)]
+      while self.matrix[e[0]][e[1]] == 1 and s != e:
+        e = [randint(0,size - 1),randint(0, size - 1)]
+      self.Set_start_end_in_matrix()
+      self.Create_list_point()
+  
+  def test5(self, index = 5):
+    if index == 5:
+      size = self.get_size()
+      self.matrix = [[0] * size for _ in range(size)]
+
+      if size % 2 == 0:
+        a = size 
+      else:
+        a = size
+      for i in range(2,a,2):
+        for j in range(2,a,2):
+          self.matrix[i][j] = 0
+          self.matrix[i-1][j-1] = 1
+          r = randint(0,1)
+          if r == 0:
+            self.matrix[i][j-1] = 1
+          else:
+            self.matrix[i-1][j] = 1
+      
+      s = [randint(0,size - 1),randint(0, size - 1)]
+      while self.matrix[s[0]][s[1]] == 1:
+        s = [randint(0,size - 1),randint(0, size - 1)]
+      
+      e = [randint(0,size - 1),randint(0, size - 1)]
+      while self.matrix[e[0]][e[1]] == 1:
+        e = [randint(0,size - 1),randint(0, size - 1)]
+      self.Set_start_end_in_matrix()
+      self.Create_list_point()
+  
+
 

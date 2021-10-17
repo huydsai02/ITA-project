@@ -6,6 +6,10 @@ def CreateMaze(size = 10, pro_brick = 2/5, index = 0): # pro_brick: proportion o
     maze = Maze(size, pro_brick)
     maze.test1(index) 
     maze.test2(index)
+    maze.test3(index)
+    maze.test4(index)
+    maze.test5(index)
+
     return maze
 
     
