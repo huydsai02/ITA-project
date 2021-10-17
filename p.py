@@ -2,8 +2,8 @@ import numpy as np
 import math
 from CreateMatrix import *
 
-def CreateMaze(): #return [maze, xs, ys, xf,yf]
-    maze = Maze()
+def CreateMaze(size = 10): #return [maze, xs, ys, xf,yf]
+    maze = Maze(size)
     return maze
 
     
@@ -71,11 +71,49 @@ def FindPath(maze):
             return solutions
     return 'not solvable'
 
+def FindCoordinatePath(maze, solutions):
+    s = maze.get_start_point()
+    translate = {"L":(-1,0), "R":(1,0), "U":(0,-1), "D":(0,1)}
+    all_path = []
+    for solution in solutions:
+        ns = (s[0], s[1])
+        path = [ns]
+        for c in solution:
+            step = translate[c]
+            ns = (ns[0] + step[0], ns[1] + step[1])
+            path.append(ns)
+        all_path.append(path)
+    
+    return all_path
 
+def Optimal_result(maze, paths):
+    highest_score = 0
+    for path in paths:
+        score = 0
+        for coor in path:
+            score += maze.get_list_point()[coor[0]][coor[1]]
+        final_score = score / len(path)
+        if final_score > highest_score:
+            highest_score = final_score
+            optimal_path = path
+    return (highest_score, optimal_path)
+
+            
 
 if __name__ == '__main__':
-    b = CreateMaze()
-    a = np.array(b.get_list_maze()).T
+    b = CreateMaze(6)
+    b.test()
+    arr = np.array(b.get_list_maze())
+    a = arr.T
+    s = FindPath(b)
+    p = FindCoordinatePath(b,s)
+    r = Optimal_result(b, p)
+    
     print(a)
-    print(b.get_start_point(), b.get_end_point())
-    print(FindPath(b))
+    print(s)
+
+    print(arr)
+    print(p)
+    
+    print(list(zip(s,p)))
+    print(r)

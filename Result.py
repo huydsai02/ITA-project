@@ -12,8 +12,8 @@ road = maze.path
 list_maze = maze.get_list_maze()
 n = maze.get_size()
 Solution = FindPath(maze)
-
-print(Solution)
+All_Path = FindCoordinatePath(maze, Solution)
+highest_score, optimal_path = Optimal_result(maze, All_Path)
 
 # Màu
 color = (255,255,190)
@@ -51,22 +51,24 @@ while True:
 
   pygame.draw.rect(DISPLAYSURF, color_start, (xs * square, ys * square, square, square))
   pygame.draw.rect(DISPLAYSURF, color_end, (xf * square, yf * square, square, square))
-  for i in [Solution[0]]:
-    lst = [(xs, ys)]
-    xt, yt = xs, ys
-    for j in i:
-      if j == 'U':
-        yt-=1
-      elif j == 'D':
-        yt+=1
-      elif j == 'R':
-        xt+=1
-      elif j == 'L':
-        xt-=1
-      lst.append((xt, yt))
-    for (x, y) in lst:
-      pygame.draw.circle(DISPLAYSURF, (0, 0, 255), (x*square + square/2, y*square + square/2), square/4, square//4)
+  # for i in [Solution[0]]:
+  #   lst = [(xs, ys)]
+  #   xt, yt = xs, ys
+  #   for j in i:
+  #     if j == 'U':
+  #       yt-=1
+  #     elif j == 'D':
+  #       yt+=1
+  #     elif j == 'R':
+  #       xt+=1
+  #     elif j == 'L':
+  #       xt-=1
+  #     lst.append((xt, yt))
+  #   for (x, y) in lst:
+  #     pygame.draw.circle(DISPLAYSURF, (0, 0, 255), (x*square + square/2, y*square + square/2), square/4, square//4)
 
+  for x,y in optimal_path:
+    pygame.draw.circle(DISPLAYSURF, (0, 0, 255), (x*square + square/2, y*square + square/2), square/4, square//4)
   
   for event in pygame.event.get():
       if event.type == QUIT:

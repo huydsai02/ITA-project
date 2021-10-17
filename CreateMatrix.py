@@ -2,14 +2,23 @@ import random
 from random import randint
 
 class Maze(object):
-  def __init__(self):
+  def __init__(self, size = 10):
     # self.size là kích thước của mê cung
-    self.size = 10
+    self.size = size
     self.start_point = (randint(0, self.get_size() - 1), randint(0, self.get_size() - 1))
     self.end_point = (randint(0, self.get_size() - 1), randint(0, self.get_size() - 1))
     self.matrix = self.CreateMaze()
     self.list_point = self.Create_list_point()
 
+  def test(self):
+    s = self.get_start_point()
+    e = self.get_end_point()
+    self.matrix[s[0]][s[1]] = 2
+    self.matrix[e[0]][e[1]] = 3
+  
+  def get_list_point(self):
+    return self.list_point
+    
   def get_start_point(self):
     return self.start_point
   
@@ -73,9 +82,10 @@ class Maze(object):
 
   def Create_list_point(self):
     size = self.get_size()
+    m = self.get_list_maze()
     self.list_point = [[0 for i in range(size)] for j in range(size)]
     for i in range(size):
       for j in range(size):
-        if (i, j) not in self.list_coordinate:
+        if m[i][j] == 0:
           self.list_point[i][j] = randint(20,40)
     return self.list_point
