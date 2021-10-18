@@ -52,7 +52,7 @@ class Maze(object):
       # Tạo điểm bắt đầu
       if have_path == False:
         s = e = [0,0]
-        while (s[0] - e[0])**2 + (s[1] - e[1])**2 < max(size)**2:
+        while (s[0] - e[0])**2 + (s[1] - e[1])**2 < min(size)**2:
           # Tạo điểm bắt đầu
           s = [randint(0,size[0] - 1),randint(0, size[1] - 1)]
           while self.matrix[s[0]][s[1]] == 1:
@@ -104,7 +104,7 @@ class Maze(object):
             self.matrix[j - 1][size[1] - 1] = 1
             self.matrix[j][size[1] - 1] = randint(0,1)
       s = e = [0,0]
-      while (s[0] - e[0])**2 + (s[1] - e[1])**2 < max(size)**2:
+      while (s[0] - e[0])**2 + (s[1] - e[1])**2 < min(size)**2:
         # Tạo điểm bắt đầu
         s = [randint(0,size[0] - 1),randint(0, size[1] - 1)]
         while self.matrix[s[0]][s[1]] == 1:
