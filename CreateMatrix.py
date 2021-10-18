@@ -6,7 +6,7 @@ class Maze(object):
     self.size = size
     self.matrix = self.CreateMaze()
     self.create_random_start_end_point()
-    self.Create_list_point()
+    self.Create_list_point(num = min(size) - 3)
 
   def CreateMaze(self):
     size = self.get_size()
@@ -77,7 +77,7 @@ class Maze(object):
   def create_random_start_end_point(self):
     size = self.get_size()
     s = e = [0,0]
-    while (s[0] - e[0])**2 + (s[1] - e[1])**2 < min(size)**2:
+    while (s[0] - e[0])**2 + (s[1] - e[1])**2 < (min(size) - 3)**2:
       # Tạo điểm bắt đầu
       s = [randint(0,size[0] - 1),randint(0, size[1] - 1)]
       while self.matrix[s[0]][s[1]] == 1:
