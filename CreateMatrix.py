@@ -1,11 +1,17 @@
 import random
 from random import randint
 class Maze(object):
-  def __init__(self, size = (11,11)):
+  def __init__(self, size = (11,11), s = None, e = None, matrix = None):
     # self.size là kích thước của mê cung, vị trí thứ nhất là chiều ngang mê cung, vị trí thứ hai là chiều dọc mê cung
     self.size = size
-    self.matrix = self.CreateMaze()
-    self.create_random_start_end_point()
+    self.matrix = self.CreateMaze() if matrix == None else matrix
+    if s == None and e == None:
+      self.create_random_start_end_point()
+    else:
+      self.start_point = s
+      self.end_point = e
+      self.matrix[s[0]][s[1]] = 2
+      self.matrix[e[0]][e[1]] = 3
     self.Create_list_point(num = min(size) - 3)
 
   def CreateMaze(self):
@@ -82,13 +88,14 @@ class Maze(object):
       s = [randint(0,size[0] - 1),randint(0, size[1] - 1)]
       while self.matrix[s[0]][s[1]] == 1:
         s = [randint(0,size[0] - 1),randint(0, size[1] - 1)]
-      self.set_start_point((s[0],s[1]))
 
       # Tạo điểm kết thúc
       e = [randint(0,size[0] - 1),randint(0, size[1] - 1)]
       while self.matrix[e[0]][e[1]] == 1 and s != e:
         e = [randint(0,size[0] - 1),randint(0, size[1] - 1)]
-      self.set_end_point((e[0],e[1]))
+
+    self.set_start_point(s)
+    self.set_end_point(e)
     self.matrix[s[0]][s[1]] = 2
     self.matrix[e[0]][e[1]] = 3
   

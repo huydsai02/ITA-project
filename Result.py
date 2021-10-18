@@ -6,7 +6,7 @@ from p import *
 
 # size lấy vào kích cỡ mê cung với tham số thứ nhất là số ô ngang mê cung, tham số thứ 2 là số ô dọc mê cung
 # Bây giờ mê cung sẽ luôn có path và size luôn là 2 số lẻ
-maze = Maze(size = (45,45))
+maze = Maze(size = (131,65), s = (1,1), e = (129, 63))
 
 # Thông tin mê cung
 xs, ys = maze.get_start_point()
@@ -15,7 +15,7 @@ list_maze = maze.get_list_maze()
 size = maze.get_size()
 
 # Tính toán. Nếu muốn tìm đường đi thì calculate = True không thì False
-calculate = False
+calculate = True
 
 if calculate == True:
   solutions = FindPath(maze)
@@ -31,7 +31,7 @@ color_brick = (102, 38, 60)
 
 ##### Thông số cửa sổ
 pygame.init()
-square = 15
+square = 10
 SIZE = (square*size[0], square*size[1] + square)
 DISPLAYSURF = pygame.display.set_mode((SIZE[0], SIZE[1]))
 pygame.display.set_caption('Hello world!')
