@@ -16,19 +16,11 @@ class Maze(object):
 
   def CreateMaze(self):
     size = self.get_size()
+    a = size[0] if size[0] % 2 == 1 else size[0] + 1
+    b = size[1] if size[1] % 2 == 1 else size[1] + 1
+    size = self.size = (a,b)
 
-    if size[0] % 2 == 0:
-      a = size[0] + 1
-    else:
-      a = size[0]
-
-    if size[1] % 2 == 0:
-      b = size[1] + 1
-    else:
-      b = size[1]
-    size = self.set_size((a,b))
-
-    self.matrix = [[1 if (i*j) % 2 == 0 else 0 for i in range(size[1])] for j in range(size[0])]
+    self.matrix = [[1 if (i*j) % 2 == 0 else 0 for i in range(b)] for j in range(a)]
     n = int(size[0]/2) * int(size[1]/2)
     nv = 1
     current_cell = (1,1)

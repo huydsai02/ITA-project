@@ -6,7 +6,8 @@ from p import *
 
 # size lấy vào kích cỡ mê cung với tham số thứ nhất là số ô ngang mê cung, tham số thứ 2 là số ô dọc mê cung
 # Bây giờ mê cung sẽ luôn có path và size luôn là 2 số lẻ
-maze = Maze(size = (65,65), s = (1,1), e = (63, 63))
+width, height = (131, 65)
+maze = Maze(size = (width, height), s = (1, height - 2), e = (width - 2, 1))
 
 # Thông tin mê cung
 xs, ys = maze.get_start_point()
@@ -15,7 +16,7 @@ list_maze = maze.get_list_maze()
 size = maze.get_size()
 
 # Tính toán. Nếu muốn tìm đường đi thì calculate = True không thì False
-calculate = False
+calculate = True
 
 if calculate == True:
   solutions = FindPath(maze)
@@ -57,6 +58,38 @@ def ShowInfo(Info, size=30):
   text = fnt.render(str(Info), True, (255, 0, 0))
   return text
 
+def NextPosition(x, y, step, l = list_maze):
+  nx = x + step[0]
+  ny = y + step[1]
+
+  while not CanTurn(nx, ny) and not LaNgoCut(nx, ny):
+    nx += step[0]
+    ny += step[1]
+
+  return (nx,ny)
+
+def CanTurn(x, y, l = list_maze):
+  check_direction = [[(1,0),(0,1)], [(-1,0),(0,1)], [(1,0),(0,-1)], [(-1,0),(0,-1)]]
+  for pair in check_direction:
+    count = 0
+    for d in pair:
+      if l[x + d[0]][y + d[1]] != 1:
+        count += 1
+    if count == 2:
+      return True
+  return False
+
+def LaNgoCut(x, y, l = list_maze):
+  check_direction = [[(1,0),(0,1),(0,-1)], [(-1,0),(0,1),(0,-1)], [(1,0),(-1,0),(0,-1)], [(-1,0),(1,0),(0,1)]]
+  for pair in check_direction:
+    count = 0
+    for d in pair:
+      if l[x + d[0]][y + d[1]] == 1:
+        count += 1
+    if count == 3:
+      return True
+  return False
+
 while True:
   DISPLAYSURF.fill(BACKGROUND_COLOR)
   for i in range(size[0]):
@@ -87,16 +120,20 @@ while True:
       if event.type == pygame.KEYDOWN:
         if event.key in [K_s, K_DOWN]:
           if list_maze[xs][ys+1] != 1:
-            ys += 2
-        if event.key in [K_w,K_UP ]:
+            xs, ys = NextPosition(xs,ys,(0,1))
+
+        if event.key in [K_w,K_UP]:
           if list_maze[xs][ys-1] != 1:
-            ys -= 2
+            xs, ys = NextPosition(xs,ys,(0,-1))
+
         if event.key in [K_a, K_LEFT]:
           if list_maze[xs-1][ys] != 1:
-            xs -= 2
+            xs, ys = NextPosition(xs,ys,(-1,0))
+
         if event.key in [K_d, K_RIGHT]:
           if list_maze[xs+1][ys] != 1:
-            xs += 2
+            xs, ys = NextPosition(xs,ys,(1,0))
+
   pygame.display.update()
 
 
