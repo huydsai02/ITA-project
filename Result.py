@@ -6,7 +6,7 @@ from p import *
 
 # size lấy vào kích cỡ mê cung với tham số thứ nhất là số ô ngang mê cung, tham số thứ 2 là số ô dọc mê cung
 # Nếu have_path = True thì chắc chắn điểm đầu và điểm cuối sẽ có đường lối, nếu have_path = False thì tùy máy
-maze = Maze(size = (45,31), have_path = True)
+maze = Maze(size = (131,65), have_path = True)
 
 # Thông tin mê cung
 xs, ys = maze.get_start_point()
@@ -23,8 +23,8 @@ if calculate == True:
 # print(optimal_path)
 
 ###### Màu
-color_start = (100,100,100)
-color_end = (255,0,0)
+color_start = (255, 199, 0)
+color_end = (115, 201, 62)
 BACKGROUND_COLOR = (55, 155, 255)
 color_road = (252, 251, 250)
 color_brick = (102, 38, 60)
@@ -36,7 +36,7 @@ color_brick = (102, 38, 60)
 
 ##### Thông số cửa sổ
 pygame.init()
-square = 20
+square = 10
 SIZE = (square*size[0], square*size[1] + square)
 DISPLAYSURF = pygame.display.set_mode((SIZE[0], SIZE[1]))
 pygame.display.set_caption('Hello world!')
