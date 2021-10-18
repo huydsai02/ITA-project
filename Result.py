@@ -8,7 +8,7 @@ from p import *
 # Nếu have_path = True, hard càng cao thì mê cung càng khó giải (2 <= hard <= min((size[0], size[1])) )
 # Nếu hard không thỏa mãn thì đưa hard về 4
 # Hiện tại đang có 2 cách tạo ma trận nên create_way có thể bằng 1 hoặc 2
-maze = Maze(size = (30,15), have_path = True, hard = 5, create_way = 2)
+maze = Maze(size = (45,30), have_path = True, hard = 5, create_way = 2)
 
 # Thông tin mê cung
 xs, ys = maze.get_start_point()
@@ -16,8 +16,8 @@ xf, yf = maze.get_end_point()
 list_maze = maze.get_list_maze()
 size = maze.get_size()
 
-# Tính toán
-calculate = True
+# Tính toán. Nếu muốn tìm đường đi thì calculate = True không thì False
+calculate = False
 
 if calculate == True:
   solutions = FindPath(maze)
@@ -33,14 +33,14 @@ BACKGROUND_COLOR = (255, 255, 255)
 
 # Thông số cửa sổ
 pygame.init()
-square = 40
+square = 20
 SIZE = (square*size[0], square*size[1] + square)
 DISPLAYSURF = pygame.display.set_mode((SIZE[0], SIZE[1]))
 pygame.display.set_caption('Hello world!')
 
 #Upload image
 img = pygame.image.load("./img/brick.png")# replace by ur path
-decrease = 1
+decrease = 0
 brick = pygame.transform.scale(img, (square - 2*decrease, square - 2*decrease))
 
 # Add score
