@@ -6,8 +6,9 @@ class Maze(object):
     # self.size là kích thước của mê cung, vị trí thứ nhất là chiều ngang mê cung, vị trí thứ hai là chiều dọc mê cung
     self.size = size
     self.matrix = self.CreateMaze(have_path, hard, create_way)
-    self.Set_start_end_in_matrix()
     self.list_point = self.Create_list_point(num = int(self.get_size()[0] * self.get_size()[1] / 10))
+    self.add_brick_outside()
+    self.Set_start_end_in_matrix()
 
 
   def CreateMaze(self, have_path = False, hard = 4, create_way = 1):
@@ -121,7 +122,29 @@ class Maze(object):
     self.Create_list_point()
     
     return self.matrix
-      
+  
+  def add_brick_outside(self):
+    matrix = self.get_list_maze()
+    size = self.get_size()
+    list_point = self.get_list_point()
+    
+    new_list_point = [[0 for i in range(size[1] + 2)] for j in range(size[0] + 2)]
+    new_matrix = [[1 for k in range(size[1] + 2)] for h in range(size[0] + 2)]
+    for i in range(1, size[0] + 1):
+      for j in range(1, size[1] + 1):
+        new_matrix[i][j] = matrix[i-1][j-1]
+        new_list_point[i][j] = list_point[i-1][j-1]
+    
+    s = self.get_start_point()
+    e = self.get_end_point()
+    
+    self.set_start_point((s[0]+1,s[1]+1))
+    self.set_end_point((e[0]+1,e[1]+1))
+
+    self.set_list_maze(new_matrix)
+    self.set_list_point(new_list_point)
+    self.set_size((size[0] + 2, size[1] + 2))
+    
   def Create_list_point(self, num = 10, ranrange= range(4, 8)):
     size = self.get_size()
     m = self.get_list_maze()
@@ -182,6 +205,10 @@ class Maze(object):
   def get_list_point(self):
     return self.list_point
 
+  def set_list_point(self, x):
+    self.list_point = x
+    return self.get_list_point()
+
   def get_start_point(self):
     return self.start_point
   
@@ -199,8 +226,16 @@ class Maze(object):
   def get_list_maze(self):
     return self.matrix
 
+  def set_list_maze(self, x):
+    self.matrix = x
+    return self.get_list_maze()
+
   def get_size(self):
     return self.size
+
+  def set_size(self, x):
+    self.size = x
+    return self.get_size()
 
 
 
