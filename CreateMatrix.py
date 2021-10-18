@@ -5,6 +5,7 @@ class Maze(object):
     # self.size là kích thước của mê cung, vị trí thứ nhất là chiều ngang mê cung, vị trí thứ hai là chiều dọc mê cung
     self.size = size
     self.matrix = self.CreateMaze()
+    self.create_random_start_end_point()
     self.Create_list_point()
 
   def CreateMaze(self):
@@ -14,7 +15,7 @@ class Maze(object):
       a = size[0] + 1
     else:
       a = size[0]
-      
+
     if size[1] % 2 == 0:
       b = size[1] + 1
     else:
@@ -32,28 +33,20 @@ class Maze(object):
         current_cell = cell_stack.pop()
         continue
       step, next_cell = random.choice(neighbours)
-      self.matrix[current_cell[0] + int(step[0]/2)][current_cell[1] + int(step[1]/2)] = 0
+      self.knock_down_wall(current_cell, step)
+      # self.matrix[current_cell[0] + int(step[0]/2)][current_cell[1] + int(step[1]/2)] = 0
       cell_stack.append(current_cell)
       current_cell = next_cell
       nv += 1
-    s = e = [0,0]
-    while (s[0] - e[0])**2 + (s[1] - e[1])**2 < min(size)**2:
-      # Tạo điểm bắt đầu
-      s = [randint(0,size[0] - 1),randint(0, size[1] - 1)]
-      while self.matrix[s[0]][s[1]] == 1:
-        s = [randint(0,size[0] - 1),randint(0, size[1] - 1)]
-      self.set_start_point((s[0],s[1]))
-
-      # Tạo điểm kết thúc
-      e = [randint(0,size[0] - 1),randint(0, size[1] - 1)]
-      while self.matrix[e[0]][e[1]] == 1 and s != e:
-        e = [randint(0,size[0] - 1),randint(0, size[1] - 1)]
-      self.set_end_point((e[0],e[1]))
+    
     return self.matrix
+
+  def knock_down_wall(self, cell, step):
+    # Phá tường mà step đi qua
+    self.matrix[cell[0] + int(step[0]/2)][cell[1] + int(step[1]/2)] = 0
 
   def has_all_walls(self, i, j):
     m = self.get_list_maze()
-    size = self.get_size()
     if m[i][j] == 0:
       if m[i-1][j] == 1 and m[i+1][j] == 1 and m[i][j-1] == 1 and m[i][j+1] == 1:
         return True
@@ -82,9 +75,21 @@ class Maze(object):
       self.list_point[i][j] = random.choice(ranrange)
     return self.list_point
 
-  def Set_start_end_in_matrix(self):
-    s = self.get_start_point()
-    e = self.get_end_point()
+  def create_random_start_end_point(self):
+    size = self.get_size()
+    s = e = [0,0]
+    while (s[0] - e[0])**2 + (s[1] - e[1])**2 < max(size)**2:
+      # Tạo điểm bắt đầu
+      s = [randint(0,size[0] - 1),randint(0, size[1] - 1)]
+      while self.matrix[s[0]][s[1]] == 1:
+        s = [randint(0,size[0] - 1),randint(0, size[1] - 1)]
+      self.set_start_point((s[0],s[1]))
+
+      # Tạo điểm kết thúc
+      e = [randint(0,size[0] - 1),randint(0, size[1] - 1)]
+      while self.matrix[e[0]][e[1]] == 1 and s != e:
+        e = [randint(0,size[0] - 1),randint(0, size[1] - 1)]
+      self.set_end_point((e[0],e[1]))
     self.matrix[s[0]][s[1]] = 2
     self.matrix[e[0]][e[1]] = 3
   
