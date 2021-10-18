@@ -6,10 +6,7 @@ from p import *
 
 # size lấy vào kích cỡ mê cung với tham số thứ nhất là số ô ngang mê cung, tham số thứ 2 là số ô dọc mê cung
 # Nếu have_path = True thì chắc chắn điểm đầu và điểm cuối sẽ có đường lối, nếu have_path = False thì tùy máy
-# Nếu have_path = True, hard càng cao thì mê cung càng khó giải (2 <= hard <= min((size[0], size[1])) )
-# Nếu hard không thỏa mãn thì đưa hard về 4
-# Hiện tại đang có 2 cách tạo ma trận nên create_way có thể bằng 1 hoặc 2
-maze = Maze(size = (45,31), have_path = True, hard = 5, create_way = 2)
+maze = Maze(size = (45,31), have_path = True)
 
 # Thông tin mê cung
 xs, ys = maze.get_start_point()
