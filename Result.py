@@ -1,6 +1,7 @@
 import pygame, sys
 from pygame.locals import *
 from CreateMatrix import *
+from random import randint
 from p import *
 
 # size lấy vào kích cỡ mê cung với tham số thứ nhất là số ô ngang mê cung, tham số thứ 2 là số ô dọc mê cung
@@ -29,7 +30,7 @@ color = (255,255,190)
 color1 = (255,9,9)
 color_start = (100,100,100)
 color_end = (255,0,0)
-BACKGROUND_COLOR = (255, 255, 255)
+BACKGROUND_COLOR = (55, 155, 255)
 
 # Thông số cửa sổ
 pygame.init()
