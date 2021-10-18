@@ -5,8 +5,8 @@ from random import randint
 from p import *
 
 # size lấy vào kích cỡ mê cung với tham số thứ nhất là số ô ngang mê cung, tham số thứ 2 là số ô dọc mê cung
-# Nếu have_path = True thì chắc chắn điểm đầu và điểm cuối sẽ có đường lối, nếu have_path = False thì tùy máy
-maze = Maze(size = (131,65), have_path = True)
+# Bây giờ mê cung sẽ luôn có path và size luôn là 2 số lẻ
+maze = Maze(size = (131,65))
 
 # Thông tin mê cung
 xs, ys = maze.get_start_point()
