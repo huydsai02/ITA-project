@@ -34,7 +34,6 @@ class Maze(object):
         continue
       step, next_cell = random.choice(neighbours)
       self.knock_down_wall(current_cell, step)
-      # self.matrix[current_cell[0] + int(step[0]/2)][current_cell[1] + int(step[1]/2)] = 0
       cell_stack.append(current_cell)
       current_cell = next_cell
       nv += 1
@@ -78,7 +77,7 @@ class Maze(object):
   def create_random_start_end_point(self):
     size = self.get_size()
     s = e = [0,0]
-    while (s[0] - e[0])**2 + (s[1] - e[1])**2 < max(size)**2:
+    while (s[0] - e[0])**2 + (s[1] - e[1])**2 < min(size)**2:
       # Tạo điểm bắt đầu
       s = [randint(0,size[0] - 1),randint(0, size[1] - 1)]
       while self.matrix[s[0]][s[1]] == 1:
