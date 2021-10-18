@@ -6,7 +6,7 @@ from p import *
 
 # size lấy vào kích cỡ mê cung với tham số thứ nhất là số ô ngang mê cung, tham số thứ 2 là số ô dọc mê cung
 # Bây giờ mê cung sẽ luôn có path và size luôn là 2 số lẻ
-maze = Maze(size = (131,65), s = (1,1), e = (129, 63))
+maze = Maze(size = (45,45), s = (1,1), e = (43, 43))
 
 # Thông tin mê cung
 xs, ys = maze.get_start_point()
@@ -15,7 +15,7 @@ list_maze = maze.get_list_maze()
 size = maze.get_size()
 
 # Tính toán. Nếu muốn tìm đường đi thì calculate = True không thì False
-calculate = True
+calculate = False
 
 if calculate == True:
   solutions = FindPath(maze)
@@ -31,15 +31,15 @@ color_brick = (102, 38, 60)
 
 ##### Thông số cửa sổ
 pygame.init()
-square = 10
+square = 15
 SIZE = (square*size[0], square*size[1] + square)
 DISPLAYSURF = pygame.display.set_mode((SIZE[0], SIZE[1]))
 pygame.display.set_caption('Hello world!')
 
 #Upload image
-img = pygame.image.load("./img/brick.png")# replace by ur path
+# img = pygame.image.load("./img/brick.png")# replace by ur path
 decrease = 0
-brick = pygame.transform.scale(img, (square - 2*decrease, square - 2*decrease))
+# brick = pygame.transform.scale(img, (square - 2*decrease, square - 2*decrease))
 
 # Add score
 font = pygame.font.Font('freesansbold.ttf', 10)
@@ -62,9 +62,9 @@ while True:
   for i in range(size[0]):
     for j in range(size[1]):
       if list_maze[i][j] == 1:
-        DISPLAYSURF.blit(brick, (i * square + decrease, j * square + decrease))
+        # DISPLAYSURF.blit(brick, (i * square + decrease, j * square + decrease))
         pygame.draw.rect(DISPLAYSURF, color_brick, (i * square + decrease, j * square + decrease, square - 2 * decrease, square - 2 * decrease))
-      if list_maze[i][j] == 0:
+      if list_maze[i][j] != 1:
         pygame.draw.rect(DISPLAYSURF, color_road, (i * square + decrease, j * square + decrease, square - 2 * decrease, square - 2 * decrease))
 
   pygame.draw.rect(DISPLAYSURF, color_start, (xs * square, ys * square, square, square))
@@ -81,9 +81,22 @@ while True:
     DISPLAYSURF.blit(ShowInfo(f'The highest score is {round(highest_score,2)} with {len_of_best} steps and {int(point_of_best)} points', size=15), (square/2, SIZE[1] - square))
 
   for event in pygame.event.get():
-      if event.type == QUIT:
+      if event.type == QUIT or (xs,ys) == (xf,yf):
           pygame.quit()
           sys.exit()
+      if event.type == pygame.KEYDOWN:
+        if event.key in [K_s, K_DOWN]:
+          if list_maze[xs][ys+1] != 1:
+            ys += 1
+        if event.key in [K_w,K_UP ]:
+          if list_maze[xs][ys-1] != 1:
+            ys -= 1
+        if event.key in [K_a, K_LEFT]:
+          if list_maze[xs-1][ys] != 1:
+            xs -= 1
+        if event.key in [K_d, K_RIGHT]:
+          if list_maze[xs+1][ys] != 1:
+            xs += 1
   pygame.display.update()
 
 
