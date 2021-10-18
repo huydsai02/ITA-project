@@ -9,7 +9,7 @@ from p import *
 # Nếu have_path = True, hard càng cao thì mê cung càng khó giải (2 <= hard <= min((size[0], size[1])) )
 # Nếu hard không thỏa mãn thì đưa hard về 4
 # Hiện tại đang có 2 cách tạo ma trận nên create_way có thể bằng 1 hoặc 2
-maze = Maze(size = (45,30), have_path = True, hard = 5, create_way = 2)
+maze = Maze(size = (45,31), have_path = True, hard = 5, create_way = 2)
 
 # Thông tin mê cung
 xs, ys = maze.get_start_point()
@@ -25,14 +25,19 @@ if calculate == True:
   highest_score, optimal_path, len_of_best, point_of_best = Optimal_result(maze, solutions)
 # print(optimal_path)
 
-# Màu
-color = (255,255,190)
-color1 = (255,9,9)
+###### Màu
 color_start = (100,100,100)
 color_end = (255,0,0)
 BACKGROUND_COLOR = (55, 155, 255)
+color_road = (252, 251, 250)
+color_brick = (102, 38, 60)
 
-# Thông số cửa sổ
+# color_road = (255,255,190)
+# color_road = (239, 251, 208)
+# color_brick = (35, 91, 5)
+
+
+##### Thông số cửa sổ
 pygame.init()
 square = 20
 SIZE = (square*size[0], square*size[1] + square)
@@ -66,8 +71,9 @@ while True:
     for j in range(size[1]):
       if list_maze[i][j] == 1:
         DISPLAYSURF.blit(brick, (i * square + decrease, j * square + decrease))
+        pygame.draw.rect(DISPLAYSURF, color_brick, (i * square + decrease, j * square + decrease, square - 2 * decrease, square - 2 * decrease))
       if list_maze[i][j] == 0:
-        pygame.draw.rect(DISPLAYSURF, color, (i * square + decrease, j * square + decrease, square - 2 * decrease, square - 2 * decrease))
+        pygame.draw.rect(DISPLAYSURF, color_road, (i * square + decrease, j * square + decrease, square - 2 * decrease, square - 2 * decrease))
 
   pygame.draw.rect(DISPLAYSURF, color_start, (xs * square, ys * square, square, square))
   pygame.draw.rect(DISPLAYSURF, color_end, (xf * square, yf * square, square, square))
