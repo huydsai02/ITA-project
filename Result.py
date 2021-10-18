@@ -15,7 +15,7 @@ list_maze = maze.get_list_maze()
 size = maze.get_size()
 
 # Tính toán. Nếu muốn tìm đường đi thì calculate = True không thì False
-calculate = False
+calculate = True
 
 if calculate == True:
   solutions = FindPath(maze)
