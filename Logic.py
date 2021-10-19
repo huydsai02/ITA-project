@@ -82,7 +82,7 @@ def FindValidDimension(coor, list_maze, p = None):
   
   return res
 
-def FindPath(maze,start = (1,1) ,end = None, c = None, path = None):
+def FindPath(maze,start = (1,1) ,end = None, c = None, path = None): #Lỗi logic hàm này
   xs, ys = start
   list_maze = maze.get_list_maze()
   d = {}
