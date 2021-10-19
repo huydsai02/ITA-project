@@ -23,7 +23,10 @@ class Maze(object):
     self.matrix = [[1 if (i*j) % 2 == 0 else 0 for i in range(b)] for j in range(a)]
     n = int(size[0]/2) * int(size[1]/2)
     nv = 1
-    current_cell = (1,1)
+
+    # Điểm khởi tạo mê cung
+    start_point = (random.choice(range(1, size[0], 2)), random.choice(range(1, size[1], 2)))
+    current_cell = start_point
     cell_stack = []
     while nv < n:
       neighbours = self.find_valid_neighbours(current_cell)
