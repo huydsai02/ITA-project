@@ -72,7 +72,8 @@ class Maze(object):
     lst = [(i, j) for i in range(size[0]) for j in range(size[1]) if m[i][j] == 0]
     point_pos = random.sample(lst, num)
     for i, j in point_pos:
-      self.list_point[i][j] = random.choice(ranrange)
+      if m[i][j] != 1:
+        self.list_point[i][j] = random.choice(ranrange)
     return self.list_point
 
   def create_random_start_end_point(self):
