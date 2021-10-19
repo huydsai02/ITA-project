@@ -2,7 +2,7 @@ import numpy as np
 import math
 from CreateMatrix import *
 
-def IsLogical(maze, path):#Liệu bước đi có hợp lý ko
+def IsLogical(maze, path):#Liệu path có hợp lý ko
     xs, ys = maze.get_start_point()
     list_maze = maze.get_list_maze()
     size = maze.get_size()
@@ -18,7 +18,7 @@ def IsLogical(maze, path):#Liệu bước đi có hợp lý ko
         return False
     return True
 
-def HasLoop(maze, path):#path có đi vòng tại điểm cuối ko, nếu có trả về điểm lặp của loop
+def HasLoop(maze, path):#path có đi vòng tại điểm cuối ko, nếu có trả về điểm lặp
     path = PathConvert(maze, path)
     if path.count(path[-1]) == 1:
         return [False]
