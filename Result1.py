@@ -13,12 +13,14 @@ maze = Maze(size = (width, height), num_point= 10)
 xs, ys = maze.get_start_point()
 xf, yf = maze.get_end_point()
 list_maze = maze.get_list_maze()
+list_point = list_maze
 size = maze.get_size()
 
 # Tính toán. Nếu muốn tìm đường đi thì calculate = True không thì False
 calculate = True
 
 if calculate == True:
+  list_point = maze.get_list_point()
   score, optimal_path = Optimize_solution((xs, ys), (xf, yf), maze)
   len_of_best = len(optimal_path)
   highest_score = score / len_of_best
@@ -59,11 +61,11 @@ def ShowInfo(Info, size=30):
   text = fnt.render(str(Info), True, (255, 0, 0))
   return text
 
-def NextPosition(x, y, step, l = list_maze):
+def NextPosition(x, y, step, l = list_maze, lp = list_point):
   nx = x + step[0]
   ny = y + step[1]
 
-  while not CanTurn(nx, ny) and not LaNgoCut(nx, ny):
+  while not CanTurn(nx, ny) and not LaNgoCut(nx, ny) and lp[nx][ny] == 0:
     nx += step[0]
     ny += step[1]
 
