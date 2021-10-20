@@ -183,14 +183,15 @@ def Optimize_solution(maze):
   return op
 
 if __name__ == '__main__':
-  si = 15
-  s = (random.choice(range(1,si - 2,2)),random.choice(range(1,si-2,2)))
-  e = (random.choice(range(1,si - 2,2)),random.choice(range(1,si - 2,2)))
-  maze = Maze(size = (si,si), s= s , e = e)
-  coordinate = (random.choice(range(1,si - 2,2)),random.choice(range(1,si - 2,2)))
-  main_path = FindPath(maze = maze, end = e, start=s)
-  extra_path = FindPath(maze = maze, start = coordinate, points = main_path)
-  print(Optimize_solution(s, e, maze))
+  while True:
+    si = 15
+    s = (random.choice(range(1,si - 2,2)),random.choice(range(1,si-2,2)))
+    e = (random.choice(range(1,si - 2,2)),random.choice(range(1,si - 2,2)))
+    maze = Maze(size = (si,si), start = s, end = e, num_point = 5)
+    coordinate = (random.choice(range(1,si - 2,2)),random.choice(range(1,si - 2,2)))
+    main_path = FindPath(maze = maze, end = e, start=s)
+    extra_path = FindPath(maze = maze, start = coordinate, points = main_path)
+    print(Optimize_solution(maze))
 
 
   # list_maze = maze.get_list_maze()

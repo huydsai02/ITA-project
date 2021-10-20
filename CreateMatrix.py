@@ -1,17 +1,14 @@
 import random
 from random import randint
 class Maze(object):
-  def __init__(self, size = (11,11), s = None, e = None, matrix = None, num_point = 12):
+  def __init__(self, size = (11,11), start = (1,1), end = (9,9), matrix = None, num_point = 12):
     # self.size là kích thước của mê cung, vị trí thứ nhất là chiều ngang mê cung, vị trí thứ hai là chiều dọc mê cung
     self.size = size
     self.matrix = self.CreateMaze() if matrix == None else matrix
-    if s == None and e == None:
-      self.create_random_start_end_point()
-    else:
-      self.start_point = s
-      self.end_point = e
-      self.matrix[s[0]][s[1]] = 2
-      self.matrix[e[0]][e[1]] = 3
+    self.start_point = start
+    self.end_point = end
+    self.matrix[start[0]][start[1]] = 2
+    self.matrix[end[0]][end[1]] = 3
     self.Create_list_point(num = num_point)
 
   def CreateMaze(self):
@@ -79,31 +76,8 @@ class Maze(object):
         self.list_point[i][j] = 5 * random.choice(ranrange)
     return self.list_point
 
-  def create_random_start_end_point(self):
-    size = self.get_size()
-    s = e = [0,0]
-    while (s[0] - e[0])**2 + (s[1] - e[1])**2 < (min(size) - 3)**2:
-      # Tạo điểm bắt đầu
-      s = [randint(0,size[0] - 1),randint(0, size[1] - 1)]
-      while self.matrix[s[0]][s[1]] == 1:
-        s = [randint(0,size[0] - 1),randint(0, size[1] - 1)]
-
-      # Tạo điểm kết thúc
-      e = [randint(0,size[0] - 1),randint(0, size[1] - 1)]
-      while self.matrix[e[0]][e[1]] == 1 and s != e:
-        e = [randint(0,size[0] - 1),randint(0, size[1] - 1)]
-
-    self.set_start_point(s)
-    self.set_end_point(e)
-    self.matrix[s[0]][s[1]] = 2
-    self.matrix[e[0]][e[1]] = 3
-  
   def get_list_point(self):
     return self.list_point
-
-  def set_list_point(self, x):
-    self.list_point = x
-    return self.get_list_point()
 
   def get_start_point(self):
     return self.start_point
@@ -111,27 +85,12 @@ class Maze(object):
   def get_end_point(self):
     return self.end_point
 
-  def set_start_point(self,coor):
-    self.start_point = coor
-    return self.get_start_point()
-
-  def set_end_point(self, coor):
-    self.end_point = coor
-    return self.get_end_point()
-
   def get_list_maze(self):
     return self.matrix
-
-  def set_list_maze(self, x):
-    self.matrix = x
-    return self.get_list_maze()
 
   def get_size(self):
     return self.size
 
-  def set_size(self, x):
-    self.size = x
-    return self.get_size()
 
 
 
