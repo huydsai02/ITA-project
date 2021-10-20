@@ -115,6 +115,8 @@ def Optimize_solution(start, end, maze):
           l[coo[0]][coo[1]].TimesGoPoint()
           if coo not in total_path:
             total_path.append(coo)
+            l[coo[0]][coo[1]].TimesGoPoint()
+
       score = 0
       length = 0
       for concoor in total_path:
