@@ -53,7 +53,7 @@ def FindValidDimension(coor, list_maze, p = None):
   
   return res
 
-def FindPath(maze,start = (1,1) ,end = None, c = None, points = None): #Lỗi logic hàm này
+def FindPath(maze,start = (1,1) ,end = None, c = None, points = None, dict = {}): #Lỗi logic hàm này
   xs, ys = start
   list_maze = maze.get_list_maze()
   d = {}
@@ -72,6 +72,18 @@ def FindPath(maze,start = (1,1) ,end = None, c = None, points = None): #Lỗi lo
       if (xs, ys) not in coors:
         coors.append((xs, ys))
     # print(coors[-1], (xs,ys))
+    if (xs, ys) in dict and True:
+      path = dict[(xs, ys)]
+      same = list(set(coors).intersection(path))
+      c = coors[:]      
+      for (x, y) in same:
+        if (x+1, y) in c or (x-1, y) in c or (x, y+1) in c or (x, y-1) in c:
+          coors.append((x,y))
+      for a in path:
+        if a not in same:
+          coors.append(a)
+      return coors
+      
     if end == None and points != None:
       if (xs, ys) in points:
         return coors
@@ -113,7 +125,7 @@ def Optimize_solution(start, end, maze):
       lss = list(subset)
       for coordinate in lss:
         if coordinate not in diction_road:
-          extra_path = FindPath(maze = maze, start = coordinate, points = main_path)
+          extra_path = FindPath(maze = maze, start = coordinate, points = main_path, dict = diction_road)
           diction_road[coordinate] = extra_path
         else:
           extra_path = diction_road[coordinate]
