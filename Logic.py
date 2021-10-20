@@ -180,7 +180,56 @@ def Optimize_solution(maze):
       if formular >= max:
         op = (score, total_path, length)
         max = formular
+  print(diction_road)
   return op
+
+def Find_Subset(d):
+    # Hàm trả về những đầu mút của đường thêm
+    l = list(d.keys())
+    res = {}
+    for consider in l:
+        # tập b là tập những điểm không nằm trong danh sách consider đi qua (trừ nó)
+        b = [consider]
+        # tập c là tập những điểm phải đi qua mới đến consider được
+        c = [consider]
+        for _ in l:
+            if consider in d[_]:
+                b.append(_)
+            if _ in d[consider]:
+                c.append(_)
+        b = list(set(b))
+        c = list(set(c))
+        if len(c) == 1:
+            res[consider] = b
+    return res
+
+def MixPoint(d):
+    l = list(d.keys())
+    list_d = [[]]
+    res = [list_d]
+    for L in range(1,len(l) + 1):
+        for subset in itertools.combinations(l, L):
+            list_d = []
+            for choosen in list(subset):
+                print(d[choosen])
+                list_d.append(d[choosen])
+                # print(list_d)
+            a = CombineList(list_d)
+            print(list_d, "======>", a)
+            res.append(a)
+    return res
+            
+def CombineList(l):
+    lf = []
+    ln = len(l)
+    if ln == 1:
+        return [[i] for i in l[0]]
+    for i in l[-1]:
+        for j in CombineList(l[:ln-1]):
+            j.append(i)
+            lf.append(j)
+    return lf
+
 
 if __name__ == '__main__':
   while True:
