@@ -2,7 +2,7 @@ import numpy as np
 import math
 from CreateMatrix import *
 
-def IsLogical(maze, path):#Liệu path có hợp lý ko
+def IsLogical(maze, path):#Liệu bước đi có hợp lý ko
     xs, ys = maze.get_start_point()
     list_maze = maze.get_list_maze()
     size = maze.get_size()
@@ -14,11 +14,11 @@ def IsLogical(maze, path):#Liệu path có hợp lý ko
         return False
     elif list_maze[x][y] == 1:
         return False
-    elif (x, y) == maze.get_start_point():
+    elif (x, y) == (xs, ys):
         return False
     return True
 
-def HasLoop(maze, path):#path có đi vòng tại điểm cuối ko, nếu có trả về điểm lặp
+def HasLoop(maze, path):#path có đi vòng tại điểm cuối ko, nếu có trả về điểm lặp của loop
     path = PathConvert(maze, path)
     if path.count(path[-1]) == 1:
         return [False]
@@ -37,9 +37,13 @@ def IsConsideredLoop(maze, path):#path có cần xem xét ko, là path mà chỉ
     return [False]
 
 def IsGoodLoop(maze, path):#liệu path cần xem xét đó có tốt ko, VD: '.....UDU' đạt điểm tại bc U là 1 path xấu
+    copath = PathConvert(maze, path)
+    l = len(copath)
     if IsConsideredLoop(maze, path)[0]:
         n = IsConsideredLoop(maze, path)[1]
         if IsConsideredLoop(maze, path[: n - 1])[0]:
+            return False
+        elif copath.count(copath[l - 2:]) > 2:
             return False
         return True
     return False
@@ -99,7 +103,14 @@ def FindPath(maze):#thuật toán để tìm tất cả path tới đích
                             paths.append(npath)
         step += 1
         if step > 2*num0:
-            return solutions
+            break
+    return solutions
+
+
+
+                        
+    
+
 
 def Optimal_result(maze, solutions):#tìm thông tin path có final score cao nhất 
     highest_score = 0
@@ -125,13 +136,11 @@ def Optimal_result(maze, solutions):#tìm thông tin path có final score cao nh
             best_solution = solution
     return highest_score, best_solution, len(best_solution), highest_score*len(best_solution)
             
+
 if __name__ == '__main__':
 # size lấy vào kích cỡ mê cung với tham số thứ nhất là số ô ngang mê cung, tham số thứ 2 là số ô dọc mê cung
     # Nếu đưa về list python thì tham số thứ nhất là số hàng, tham số thứ 2 là số cột
-    width, height = (19, 19)
-    s = (random.choice(range(1,width - 2,2)),random.choice(range(1,height - 2,2)))
-    e = (random.choice(range(1,width - 2,2)),random.choice(range(1,height - 2,2)))
-    maze_info = Maze(size = (width, height), num_point= 10, start = s, end = e, multi_path = False)
+    maze_info = Maze(size = (10,10))
     maze = np.array(maze_info.get_list_maze()).T
     lst_point = np.array(maze_info.get_list_point()).T
     solutions = FindPath(maze_info)
