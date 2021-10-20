@@ -7,7 +7,7 @@ from Logic import *
 # size lấy vào kích cỡ mê cung với tham số thứ nhất là số ô ngang mê cung, tham số thứ 2 là số ô dọc mê cung
 # Bây giờ mê cung sẽ luôn có path và size luôn là 2 số lẻ
 width, height = (35, 35)
-maze = Maze(size = (width, height))
+maze = Maze(size = (width, height), num_point= 10)
 
 # Thông tin mê cung
 xs, ys = maze.get_start_point()
