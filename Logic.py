@@ -121,8 +121,10 @@ def Optimize_solution(start, end, maze):
         score += list_point[concoor[0]][concoor[1]]
         length += l[concoor[0]][concoor[1]].get_times()
       all_path.append((score, length))
-      if score / length >= max:
+      formular = score / length
+      if formular >= max:
         op = (score, total_path)
+        max = formular
   return op
 
 if __name__ == '__main__':

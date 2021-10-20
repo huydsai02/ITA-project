@@ -6,7 +6,7 @@ from Logic import *
 
 # size lấy vào kích cỡ mê cung với tham số thứ nhất là số ô ngang mê cung, tham số thứ 2 là số ô dọc mê cung
 # Bây giờ mê cung sẽ luôn có path và size luôn là 2 số lẻ
-width, height = (15, 15)
+width, height = (21, 21)
 maze = Maze(size = (width, height))
 
 # Thông tin mê cung
