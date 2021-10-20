@@ -93,7 +93,7 @@ def FindPath(maze,start = (1,1) ,end = None, c = None, points = None, dict = {})
       if (xs, ys) not in coors:
         coors.append((xs, ys))
     # print(coors[-1], (xs,ys))
-    if (xs, ys) in dict and True:
+    if (xs, ys) in dict and False:
       path = dict[(xs, ys)]
       same = []
       diff = []
