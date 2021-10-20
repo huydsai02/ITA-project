@@ -140,12 +140,14 @@ def Optimal_result(maze, solutions):#tìm thông tin path có final score cao nh
 if __name__ == '__main__':
 # size lấy vào kích cỡ mê cung với tham số thứ nhất là số ô ngang mê cung, tham số thứ 2 là số ô dọc mê cung
     # Nếu đưa về list python thì tham số thứ nhất là số hàng, tham số thứ 2 là số cột
-    maze_info = Maze(size = (10,10))
+    width, height = (19, 19)
+    s = (random.choice(range(1,width - 2,2)),random.choice(range(1,height - 2,2)))
+    e = (random.choice(range(1,width - 2,2)),random.choice(range(1,height - 2,2)))
+    maze_info = Maze(size = (width, height), num_point= 10, start = s, end = e, multi_path = True)
     maze = np.array(maze_info.get_list_maze()).T
     lst_point = np.array(maze_info.get_list_point()).T
     solutions = FindPath(maze_info)
     the_most = Optimal_result(maze_info, solutions)
-
     print(maze)
     print(maze_info.get_start_point(), maze_info.get_end_point())
     print(solutions)
