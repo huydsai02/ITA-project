@@ -95,15 +95,24 @@ def FindPath(maze,start = (1,1) ,end = None, c = None, points = None, dict = {})
     # print(coors[-1], (xs,ys))
     if (xs, ys) in dict and True:
       path = dict[(xs, ys)]
-      same = list(set(coors).intersection(path))
-      c = coors[:]      
-      for (x, y) in same:
-        if (x+1, y) in c or (x-1, y) in c or (x, y+1) in c or (x, y-1) in c:
-          coors.append((x,y))
-      for a in path:
-        if a not in same:
-          coors.append(a)
-      return coors
+      same = []
+      diff = []
+      for a1 in coors:
+        if a1 not in path:
+          diff.append(a1)
+        else:
+          same.append(a1)
+      
+      c_diff = diff[:]
+      for x, y in same:
+        if (x-1, y) in c_diff or (x+1, y) in c_diff or (x, y-1) in c_diff or (x, y+1) in c_diff:
+          diff.append((x,y))
+      
+      for b1 in path:
+        if b1 not in same:
+          diff.append(b1)
+
+      return diff
       
     if end == None and points != None:
       if (xs, ys) in points:
