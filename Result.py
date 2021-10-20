@@ -6,8 +6,10 @@ from p import *
 
 # size lấy vào kích cỡ mê cung với tham số thứ nhất là số ô ngang mê cung, tham số thứ 2 là số ô dọc mê cung
 # Bây giờ mê cung sẽ luôn có path và size luôn là 2 số lẻ
-width, height = (31, 15)
-maze = Maze(size = (width, height), s = (1, height - 2), e = (width - 2, 1))
+width, height = (19, 19)
+s = (random.choice(range(1,width - 2,2)),random.choice(range(1,height - 2,2)))
+e = (random.choice(range(1,width - 2,2)),random.choice(range(1,height - 2,2)))
+maze = Maze(size = (width, height), num_point= 10, start = s, end = e, multi_path = True)
 
 # Thông tin mê cung
 xs, ys = maze.get_start_point()
