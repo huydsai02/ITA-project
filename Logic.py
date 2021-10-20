@@ -11,8 +11,10 @@ class Cell(object):
     self.main_road = main_road
     if main_road == False:
       self.times = 0
-    else:
+      self.go_through = False
+    else:      
       self.times = 1
+      self.go_through = True
 
   def TimesGoPoint(self):
     maze = self.maze
@@ -24,7 +26,26 @@ class Cell(object):
         times += 1
       self.times = times
     return self.times
-      
+  
+  def IsEnd(self, l):
+    x, y = self.get_pos()
+    count = 0
+    if l[x][y-1].go_through == True:
+      count += 1
+    if l[x][y+1].go_through == True:
+      count += 1
+    if l[x-1][y].go_through == True:
+      count += 1
+    if l[x+1][y].go_through == True:
+      count += 1
+    if count == 1 or (x,y) == self.maze.get_start_point():
+      return True
+    else:
+      return False
+
+  def GoThrough(self):
+    self.go_through = True 
+
   def get_pos(self):
     return (self.x, self.y)
 
@@ -102,8 +123,9 @@ def ConsiderCell(maze, path = []):
         res.append((x, y))
   return res
 
-def Optimize_solution(start, end, maze):
-  list_maze = maze.get_list_maze()
+def Optimize_solution(maze):
+  start = maze.get_start_point()
+  end = maze.get_end_point()
   list_point = maze.get_list_point()
   size = maze.get_size()
   main_path = FindPath(maze = maze, start = start, end = end)
@@ -111,7 +133,7 @@ def Optimize_solution(start, end, maze):
   max = 0
   diction_road = {}
     
-  all_path = []
+  # all_path = []
   for sl in range(0, len(consider_cell) + 1):
     for subset in itertools.combinations(consider_cell, sl):
       l = [[0 for i in range(size[1])] for j in range(size[0])]
@@ -136,14 +158,18 @@ def Optimize_solution(start, end, maze):
             l[coo[0]][coo[1]].TimesGoPoint()
 
       score = 0
-      length = 0
+      length = 1
       for concoor in total_path:
         score += list_point[concoor[0]][concoor[1]]
-        length += l[concoor[0]][concoor[1]].get_times()
-      all_path.append((score, length))
+        cell = l[concoor[0]][concoor[1]]
+        if cell.IsEnd(l):
+          length += (cell.get_times() - 1)
+        else:
+          length += cell.get_times()
+      # all_path.append((score, length))
       formular = score / length
       if formular >= max:
-        op = (score, total_path)
+        op = (score, total_path, length)
         max = formular
   return op
 

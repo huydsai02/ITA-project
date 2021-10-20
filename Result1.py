@@ -6,8 +6,8 @@ from Logic import *
 
 # size lấy vào kích cỡ mê cung với tham số thứ nhất là số ô ngang mê cung, tham số thứ 2 là số ô dọc mê cung
 # Bây giờ mê cung sẽ luôn có path và size luôn là 2 số lẻ
-width, height = (35, 35)
-maze = Maze(size = (width, height), num_point= 15)
+width, height = (11, 11)
+maze = Maze(size = (width, height), num_point= 10, s = (5,5), e = (3,3))
 
 # Thông tin mê cung
 xs, ys = maze.get_start_point()
@@ -21,8 +21,8 @@ calculate = True
 
 if calculate == True:
   list_point = maze.get_list_point()
-  score, optimal_path = Optimize_solution((xs, ys), (xf, yf), maze)
-  len_of_best = len(optimal_path)
+  score, optimal_path, len_of_best = Optimize_solution(maze)
+
   highest_score = score / len_of_best
   point_of_best = score
 
@@ -37,7 +37,7 @@ color_brick = (102, 38, 60)
 pygame.init()
 square = 20
 SIZE = (square*size[0], square*size[1] + square)
-DISPLAYSURF = pygame.display.set_mode((SIZE[0], SIZE[1]))
+DISPLAYSURF = pygame.display.set_mode((SIZE[0]+100, SIZE[1]))
 pygame.display.set_caption('Maze')
 
 #Upload image
