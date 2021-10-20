@@ -78,8 +78,8 @@ class Maze(object):
     return self.list_point
 
   def MultiPath(self, bool, break_brick = 10):
+    m = self.matrix
     if bool:
-      m = self.matrix
       size = self.get_size()
       l = []
       for i in range(1,size[0] - 1):
@@ -90,7 +90,7 @@ class Maze(object):
       br = random.sample(l, break_brick)
       for x,y in br:
         m[x][y] = 0
-      return m
+    return m
 
   def get_list_point(self):
     return self.list_point
