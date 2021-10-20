@@ -64,7 +64,7 @@ def NextPosition(x, y, step, l = list_maze, lp = list_point):
   nx = x + step[0]
   ny = y + step[1]
 
-  while not CanTurn(nx, ny) and not LaNgoCut(nx, ny) and lp[nx][ny] == 0:
+  while not CanTurn(nx, ny) and not LaNgoCut(nx, ny) and lp[nx][ny] == 0 and l[nx][ny] == 0:
     nx += step[0]
     ny += step[1]
 

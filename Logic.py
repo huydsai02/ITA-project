@@ -97,20 +97,26 @@ def Optimize_solution(start, end, maze):
   main_path = FindPath(maze = maze, start = start, end = end)
   consider_cell = ConsiderCell(maze, path = main_path)
   max = 0
-  l = [[0 for i in range(size[1])] for j in range(size[0])]
-  for i in range(size[0]):
-    for j in range(size[1]):
-      if (i, j) not in main_path:
-        l[i][j] = Cell((i,j), maze, main_road = False)
-      else:
-        l[i][j] = Cell((i,j), maze, main_road = True)  
+  diction_road = {}
+    
   all_path = []
   for sl in range(0, len(consider_cell) + 1):
     for subset in itertools.combinations(consider_cell, sl):
+      l = [[0 for i in range(size[1])] for j in range(size[0])]
+      for i in range(size[0]):
+        for j in range(size[1]):
+          if (i, j) not in main_path:
+            l[i][j] = Cell((i,j), maze, main_road = False)
+          else:
+            l[i][j] = Cell((i,j), maze, main_road = True)
       total_path = main_path[:]
       lss = list(subset)
       for coordinate in lss:
-        extra_path = FindPath(maze = maze, start = coordinate, points = main_path)
+        if coordinate not in diction_road:
+          extra_path = FindPath(maze = maze, start = coordinate, points = main_path)
+          diction_road[coordinate] = extra_path
+        else:
+          extra_path = diction_road[coordinate]
         for coo in extra_path:
           l[coo[0]][coo[1]].TimesGoPoint()
           if coo not in total_path:

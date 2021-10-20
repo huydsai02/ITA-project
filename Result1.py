@@ -6,8 +6,8 @@ from Logic import *
 
 # size lấy vào kích cỡ mê cung với tham số thứ nhất là số ô ngang mê cung, tham số thứ 2 là số ô dọc mê cung
 # Bây giờ mê cung sẽ luôn có path và size luôn là 2 số lẻ
-width, height = (35, 35)
-maze = Maze(size = (width, height), num_point= 10)
+width, height = (55, 55)
+maze = Maze(size = (width, height), num_point= 12)
 
 # Thông tin mê cung
 xs, ys = maze.get_start_point()
@@ -65,7 +65,7 @@ def NextPosition(x, y, step, l = list_maze, lp = list_point):
   nx = x + step[0]
   ny = y + step[1]
 
-  while not CanTurn(nx, ny) and not LaNgoCut(nx, ny) and lp[nx][ny] == 0:
+  while not CanTurn(nx, ny) and not LaNgoCut(nx, ny) and lp[nx][ny] == 0 and l[nx][ny] == 0:
     nx += step[0]
     ny += step[1]
 
