@@ -4,13 +4,50 @@ from CreateMatrix import *
 from random import randint
 from Logic import *
 
-# size lấy vào kích cỡ mê cung với tham số thứ nhất là số ô ngang mê cung, tham số thứ 2 là số ô dọc mê cung
-# Bây giờ mê cung sẽ luôn có path và size luôn là 2 số lẻ
-width, height = (35, 35)
+class Button:
+    """Create a button, then blit the surface in the while loop"""
+ 
+    def __init__(self, text,  pos, font, screen, bg="black", feedback="", size = (150,50), func = None):
+        self.x, self.y = pos
+        self.screen = screen
+        self.size = size
+        self.font = pygame.font.SysFont("Arial", font)
+        if feedback == "":
+            self.feedback = "text"
+        else:
+            self.feedback = feedback
+        self.change_text(text, bg)
+        self.handle = func
+        
+ 
+    def change_text(self, text, bg="black"):
+        ### Hàm xử lý khi click vào ###
+        """Change the text whe you click"""
+        self.text = self.font.render(text, 1, pygame.Color("White"))
+        # self.size = self.text.get_size()
+        self.surface = pygame.Surface(self.size)
+        self.surface.fill(bg)
+        self.surface.blit(self.text, (0, 0))
+        self.rect = pygame.Rect(self.x, self.y, self.size[0], self.size[1])
+ 
+    def show(self):
+        self.screen.blit(button1.surface, (self.x, self.y))
+ 
+    def click(self, event):
+        x, y = pygame.mouse.get_pos()
+        print(x,y)
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if pygame.mouse.get_pressed()[0]:
+                x, y = pygame.mouse.get_pos()
+                print(x,y)
+                if self.rect.collidepoint(x, y):
+                    self.change_text(self.feedback, bg="red")
+                    self.handle()
+
+width, height = (30, 30)
 s = (random.choice(range(1,width - 2,2)),random.choice(range(1,height - 2,2)))
 e = (random.choice(range(1,width - 2,2)),random.choice(range(1,height - 2,2)))
-maze = Maze(size = (width, height), num_point= 20, start = s, end = e, multi_path = False)
-
+maze = Maze(size = (width, height), num_point= 30, start = s, end = e, multi_path = False)
 
 # Thông tin mê cung
 xs, ys = maze.get_start_point()
@@ -20,7 +57,7 @@ list_point = list_maze
 size = maze.get_size()
 
 # Tính toán. Nếu muốn tìm đường đi thì calculate = True không thì False
-calculate = True
+calculate = False
 
 if calculate == True:
   list_point = maze.get_list_point()
@@ -38,8 +75,8 @@ color_brick = (102, 38, 60)
 
 ##### Thông số cửa sổ
 pygame.init()
-square = 20
-SIZE = (square*size[0], square*size[1] + square)
+square = 10
+SIZE = (square*size[0] + 200, square*size[1] + square)
 DISPLAYSURF = pygame.display.set_mode((SIZE[0]+100, SIZE[1]))
 pygame.display.set_caption('Maze')
 
@@ -100,13 +137,23 @@ def LaNgoCut(x, y, l = list_maze):
 FPS = 60
 fpsClock = pygame.time.Clock()
 
+
+
+
+
+
+####### Xử lý button
+def a():
+  print(1)
+button1 = Button("Click here", (0, 0), font=30, bg="navy", feedback="Hide", screen = DISPLAYSURF, func = a)
 while True:
   fpsClock.tick(FPS)
   DISPLAYSURF.fill(BACKGROUND_COLOR)
   for i in range(size[0]):
     for j in range(size[1]):
-      if ((i, j) in list_start or (i,j) in main_path) and False:
-        continue
+      if calculate:
+        if ((i, j) in list_start or (i,j) in main_path) and False:
+          continue
       if list_maze[i][j] == 1:
         # DISPLAYSURF.blit(brick, (i * square + decrease, j * square + decrease))
         pygame.draw.rect(DISPLAYSURF, color_brick, (i * square + decrease, j * square + decrease, square - 2 * decrease, square - 2 * decrease))
@@ -130,6 +177,7 @@ while True:
       if event.type == QUIT or (xs,ys) == (xf,yf):
           pygame.quit()
           sys.exit()
+      button1.click(event)
       if event.type == pygame.KEYDOWN:
         if event.key in [K_s, K_DOWN]:
           if list_maze[xs][ys+1] != 1:
@@ -146,7 +194,7 @@ while True:
         if event.key in [K_d, K_RIGHT]:
           if list_maze[xs+1][ys] != 1:
             xs, ys = NextPosition(xs,ys,(1,0))
-
+  button1.show()
   pygame.display.update()
 
 
