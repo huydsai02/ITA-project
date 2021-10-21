@@ -87,13 +87,13 @@ def DrawRectangle(l, size, color):
   for (i, j) in l:
     pygame.draw.rect(DISPLAYSURF, color, (i * a + decrease, j * b + decrease, a - 2 * decrease, b - 2 * decrease))
 
-def DrawCircle(l, size, color):
+def DrawCircle(l, size, color, radius):
   for (x, y) in l:
-    pygame.draw.circle(DISPLAYSURF, color, (x*size + size/2, y*size + size/2), size//4)
+    pygame.draw.circle(DISPLAYSURF, color, (x*size + size/2, y*size + size/2), radius-2*decrease)
 
 # Các nút trong chương trình
 state = True
-speed = 0.1
+speed = 0.07
 initial = 0
 length = len(path_bot_go)
 seen = False
@@ -106,6 +106,7 @@ btn_show_solution = Button(name = "Show solution", pos = (650,150), size = (230,
 show_bot_go = False
 one_times = True
 btn_show_bot = Button(name = "EXPLAIN", pos = (650,250), size = (230, 50))
+list_gone = []
 while True:
   if int(initial) < length:
     initial += speed
@@ -115,18 +116,25 @@ while True:
   # Draw rect
   DrawRectangle(cr, (square, square), color_road)
   DrawRectangle(cb, (square, square), color_brick)
-  DrawRectangle([(xs,ys)], (square, square), color_start)
-  DrawRectangle([(xf, yf)], (square, square), color_end)
-  if show_solution:
-    DrawCircle(optimal_path, square, (200, 200, 200))
-    
+  
+
+  # DrawRectangle([(xs,ys)], (square, square), color_start)
+  # DrawRectangle([(xf, yf)], (square, square), color_end)
   if seen == False:
     FullMaze(DrawRectangle,(cr, (square, square), color_road), xs, ys, maze)
+  # r, (square, square), color_road, color_brick
+  PathHasGone(list_gone, cr, cb, DrawRectangle, (cr, (square, square), color_road, color_brick), (xs, ys))
+  DrawCircle([(xs, ys)], square, color_start, square//2)
+  DrawCircle([(xf, yf)], square, color_end, square//2)
+  if show_solution:
+    DrawCircle(optimal_path, square, (220, 220, 220), square//4)
+    
   if show_bot_go:
     if int(initial) == length - 1:
       state = True
       show_bot_go = False
-    xs, ys = ShowBotGo(DrawRectangle,(cr, (square, square), color_road), path_bot_go, initial)
+    # DrawCircle([(xs, ys)], square, color_start, square//2)    
+    xs, ys = ShowBotGo(DrawCircle,(cr, square, (0,0,255), square//4), path_bot_go, initial)
   
   if show_solution or one_times == False:
     DISPLAYSURF.blit(ShowInfo(f'The highest score is {round(highest_score,2)} with {len_of_best} steps and {int(point_of_best)} points', size=15), (square/2, SIZE[1]))
@@ -151,7 +159,9 @@ while True:
         seen = False
         state = False
         show_bot_go = True
+        xs, ys = maze.get_start_point()
         one_times = False
+        list_gone = []
 
     if event.type == pygame.KEYDOWN:
       if event.key in [K_s, K_DOWN] and state:
@@ -182,9 +192,10 @@ while True:
   btn_show_bot.show(x,y)
   cp = DelElementFromList((xs,ys), cp)
   if seen == False:
-    h = cp + [(xf,yf)]
+    h = cp 
     DrawRectangle(h, (square, square), color_end)
     decrease = 1
+    DrawCircle([(xf, yf)], square, color_end, square//2)
   write_score(maze, cp, (square, square))
   pygame.display.update()
 
