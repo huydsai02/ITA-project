@@ -225,21 +225,19 @@ def CombineList(l):
 
 
 if __name__ == '__main__':
-  while True:
-    si = 15
-    s = (random.choice(range(1,si - 2,2)),random.choice(range(1,si-2,2)))
-    e = (random.choice(range(1,si - 2,2)),random.choice(range(1,si - 2,2)))
-    maze = Maze(size = (si,si), start = s, end = e, num_point = 5)
-    coordinate = (random.choice(range(1,si - 2,2)),random.choice(range(1,si - 2,2)))
-    main_path = FindPath(maze = maze, end = e, start=s)
-    extra_path = FindPath(maze = maze, start = coordinate, points = main_path)
-    print(Optimize_solution(maze))
+
+  si = 9
+  s = (random.choice(range(1,si - 2,2)),random.choice(range(1,si-2,2)))
+  e = (random.choice(range(1,si - 2,2)),random.choice(range(1,si - 2,2)))
+  maze = Maze(size = (si,si), start = s, end = e, num_point = 5)
+  main, ana = MazeAnalysis(maze)
+  print(e)
+  print(main)
+  print(ana)
+  # print([list_point[i][j] for (i, j) in ana])
 
 
-  # list_maze = maze.get_list_maze()
-  # list_point = maze.get_list_point()
-  # print(np.array(list_maze))
-  # print(np.array(list_point))
+
 
 
   
