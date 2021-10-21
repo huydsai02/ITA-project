@@ -144,7 +144,7 @@ while True:
       sys.exit()
     if event.type == pygame.MOUSEBUTTONDOWN:
       a, b = btn_seen.get_full_coor()
-      if a[0] <= x <= a[1] and b[0] <= y <= b[1] and state:
+      if a[0] <= x <= a[1] and b[0] <= y <= b[1] and state or not one_times:
         ewr = True if seen == False else False
         seen = ewr
       a, b = btn_show_solution.get_full_coor()
