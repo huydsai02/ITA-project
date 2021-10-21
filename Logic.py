@@ -84,6 +84,7 @@ def FindPath(maze, points = []):
   dict_road = {}
   d = {}
   d[(xs, ys)] = FindValidDimension((xs,ys), list_maze)
+  path_bot_go = [[(xs,ys), d[(xs,ys)][:]]]
   while True:
     if len(d[coors[-1]]) == 0:
       coors.pop()
@@ -94,6 +95,7 @@ def FindPath(maze, points = []):
       xs += cpath[0]
       ys += cpath[1]
       d[(xs,ys)] = d.get((xs,ys), FindValidDimension((xs,ys), list_maze, p = cpath))
+      path_bot_go.append([(xs,ys), d[(xs,ys)][:]])
       if (xs, ys) not in coors:
         coors.append((xs, ys))
 
@@ -103,7 +105,7 @@ def FindPath(maze, points = []):
       new_points = [point for point in points if point != (xs, ys)]
       points = new_points
     if len(points) == 0:
-      return dict_road
+      return dict_road, path_bot_go
     
 def MazeAnalysis(maze):
   size = maze.get_size()
@@ -111,7 +113,7 @@ def MazeAnalysis(maze):
   end_point = maze.get_end_point()
   list_point = maze.get_list_point()
   list_consider = [(i, j) for i in range(size[0]) for j in range(size[1]) if list_point[i][j] != 0 or (i,j) == end_point]
-  dict_path = FindPath(maze, list_consider)
+  dict_path, path_bot_go = FindPath(maze, list_consider)
   main_path = dict_path[end_point]
   dict_extra_path = {}
   for point in list_consider:
@@ -123,12 +125,12 @@ def MazeAnalysis(maze):
           extra_path.append(p)
       if len(extra_path) > 0:
         dict_extra_path[point] = extra_path
-  return main_path, dict_extra_path
+  return main_path, dict_extra_path, path_bot_go
   
 def Optimize_solution(maze):
   list_point = maze.get_list_point()
   size = maze.get_size()
-  main_path, diction_road = MazeAnalysis(maze)
+  main_path, diction_road, path_bot_go = MazeAnalysis(maze)
   max = 0
   start_extra = Find_Subset(diction_road)
   list_subset = MixPoint(start_extra)
@@ -172,7 +174,7 @@ def Optimize_solution(maze):
       op = (score, total_path, length)
       max = formular
 
-  return op, main_path, list(start_extra.keys())
+  return op, path_bot_go
 
 def Find_Subset(d):
   # Hàm trả về những đầu mút của đường thêm

@@ -43,3 +43,22 @@ def FullMaze(func, para, xs, ys, maze):
     l.append((a,b))
   res = [(i,j) for i in range(size[0]) for j in range(size[1]) if (i,j) not in l]
   func(res, (square, square), (0,0,0))
+
+def ShowBotGo(func, para, l, i):
+  cr, (square, square), color_road = para
+  if i < len(l):
+    consider = l[int(i)]
+    (xs, ys), dims = consider
+    res = []
+    for a,b in dims:
+      j = xs + a
+      k = ys + b
+      res.append((j,k))
+    func(res, (square, square), (150,150,150))
+    return xs, ys
+
+def DelElementFromList(coor, points):
+  if coor in points:
+    new_points = [point for point in points if point != coor]
+    points = new_points
+  return points
