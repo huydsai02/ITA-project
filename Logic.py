@@ -74,12 +74,11 @@ def FindValidDimension(coor, list_maze, p = None):
     res = []
     for step in steps:
       if list_maze[coor[0] + step[0]][coor[1] + step[1]] != 1:
-        res.append(step)
-  
+        res.append(step)  
   return res
 
-def FindPath(maze,start = (1,1) ,points = []): #Lỗi logic hàm này
-  xs, ys = start
+def FindPath(maze, points = []):
+  xs, ys = maze.get_start_point()
   list_maze = maze.get_list_maze()
   coors = [(xs, ys)]
   dict_road = {}
@@ -112,7 +111,7 @@ def MazeAnalysis(maze):
   end_point = maze.get_end_point()
   list_point = maze.get_list_point()
   list_consider = [(i, j) for i in range(size[0]) for j in range(size[1]) if list_point[i][j] != 0 or (i,j) == end_point]
-  dict_path = FindPath(maze, start_point, list_consider)
+  dict_path = FindPath(maze, list_consider)
   main_path = dict_path[end_point]
   dict_extra_path = {}
   for point in list_consider:
@@ -127,16 +126,15 @@ def MazeAnalysis(maze):
   return main_path, dict_extra_path
   
 def Optimize_solution(maze):
-  start = maze.get_start_point()
-  end = maze.get_end_point()
   list_point = maze.get_list_point()
   size = maze.get_size()
   main_path, diction_road = MazeAnalysis(maze)
   max = 0
   start_extra = Find_Subset(diction_road)
   list_subset = MixPoint(start_extra)
-  # all_path = []
+
   for subset in list_subset:
+
     l = [[0 for i in range(size[1])] for j in range(size[0])]
     for i in range(size[0]):
       for j in range(size[1]):
@@ -144,9 +142,10 @@ def Optimize_solution(maze):
           l[i][j] = Cell((i,j), maze, main_road = False)
         else:
           l[i][j] = Cell((i,j), maze, main_road = True)
+
     total_path = main_path[:]
-    lss = list(subset)
-    for coordinate in lss:
+
+    for coordinate in list(subset):
       if coordinate not in diction_road:
         extra_path = FindPath(maze = maze, start = coordinate, points = main_path, dict = diction_road)
         diction_road[coordinate] = extra_path
@@ -157,7 +156,7 @@ def Optimize_solution(maze):
         if coo not in total_path:
           total_path.append(coo)
           l[coo[0]][coo[1]].TimesGoPoint()
-    # print(set(total_path) == set(main_path))
+
     score = 0
     length = 1
     for concoor in total_path:
@@ -167,12 +166,12 @@ def Optimize_solution(maze):
         length += (cell.get_times() - 1)
       else:
         length += cell.get_times()
-    # all_path.append((score, length))
+
     formular = score / length
     if formular >= max:
       op = (score, total_path, length)
       max = formular
-  # print(diction_road)
+
   return op, main_path, list(start_extra.keys())
 
 def Find_Subset(d):
@@ -203,11 +202,8 @@ def MixPoint(d):
     for subset in itertools.combinations(l, L):
       list_d = []
       for choosen in list(subset):
-        # print(d[choosen])
         list_d.append(d[choosen])
-        # print(list_d)
       a = CombineList(list_d)
-      # print(list_d, "======>", a)
       for i in a:
         res.append(i)
   return res
@@ -234,14 +230,3 @@ if __name__ == '__main__':
     main_path = FindPath(maze = maze, end = e, start=s)
     extra_path = FindPath(maze = maze, start = coordinate, points = main_path)
     print(Optimize_solution(maze))
-
-
-  # list_maze = maze.get_list_maze()
-  # list_point = maze.get_list_point()
-  # print(np.array(list_maze))
-  # print(np.array(list_point))
-
-
-  
-
- 
