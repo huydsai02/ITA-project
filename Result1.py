@@ -4,14 +4,16 @@ from HandleEventFunction import *
 from HandleInfoFunction import * 
 import random
 
+nghich = False
 ###### All need info 
-maze, cp1, cr, cb, score, optimal_path, len_of_best, highest_score, point_of_best, path_bot_go, main_path = AllNeedInfo(size = (29,29), num_point = 0, start = None, end = None, multi_path = False)
+maze, cp1, cr, cb, score, optimal_path, len_of_best, highest_score, point_of_best, path_bot_go, main_path = AllNeedInfo(size = (29,29), num_point = 0, start = (1,1), end = (27,27), multi_path = False)
 cp = cp1[:]
 xs, ys = maze.get_start_point(); xf, yf = maze.get_end_point()
 list_point = maze.get_list_point()
 size = maze.get_size()
-cho = 2
-khoc = [(i,j) for i in range(size[0]) for j in range(size[1]) if (i,j) not in main_path]
+cho = min(size) // 2
+
+khoc = [(i,j) for i in range(size[0]) for j in range(size[1]) if (i,j) not in main_path and maze.get_list_maze()[i][j] != 1]
 cay = random.sample(khoc, cho)
 # print(cay)
 class Button:
@@ -118,7 +120,7 @@ list_gone = []
 current_score = 0
 total_step = 0
 while True:
-  if (xs, ys) in cay and False:
+  if (xs, ys) in cay and nghich:
     cay = random.sample(khoc, cho)
     xs, ys = maze.get_start_point()
 
@@ -137,7 +139,8 @@ while True:
   if seen == False:
     FullMaze(DrawRectangle,(cr, (square, square), color_road), xs, ys, maze)
   # r, (square, square), color_road, color_brick
-  PathHasGone(list_gone, cr, cb, DrawRectangle, (cr, (square, square), color_road, color_brick), (xs, ys))
+  if not nghich:
+    PathHasGone(list_gone, cr, cb, DrawRectangle, (cr, (square, square), color_road, color_brick), (xs, ys))
   DrawCircle([(xs, ys)], square, color_start, square//2)
   DrawCircle([(xf, yf)], square, color_end, square//2)
   if show_solution:
@@ -163,7 +166,7 @@ while True:
   DISPLAYSURF.blit(ShowInfo(stri, size=30), (650, 550))
     
   for event in pygame.event.get():
-    if event.type == QUIT:
+    if event.type == QUIT or ((xs, ys) == (xf, yf) and nghich):
       pygame.quit()
       sys.exit()
     if event.type == pygame.MOUSEBUTTONDOWN:
