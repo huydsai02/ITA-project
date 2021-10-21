@@ -1,8 +1,8 @@
 import pygame, sys
 from pygame.locals import *
-from CreateMatrix import *
-from random import randint
-from Logic import *
+from HandleEventFunction import * 
+from HandleInfoFunction import * 
+
 
 class Button:
     """Create a button, then blit the surface in the while loop"""
@@ -31,7 +31,7 @@ class Button:
         self.rect = pygame.Rect(self.x, self.y, self.size[0], self.size[1])
  
     def show(self):
-        self.screen.blit(button1.surface, (self.x, self.y))
+        self.screen.blit(self.surface, (self.x, self.y))
  
     def click(self, event):
         x, y = pygame.mouse.get_pos()
@@ -44,27 +44,9 @@ class Button:
                     self.change_text(self.feedback, bg="red")
                     self.handle()
 
-width, height = (30, 30)
-s = (random.choice(range(1,width - 2,2)),random.choice(range(1,height - 2,2)))
-e = (random.choice(range(1,width - 2,2)),random.choice(range(1,height - 2,2)))
-maze = Maze(size = (width, height), num_point= 30, start = s, end = e, multi_path = False)
-
-# Thông tin mê cung
-xs, ys = maze.get_start_point()
-xf, yf = maze.get_end_point()
-list_maze = maze.get_list_maze()
-list_point = list_maze
-size = maze.get_size()
-
-# Tính toán. Nếu muốn tìm đường đi thì calculate = True không thì False
-calculate = False
-
-if calculate == True:
-  list_point = maze.get_list_point()
-  (score, optimal_path, len_of_best), main_path, list_start = Optimize_solution(maze)
-
-  highest_score = score / len_of_best
-  point_of_best = score
+###### All need info 
+maze, cp, cr, cb, score, optimal_path, len_of_best, highest_score, point_of_best = AllNeedInfo()
+xs, ys = maze.get_start_point(); xf, yf = maze.get_end_point()
 
 ###### Màu
 color_start = (255, 199, 0)
@@ -75,126 +57,76 @@ color_brick = (102, 38, 60)
 
 ##### Thông số cửa sổ
 pygame.init()
-square = 10
-SIZE = (square*size[0] + 200, square*size[1] + square)
-DISPLAYSURF = pygame.display.set_mode((SIZE[0]+100, SIZE[1]))
+SIZE = (700,500)
+square = min(SIZE) // max(maze.get_size())
+DISPLAYSURF = pygame.display.set_mode((SIZE[0], SIZE[1] + square))
 pygame.display.set_caption('Maze')
+FPS = 60
+fpsClock = pygame.time.Clock()
+decrease = 0
 
 #Upload image
 # img = pygame.image.load("./img/brick.png")# replace by ur path
-decrease = 0
 # brick = pygame.transform.scale(img, (square - 2*decrease, square - 2*decrease))
 
-# Add score
-font = pygame.font.Font('freesansbold.ttf', 10)
-def write_score(maze, x, y):
-  info = maze.get_list_point()[x][y]
-  if info != 0:
-    s = str(info)
-  else:
-    s = ""
-  text = font.render(s, True, (255,0,0))
-  return text
+def write_score(maze, l, size):
+  a, b = size
+  font = pygame.font.Font('freesansbold.ttf', 10)
+  lp = maze.get_list_point()
+  for i, j in l:
+    text = font.render(str(lp[i][j]), True, (255,0,0))
+    DISPLAYSURF.blit(text, (i * a + decrease, j * b + decrease))
 
 def ShowInfo(Info, size=30):
   fnt = pygame.font.Font('freesansbold.ttf', size)
   text = fnt.render(str(Info), True, (255, 0, 0))
   return text
 
-def NextPosition(x, y, step, l = list_maze, lp = list_point):
-  nx = x + step[0]
-  ny = y + step[1]
+def DrawRectangle(l, size, color):
+  a, b = size
+  for (i, j) in l:
+    pygame.draw.rect(DISPLAYSURF, color, (i * a + decrease, j * b + decrease, a - 2 * decrease, b - 2 * decrease))
 
-  while not CanTurn(nx, ny) and not LaNgoCut(nx, ny) and lp[nx][ny] == 0 and l[nx][ny] == 0:
-    nx += step[0]
-    ny += step[1]
+# button1 = Button("Click here", (0, 0), font=30, bg="navy", feedback="Hide", screen = DISPLAYSURF, func = a)
+def DrawCircle(l, size, color):
+  for (x, y) in l:
+    pygame.draw.circle(DISPLAYSURF, color, (x*size + size/2, y*size + size/2), size//4)
 
-  return (nx,ny)
-
-def CanTurn(x, y, l = list_maze):
-  check_direction = [[(1,0),(0,1)], [(-1,0),(0,1)], [(1,0),(0,-1)], [(-1,0),(0,-1)]]
-  for pair in check_direction:
-    count = 0
-    for d in pair:
-      if l[x + d[0]][y + d[1]] != 1:
-        count += 1
-    if count == 2:
-      return True
-  return False
-
-def LaNgoCut(x, y, l = list_maze):
-  check_direction = [[(1,0),(0,1),(0,-1)], [(-1,0),(0,1),(0,-1)], [(1,0),(-1,0),(0,-1)], [(-1,0),(1,0),(0,1)]]
-  for pair in check_direction:
-    count = 0
-    for d in pair:
-      if l[x + d[0]][y + d[1]] == 1:
-        count += 1
-    if count == 3:
-      return True
-  return False
-
-#Set FPS
-FPS = 60
-fpsClock = pygame.time.Clock()
-
-
-
-
-
-
-####### Xử lý button
-def a():
-  print(1)
-button1 = Button("Click here", (0, 0), font=30, bg="navy", feedback="Hide", screen = DISPLAYSURF, func = a)
 while True:
   fpsClock.tick(FPS)
   DISPLAYSURF.fill(BACKGROUND_COLOR)
-  for i in range(size[0]):
-    for j in range(size[1]):
-      if calculate:
-        if ((i, j) in list_start or (i,j) in main_path) and False:
-          continue
-      if list_maze[i][j] == 1:
-        # DISPLAYSURF.blit(brick, (i * square + decrease, j * square + decrease))
-        pygame.draw.rect(DISPLAYSURF, color_brick, (i * square + decrease, j * square + decrease, square - 2 * decrease, square - 2 * decrease))
-      if list_maze[i][j] != 1:
-        pygame.draw.rect(DISPLAYSURF, color_road, (i * square + decrease, j * square + decrease, square - 2 * decrease, square - 2 * decrease))
+  # Draw rect
+  DrawRectangle(cr, (square, square), color_road)
+  DrawRectangle(cb, (square, square), color_brick)
+  DrawRectangle([(xs,ys)], (square, square), color_start)
+  DrawRectangle([(xf, yf)], (square, square), color_end)
+  write_score(maze, cp, (square, square))
+  DrawCircle(optimal_path, square, (0, 0, 255))
 
-  pygame.draw.rect(DISPLAYSURF, color_start, (xs * square, ys * square, square, square))
-  pygame.draw.rect(DISPLAYSURF, color_end, (xf * square, yf * square, square, square))
-
-  if calculate == True:
-    for i in range(size[0]):
-      for j in range(size[1]):
-        if list_maze[i][j] == 0:
-          DISPLAYSURF.blit(write_score(maze,i,j), (i * square + decrease, j * square + decrease))
-
-    for x,y in optimal_path:
-      pygame.draw.circle(DISPLAYSURF, (0, 0, 255), (x*square + square/2, y*square + square/2), square/4, square//4)
-    DISPLAYSURF.blit(ShowInfo(f'The highest score is {round(highest_score,2)} with {len_of_best} steps and {int(point_of_best)} points', size=15), (square/2, SIZE[1] - square))
-
+  DISPLAYSURF.blit(ShowInfo(f'The highest score is {round(highest_score,2)} with {len_of_best} steps and {int(point_of_best)} points', size=15), (square/2, SIZE[1]))
+  
   for event in pygame.event.get():
-      if event.type == QUIT or (xs,ys) == (xf,yf):
-          pygame.quit()
-          sys.exit()
-      button1.click(event)
-      if event.type == pygame.KEYDOWN:
-        if event.key in [K_s, K_DOWN]:
-          if list_maze[xs][ys+1] != 1:
-            xs, ys = NextPosition(xs,ys,(0,1))
+    if event.type == QUIT or (xs,ys) == (xf,yf):
+      pygame.quit()
+      sys.exit()
+    # button1.click(event)
+    if event.type == pygame.KEYDOWN:
+      if event.key in [K_s, K_DOWN]:
+        if (xs,ys+1) in cr:
+          xs, ys = NextPosition(xs,ys,(0,1), maze)
 
-        if event.key in [K_w,K_UP]:
-          if list_maze[xs][ys-1] != 1:
-            xs, ys = NextPosition(xs,ys,(0,-1))
+      if event.key in [K_w,K_UP]:
+        if (xs,ys-1) in cr:
+          xs, ys = NextPosition(xs,ys,(0,-1), maze)
 
-        if event.key in [K_a, K_LEFT]:
-          if list_maze[xs-1][ys] != 1:
-            xs, ys = NextPosition(xs,ys,(-1,0))
+      if event.key in [K_a, K_LEFT]:
+        if (xs-1,ys) in cr:
+          xs, ys = NextPosition(xs,ys,(-1,0), maze)
 
-        if event.key in [K_d, K_RIGHT]:
-          if list_maze[xs+1][ys] != 1:
-            xs, ys = NextPosition(xs,ys,(1,0))
-  button1.show()
+      if event.key in [K_d, K_RIGHT]:
+        if (xs+1,ys) in cr:
+          xs, ys = NextPosition(xs,ys,(1,0), maze)
+  # button1.show()
   pygame.display.update()
 
 

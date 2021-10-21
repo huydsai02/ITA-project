@@ -33,7 +33,7 @@ class Button:
         self.rect = pygame.Rect(self.x, self.y, self.size[0], self.size[1])
  
     def show(self):
-        self.screen.blit(button1.surface, (self.x, self.y))
+        self.screen.blit(self.surface, (self.x, self.y))
  
     def click(self, event):
         x, y = pygame.mouse.get_pos()
