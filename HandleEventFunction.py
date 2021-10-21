@@ -31,3 +31,15 @@ def LaNgoCut(x, y, l):
     if count == 3:
       return True
   return False
+
+def FullMaze(func, para, xs, ys, maze):
+  size = maze.get_size()
+  cr, (square, square), color_road = para
+  dim = [(1,1), (1,0), (1,-1), (0,1), (0,-1), (-1,1), (-1,0), (-1,-1), (0,0)]
+  l = []
+  for x,y in dim:
+    a = xs + x
+    b = ys + y
+    l.append((a,b))
+  res = [(i,j) for i in range(size[0]) for j in range(size[1]) if (i,j) not in l]
+  func(res, (square, square), (0,0,0))

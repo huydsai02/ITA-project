@@ -15,10 +15,10 @@ def TakeCoordinateRoad(maze):
 
 def AllNeedInfo():
   maze = Maze
-  width, height = (20, 20)
+  width, height = (7, 7)
   s = (random.choice(range(1,width - 2,2)),random.choice(range(1,height - 2,2)))
   e = (random.choice(range(1,width - 2,2)),random.choice(range(1,height - 2,2)))
-  maze = Maze(size = (width, height), num_point= 10, start = s, end = e, multi_path = False)
+  maze = Maze(size = (width, height), num_point= 5, start = s, end = e, multi_path = False)
   cp = TakeCoordinatePoint(maze)
   cr, cb = TakeCoordinateRoad(maze)
   (score, optimal_path, len_of_best), main_path, list_start = Optimize_solution(maze)

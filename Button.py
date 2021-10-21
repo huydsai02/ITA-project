@@ -29,7 +29,7 @@ class Button:
         # self.size = self.text.get_size()
         self.surface = pygame.Surface(self.size)
         self.surface.fill(bg)
-        self.surface.blit(self.text, (0, 0))
+        self.surface.blit(self.text.upper(), (0, 0))
         self.rect = pygame.Rect(self.x, self.y, self.size[0], self.size[1])
  
     def show(self):
