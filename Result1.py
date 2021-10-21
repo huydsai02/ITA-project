@@ -7,6 +7,7 @@ from HandleInfoFunction import *
 maze, cp1, cr, cb, score, optimal_path, len_of_best, highest_score, point_of_best, path_bot_go = AllNeedInfo(size = (21,21), num_point = 10, start = None, end = None, multi_path = False)
 cp = cp1[:]
 xs, ys = maze.get_start_point(); xf, yf = maze.get_end_point()
+list_point = maze.get_list_point()
 class Button:
   """Create a button, then blit the surface in the while loop"""
   def __init__(self, name,  pos = (0,0), color = (255,255,255), font = 30, size = (150,50)):
@@ -54,7 +55,7 @@ color_brick = (102, 38, 60)
 
 ##### Thông số cửa sổ
 pygame.init()
-SIZE = (900,600)
+SIZE = (950,600)
 square = min(SIZE) // max(maze.get_size())
 DISPLAYSURF = pygame.display.set_mode((SIZE[0], SIZE[1] + square))
 pygame.display.set_caption('Maze')
@@ -105,9 +106,13 @@ btn_show_solution = Button(name = "Show solution", pos = (650,150), size = (230,
 
 show_bot_go = False
 one_times = True
+change_when_run = False
 btn_show_bot = Button(name = "EXPLAIN", pos = (650,250), size = (230, 50))
 list_gone = []
+current_score = 0
+total_step = 0
 while True:
+  old_coor = (xs, ys)
   if int(initial) < length:
     initial += speed
   x, y = pygame.mouse.get_pos()
@@ -118,8 +123,8 @@ while True:
   DrawRectangle(cb, (square, square), color_brick)
   
 
-  # DrawRectangle([(xs,ys)], (square, square), color_start)
-  # DrawRectangle([(xf, yf)], (square, square), color_end)
+  current_score += list_point[xs][ys]
+  list_point[xs][ys] = 0
   if seen == False:
     FullMaze(DrawRectangle,(cr, (square, square), color_road), xs, ys, maze)
   # r, (square, square), color_road, color_brick
@@ -128,23 +133,33 @@ while True:
   DrawCircle([(xf, yf)], square, color_end, square//2)
   if show_solution:
     DrawCircle(optimal_path, square, (220, 220, 220), square//4)
+    write_score(maze, cp, (square, square))
     
   if show_bot_go:
     if int(initial) == length - 1:
       state = True
       show_bot_go = False
+      # one_times = True
+      change_when_run = False
     # DrawCircle([(xs, ys)], square, color_start, square//2)    
     xs, ys = ShowBotGo(DrawCircle,(cr, square, (0,0,255), square//4), path_bot_go, initial)
   
   if show_solution or one_times == False:
-    DISPLAYSURF.blit(ShowInfo(f'The highest score is {round(highest_score,2)} with {len_of_best} steps and {int(point_of_best)} points', size=15), (square/2, SIZE[1]))
+    DISPLAYSURF.blit(ShowInfo(f'The highest score is {round(highest_score,2)} with {len_of_best} steps and {int(point_of_best)} points'.upper(), size=15), (square/2, SIZE[1]))
+
+  # pos = (650,250), size = (230, 50)
+  DISPLAYSURF.blit(ShowInfo(f'TOTAL POINT: {current_score}', size=30), (650, 350))
+  DISPLAYSURF.blit(ShowInfo(f'TOTAL STEP: {total_step}', size=30), (650, 450))
+  stri = f'FINAL POINT: {round(current_score/total_step,2)}' if total_step != 0 else 'FINAL POINT: 0'
+  DISPLAYSURF.blit(ShowInfo(stri, size=30), (650, 550))
+    
   for event in pygame.event.get():
     if event.type == QUIT:
       pygame.quit()
       sys.exit()
     if event.type == pygame.MOUSEBUTTONDOWN:
       a, b = btn_seen.get_full_coor()
-      if a[0] <= x <= a[1] and b[0] <= y <= b[1] and state or not one_times:
+      if a[0] <= x <= a[1] and b[0] <= y <= b[1] and state or change_when_run:
         ewr = True if seen == False else False
         seen = ewr
       a, b = btn_show_solution.get_full_coor()
@@ -162,6 +177,8 @@ while True:
         xs, ys = maze.get_start_point()
         one_times = False
         list_gone = []
+        show_solution = False
+        change_when_run = True
 
     if event.type == pygame.KEYDOWN:
       if event.key in [K_s, K_DOWN] and state:
@@ -197,6 +214,9 @@ while True:
     decrease = 1
     DrawCircle([(xf, yf)], square, color_end, square//2)
   write_score(maze, cp, (square, square))
+  new_coor = (xs, ys)
+  if new_coor != old_coor:
+    total_step += 1
   pygame.display.update()
 
 
