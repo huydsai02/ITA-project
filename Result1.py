@@ -6,10 +6,10 @@ from Logic import *
 
 # size lấy vào kích cỡ mê cung với tham số thứ nhất là số ô ngang mê cung, tham số thứ 2 là số ô dọc mê cung
 # Bây giờ mê cung sẽ luôn có path và size luôn là 2 số lẻ
-width, height = (19, 19)
+width, height = (65, 65)
 s = (random.choice(range(1,width - 2,2)),random.choice(range(1,height - 2,2)))
 e = (random.choice(range(1,width - 2,2)),random.choice(range(1,height - 2,2)))
-maze = Maze(size = (width, height), num_point= 10, start = s, end = e, multi_path = False)
+maze = Maze(size = (width, height), num_point= 30, start = s, end = e, multi_path = False)
 
 
 # Thông tin mê cung
@@ -38,7 +38,7 @@ color_brick = (102, 38, 60)
 
 ##### Thông số cửa sổ
 pygame.init()
-square = 20
+square = 10
 SIZE = (square*size[0], square*size[1] + square)
 DISPLAYSURF = pygame.display.set_mode((SIZE[0]+100, SIZE[1]))
 pygame.display.set_caption('Maze')

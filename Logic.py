@@ -141,94 +141,97 @@ def Optimize_solution(maze):
   consider_cell = ConsiderCell(maze, path = main_path)
   max = 0
   diction_road = {}
-    
+  for _ in consider_cell:
+    diction_road[_] = diction_road.get(_, FindPath(maze = maze, start = _, points = main_path, dict = diction_road))
+  start_extra = Find_Subset(diction_road)
+  list_subset = MixPoint(start_extra)
   # all_path = []
-  for sl in range(0, len(consider_cell) + 1):
-    for subset in itertools.combinations(consider_cell, sl):
-      l = [[0 for i in range(size[1])] for j in range(size[0])]
-      for i in range(size[0]):
-        for j in range(size[1]):
-          if (i, j) not in main_path:
-            l[i][j] = Cell((i,j), maze, main_road = False)
-          else:
-            l[i][j] = Cell((i,j), maze, main_road = True)
-      total_path = main_path[:]
-      lss = list(subset)
-      for coordinate in lss:
-        if coordinate not in diction_road:
-          extra_path = FindPath(maze = maze, start = coordinate, points = main_path, dict = diction_road)
-          diction_road[coordinate] = extra_path
+  for subset in list_subset:
+    l = [[0 for i in range(size[1])] for j in range(size[0])]
+    for i in range(size[0]):
+      for j in range(size[1]):
+        if (i, j) not in main_path:
+          l[i][j] = Cell((i,j), maze, main_road = False)
         else:
-          extra_path = diction_road[coordinate]
-        for coo in extra_path:
+          l[i][j] = Cell((i,j), maze, main_road = True)
+    total_path = main_path[:]
+    lss = list(subset)
+    for coordinate in lss:
+      if coordinate not in diction_road:
+        extra_path = FindPath(maze = maze, start = coordinate, points = main_path, dict = diction_road)
+        diction_road[coordinate] = extra_path
+      else:
+        extra_path = diction_road[coordinate]
+      for coo in extra_path:
+        l[coo[0]][coo[1]].TimesGoPoint()
+        if coo not in total_path:
+          total_path.append(coo)
           l[coo[0]][coo[1]].TimesGoPoint()
-          if coo not in total_path:
-            total_path.append(coo)
-            l[coo[0]][coo[1]].TimesGoPoint()
-
-      score = 0
-      length = 1
-      for concoor in total_path:
-        score += list_point[concoor[0]][concoor[1]]
-        cell = l[concoor[0]][concoor[1]]
-        if cell.IsEnd(l):
-          length += (cell.get_times() - 1)
-        else:
-          length += cell.get_times()
-      # all_path.append((score, length))
-      formular = score / length
-      if formular >= max:
-        op = (score, total_path, length)
-        max = formular
-  print(diction_road)
+    # print(set(total_path) == set(main_path))
+    score = 0
+    length = 1
+    for concoor in total_path:
+      score += list_point[concoor[0]][concoor[1]]
+      cell = l[concoor[0]][concoor[1]]
+      if cell.IsEnd(l):
+        length += (cell.get_times() - 1)
+      else:
+        length += cell.get_times()
+    # all_path.append((score, length))
+    formular = score / length
+    if formular >= max:
+      op = (score, total_path, length)
+      max = formular
+  # print(diction_road)
   return op
 
 def Find_Subset(d):
-    # Hàm trả về những đầu mút của đường thêm
-    l = list(d.keys())
-    res = {}
-    for consider in l:
-        # tập b là tập những điểm không nằm trong danh sách consider đi qua (trừ nó)
-        b = [consider]
-        # tập c là tập những điểm phải đi qua mới đến consider được
-        c = [consider]
-        for _ in l:
-            if consider in d[_]:
-                b.append(_)
-            if _ in d[consider]:
-                c.append(_)
-        b = list(set(b))
-        c = list(set(c))
-        if len(c) == 1:
-            res[consider] = b
-    return res
+  # Hàm trả về những đầu mút của đường thêm
+  l = list(d.keys())
+  res = {}
+  for consider in l:
+    # tập b là tập những điểm không nằm trong danh sách consider đi qua (trừ nó)
+    b = [consider]
+    # tập c là tập những điểm phải đi qua mới đến consider được
+    c = [consider]
+    for _ in l:
+      if consider in d[_]:
+          b.append(_)
+      if _ in d[consider]:
+          c.append(_)
+    b = list(set(b))
+    c = list(set(c))
+    if len(c) == 1:
+      res[consider] = b
+  return res
 
 def MixPoint(d):
-    l = list(d.keys())
-    list_d = [[]]
-    res = [list_d]
-    for L in range(1,len(l) + 1):
-        for subset in itertools.combinations(l, L):
-            list_d = []
-            for choosen in list(subset):
-                print(d[choosen])
-                list_d.append(d[choosen])
-                # print(list_d)
-            a = CombineList(list_d)
-            print(list_d, "======>", a)
-            res.append(a)
-    return res
+  l = list(d.keys())
+  list_d = []
+  res = [list_d]
+  for L in range(1,len(l) + 1):
+    for subset in itertools.combinations(l, L):
+      list_d = []
+      for choosen in list(subset):
+        # print(d[choosen])
+        list_d.append(d[choosen])
+        # print(list_d)
+      a = CombineList(list_d)
+      # print(list_d, "======>", a)
+      for i in a:
+        res.append(i)
+  return res
             
 def CombineList(l):
-    lf = []
-    ln = len(l)
-    if ln == 1:
-        return [[i] for i in l[0]]
-    for i in l[-1]:
-        for j in CombineList(l[:ln-1]):
-            j.append(i)
-            lf.append(j)
-    return lf
+  lf = []
+  ln = len(l)
+  if ln == 1:
+    return [[i] for i in l[0]]
+  for i in l[-1]:
+    for j in CombineList(l[:ln-1]):
+      j.append(i)
+      lf.append(j)
+  return lf
 
 
 if __name__ == '__main__':
