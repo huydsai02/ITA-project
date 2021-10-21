@@ -3,7 +3,10 @@ from pygame.locals import *
 from HandleEventFunction import * 
 from HandleInfoFunction import * 
 
-
+###### All need info 
+maze, cp1, cr, cb, score, optimal_path, len_of_best, highest_score, point_of_best, path_bot_go = AllNeedInfo(size = (21,21), num_point = 10, start = None, end = None, multi_path = False)
+cp = cp1[:]
+xs, ys = maze.get_start_point(); xf, yf = maze.get_end_point()
 class Button:
   """Create a button, then blit the surface in the while loop"""
   def __init__(self, name,  pos = (0,0), color = (255,255,255), font = 30, size = (150,50)):
@@ -41,12 +44,6 @@ class Button:
       self.color = (200,200,200)
     else:
       self.color = (255,255,255)
-
-
-###### All need info 
-maze, cp1, cr, cb, score, optimal_path, len_of_best, highest_score, point_of_best, path_bot_go = AllNeedInfo(size = (21,21), num_point = 10, start = None, end = None, multi_path = False)
-cp = cp1[:]
-xs, ys = maze.get_start_point(); xf, yf = maze.get_end_point()
 
 ###### Màu
 color_start = (255, 199, 0)
