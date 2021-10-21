@@ -2,12 +2,18 @@ import pygame, sys
 from pygame.locals import *
 from HandleEventFunction import * 
 from HandleInfoFunction import * 
+import random
 
 ###### All need info 
-maze, cp1, cr, cb, score, optimal_path, len_of_best, highest_score, point_of_best, path_bot_go = AllNeedInfo(size = (21,21), num_point = 10, start = None, end = None, multi_path = False)
+maze, cp1, cr, cb, score, optimal_path, len_of_best, highest_score, point_of_best, path_bot_go, main_path = AllNeedInfo(size = (29,29), num_point = 0, start = None, end = None, multi_path = False)
 cp = cp1[:]
 xs, ys = maze.get_start_point(); xf, yf = maze.get_end_point()
 list_point = maze.get_list_point()
+size = maze.get_size()
+cho = 2
+khoc = [(i,j) for i in range(size[0]) for j in range(size[1]) if (i,j) not in main_path]
+cay = random.sample(khoc, cho)
+# print(cay)
 class Button:
   """Create a button, then blit the surface in the while loop"""
   def __init__(self, name,  pos = (0,0), color = (255,255,255), font = 30, size = (150,50)):
@@ -112,6 +118,10 @@ list_gone = []
 current_score = 0
 total_step = 0
 while True:
+  if (xs, ys) in cay and False:
+    cay = random.sample(khoc, cho)
+    xs, ys = maze.get_start_point()
+
   old_coor = (xs, ys)
   if int(initial) < length:
     initial += speed
@@ -121,7 +131,6 @@ while True:
   # Draw rect
   DrawRectangle(cr, (square, square), color_road)
   DrawRectangle(cb, (square, square), color_brick)
-  
 
   current_score += list_point[xs][ys]
   list_point[xs][ys] = 0

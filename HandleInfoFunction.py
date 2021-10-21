@@ -24,7 +24,7 @@ def AllNeedInfo(size = (21,21), num_point = 10, start = None, end = None, multi_
   maze = Maze(size = (width, height), num_point= num_point, start = s, end = e, multi_path = False)
   cp = TakeCoordinatePoint(maze)
   cr, cb = TakeCoordinateRoad(maze)
-  (score, optimal_path, len_of_best), path_bot_go = Optimize_solution(maze)
+  (score, optimal_path, len_of_best), path_bot_go, main_path = Optimize_solution(maze)
   highest_score = score / len_of_best
   point_of_best = score
-  return maze, cp, cr, cb, score, optimal_path, len_of_best, highest_score, point_of_best, path_bot_go
+  return maze, cp, cr, cb, score, optimal_path, len_of_best, highest_score, point_of_best, path_bot_go, main_path

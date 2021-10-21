@@ -174,7 +174,7 @@ def Optimize_solution(maze):
       op = (score, total_path, length)
       max = formular
 
-  return op, path_bot_go
+  return op, path_bot_go, main_path
 
 def Find_Subset(d):
   # Hàm trả về những đầu mút của đường thêm
