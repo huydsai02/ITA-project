@@ -194,6 +194,8 @@ while True:
         show_solution = True
         seen = True
         state = False
+        if (xs, ys) != maze.get_start_point():
+          total_step -= 1
         xs, ys = maze.get_start_point()
       a, b = btn_show_bot.get_full_coor()
       if a[0] <= x <= a[1] and b[0] <= y <= b[1] and one_times:
@@ -201,6 +203,8 @@ while True:
         seen = False
         state = False
         show_bot_go = True
+        total_step = 0 if (xs, ys) == maze.get_start_point() or total_step != 0 else -1
+        total_point = 0
         xs, ys = maze.get_start_point()
         one_times = False
         list_gone = []
@@ -213,6 +217,8 @@ while True:
         seen = False
         state = False
         best_path = True
+        total_step = 0 if (xs, ys) == maze.get_start_point() or total_step != 0 else -1
+        total_point = 0
         xs, ys = maze.get_start_point()
         one_times = False
         list_gone = []

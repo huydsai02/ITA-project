@@ -133,10 +133,8 @@ def Optimize_solution(maze):
   main_path, diction_road, path_bot_go = MazeAnalysis(maze)
   max = 0
   start_extra = Find_Subset(diction_road)
-  list_subset = MixPoint(start_extra)
-
+  list_subset = FullSituation(start_extra)
   for subset in list_subset:
-
     l = [[0 for i in range(size[1])] for j in range(size[0])]
     for i in range(size[0]):
       for j in range(size[1]):
@@ -160,7 +158,7 @@ def Optimize_solution(maze):
           l[coo[0]][coo[1]].TimesGoPoint()
 
     score = 0
-    length = 1
+    length = 1 + len(subset)
     for concoor in total_path:
       score += list_point[concoor[0]][concoor[1]]
       cell = l[concoor[0]][concoor[1]]
@@ -192,46 +190,8 @@ def Find_Subset(d):
           c.append(_)
     b = list(set(b))
     c = list(set(c))
-    if len(c) == 1:
-      res[consider] = b
+    res[consider] = [b[:],c[:]]
   return res
-
-def MixPoint(d):
-  l = list(d.keys())
-  list_d = []
-  res = [list_d]
-  for L in range(1,len(l) + 1):
-    for subset in itertools.combinations(l, L):
-      list_d = []
-      for choosen in list(subset):
-        list_d.append(d[choosen])
-      a = CombineList(list_d)
-      for i in a:
-        res.append(i)
-  return res
-            
-def CombineList(l):
-  lf = []
-  ln = len(l)
-  if ln == 1:
-    return [[i] for i in l[0]]
-  for i in l[-1]:
-    for j in CombineList(l[:ln-1]):
-      j.append(i)
-      lf.append(j)
-  return lf
-
-
-if __name__ == '__main__':
-  while True:
-    si = 15
-    s = (random.choice(range(1,si - 2,2)),random.choice(range(1,si-2,2)))
-    e = (random.choice(range(1,si - 2,2)),random.choice(range(1,si - 2,2)))
-    maze = Maze(size = (si,si), start = s, end = e, num_point = 5)
-    coordinate = (random.choice(range(1,si - 2,2)),random.choice(range(1,si - 2,2)))
-    main_path = FindPath(maze = maze, end = e, start=s)
-    extra_path = FindPath(maze = maze, start = coordinate, points = main_path)
-    print(Optimize_solution(maze))
 
 def FindDimensionIsPath(coor, main_path, total_path, p = None):
   # Hàm trả về các hướng không phải tường 
@@ -284,4 +244,39 @@ def FindOptimalPath(maze, main_path, total_path):
       path_bot_go.append([(xs,ys), d[(xs,ys)][:]])
       if (xs, ys) not in coors:
         coors.append((xs, ys))
-    
+
+def test(first_num, list_copy, d, n):
+    ans = []
+    list_copy = del_relate_info(list_copy, d[first_num])
+    if n == 1:
+        return [[i] for i in list_copy]
+    if n == 0:
+        return []
+    for coor1 in list_copy:
+        for lc in test(coor1, list_copy, d, n-1):
+            lc.append(coor1)
+            ans.append(lc)
+    return ans
+
+def del_relate_info(l1, d):
+    new_l = []
+    for point in l1:
+        if point not in d[0] and point not in d[1]:
+            new_l.append(point)
+    return new_l
+
+
+def FullSituation(d):
+  l = list(d.keys())
+  lc = l[:]
+  cover = [{}]
+  for point in l:
+    cover.append(set([point]))
+  for n in range(1, len(l)+1):
+    for start in l:
+      for points in test(start, lc, d, n-1):
+        points = [start] + points
+        if set(points) not in cover:
+          cover.append(set(points))
+  s = [list(p) for p in cover]    
+  return s
