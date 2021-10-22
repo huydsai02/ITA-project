@@ -160,7 +160,7 @@ while True:
     # DrawCircle([(xs, ys)], square, color_start, square//2)    
     xs, ys = ShowBotGo(DrawCircle,(cr, square, (0,0,255), square//4), path_bot_go, initial)
 
-  if show_bot_go:
+  if best_path:
     if int(initial) == length - 1:
       state = True
       best_path = False
