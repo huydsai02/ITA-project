@@ -122,7 +122,7 @@ total_step = 0
 
 btn_best_path = Button(name = "BEST PATH", pos = (650,0), size = (230, 30))
 best_path = False
-
+length1 = len(op_road)
 while True:
   if (xs, ys) in cay and nghich:
     cay = random.sample(khoc, cho)
@@ -161,13 +161,15 @@ while True:
     xs, ys = ShowBotGo(DrawCircle,(cr, square, (0,0,255), square//4), path_bot_go, initial)
 
   if best_path:
-    if int(initial) == length - 1:
+    if int(initial) >= length1 - 1:
       state = True
       best_path = False
       one_times = True
       change_when_run = False
-    # DrawCircle([(xs, ys)], square, color_start, square//2)    
-    xs, ys = ShowBotGo(DrawCircle,(cr, square, (0,0,255), square//4), op_road, initial)
+    # DrawCircle([(xs, ys)], square, color_start, square//2)
+    res = ShowBotGo(DrawCircle,(cr, square, (0,0,255), square//4), op_road, initial)
+    if res != None:    
+      xs, ys = res
   
   if show_solution or one_times == False:
     DISPLAYSURF.blit(ShowInfo(f'The highest score is {round(highest_score,2)} with {len_of_best} steps and {int(point_of_best)} points'.upper(), size=15), (square/2, SIZE[1]))

@@ -48,14 +48,14 @@ def ShowBotGo(func, para, l, i):
   lis, square, color, radius = para
   if i < len(l):
     consider = l[int(i)]
-    (xs, ys), dims = consider
-    res = []
+    point, dims = consider
+    res = []    
     for a,b in dims:
-      j = xs + a
-      k = ys + b
+      j = point[0] + a
+      k = point[1] + b
       res.append((j,k))
     func(res, square, color, radius)
-    return xs, ys
+    return point
 
 def DelElementFromList(coor, points):
   if coor in points:

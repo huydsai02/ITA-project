@@ -245,7 +245,8 @@ def FindDimensionIsPath(coor, main_path, total_path, p = None):
     for step in steps:
       if step not in res and (coor[0] + step[0],coor[1] + step[1]) in main_path:
         res.append(step)
-      elif step not in res and (coor[0] + step[0],coor[1] + step[1]) in total_path:
+    for step in steps:
+      if step not in res and (coor[0] + step[0],coor[1] + step[1]) in total_path:
         res.append(step)
 
   else:
@@ -253,7 +254,8 @@ def FindDimensionIsPath(coor, main_path, total_path, p = None):
     for step in steps:
       if step not in res and (coor[0] + step[0],coor[1] + step[1]) in main_path:
         res.append(step)
-      elif step not in res and (coor[0] + step[0],coor[1] + step[1]) in total_path:
+    for step in steps:
+      if step not in res and (coor[0] + step[0],coor[1] + step[1]) in total_path:
         res.append(step) 
   return res
 
@@ -265,6 +267,11 @@ def FindOptimalPath(maze, main_path, total_path):
   d[(xs, ys)] = FindDimensionIsPath((xs,ys), main_path, total_path)
   path_bot_go = [[(xs,ys), d[(xs,ys)][:]]]
   while True:
+    if (xs, ys) in points:
+      new_points = [point for point in points if point != (xs, ys)]
+      points = new_points
+    if (xs, ys) == maze.get_end_point() and len(points) == 0:
+      return path_bot_go
     if len(d[coors[-1]]) == 0:
       coors.pop()
       xs, ys = coors[-1]
@@ -277,9 +284,4 @@ def FindOptimalPath(maze, main_path, total_path):
       path_bot_go.append([(xs,ys), d[(xs,ys)][:]])
       if (xs, ys) not in coors:
         coors.append((xs, ys))
-
-    if (xs, ys) in points:
-      new_points = [point for point in points if point != (xs, ys)]
-      points = new_points
-    if len(points) == 0 and (xs, ys) == maze.get_end_point():
-      return path_bot_go
+    
