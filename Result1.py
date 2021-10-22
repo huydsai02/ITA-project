@@ -6,7 +6,7 @@ import random
 
 nghich = False
 ###### All need info 
-maze, cp1, cr, cb, score, optimal_path, len_of_best, highest_score, point_of_best, path_bot_go, main_path = AllNeedInfo(size = (29,29), num_point = 0, start = (1,1), end = (27,27), multi_path = False)
+maze, cp1, cr, cb, score, optimal_path, len_of_best, highest_score, point_of_best, path_bot_go, main_path, op_road = AllNeedInfo(size = (29,29), num_point = 10, start = (1,1), end = (27,27), multi_path = False)
 cp = cp1[:]
 xs, ys = maze.get_start_point(); xf, yf = maze.get_end_point()
 list_point = maze.get_list_point()
@@ -119,6 +119,10 @@ btn_show_bot = Button(name = "EXPLAIN", pos = (650,250), size = (230, 50))
 list_gone = []
 current_score = 0
 total_step = 0
+
+btn_best_path = Button(name = "BEST PATH", pos = (650,0), size = (230, 30))
+best_path = False
+
 while True:
   if (xs, ys) in cay and nghich:
     cay = random.sample(khoc, cho)
@@ -140,7 +144,7 @@ while True:
     FullMaze(DrawRectangle,(cr, (square, square), color_road), xs, ys, maze)
   # r, (square, square), color_road, color_brick
   if not nghich:
-    PathHasGone(list_gone, cr, cb, DrawRectangle, (cr, (square, square), color_road, color_brick), (xs, ys))
+    list_gone = PathHasGone(list_gone, cr, cb, DrawRectangle, (cr, (square, square), color_road, color_brick), (xs, ys))
   DrawCircle([(xs, ys)], square, color_start, square//2)
   DrawCircle([(xf, yf)], square, color_end, square//2)
   if show_solution:
@@ -151,10 +155,19 @@ while True:
     if int(initial) == length - 1:
       state = True
       show_bot_go = False
-      # one_times = True
+      one_times = True
       change_when_run = False
     # DrawCircle([(xs, ys)], square, color_start, square//2)    
     xs, ys = ShowBotGo(DrawCircle,(cr, square, (0,0,255), square//4), path_bot_go, initial)
+
+  if show_bot_go:
+    if int(initial) == length - 1:
+      state = True
+      best_path = False
+      one_times = True
+      change_when_run = False
+    # DrawCircle([(xs, ys)], square, color_start, square//2)    
+    xs, ys = ShowBotGo(DrawCircle,(cr, square, (0,0,255), square//4), op_road, initial)
   
   if show_solution or one_times == False:
     DISPLAYSURF.blit(ShowInfo(f'The highest score is {round(highest_score,2)} with {len_of_best} steps and {int(point_of_best)} points'.upper(), size=15), (square/2, SIZE[1]))
@@ -192,6 +205,18 @@ while True:
         show_solution = False
         change_when_run = True
 
+      a, b = btn_best_path.get_full_coor()
+      if a[0] <= x <= a[1] and b[0] <= y <= b[1] and one_times:
+        initial = 0
+        seen = False
+        state = False
+        best_path = True
+        xs, ys = maze.get_start_point()
+        one_times = False
+        list_gone = []
+        # show_solution = False
+        change_when_run = True
+
     if event.type == pygame.KEYDOWN:
       if event.key in [K_s, K_DOWN] and state:
         if (xs,ys+1) in cr:
@@ -219,6 +244,7 @@ while True:
     decrease = 0
   btn_show_solution.show(x,y)
   btn_show_bot.show(x,y)
+  btn_best_path.show(x,y)
   cp = DelElementFromList((xs,ys), cp)
   if seen == False:
     h = cp 

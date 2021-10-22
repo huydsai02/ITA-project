@@ -232,3 +232,54 @@ if __name__ == '__main__':
     main_path = FindPath(maze = maze, end = e, start=s)
     extra_path = FindPath(maze = maze, start = coordinate, points = main_path)
     print(Optimize_solution(maze))
+
+def FindDimensionIsPath(coor, main_path, total_path, p = None):
+  # Hàm trả về các hướng không phải tường 
+  # điểm cuối sẽ là hướng p nếu hướng p ko có gạch, điểm đầu sẽ là hướng ngược lại p
+  steps = [(0,1), (0,-1), (1,0), (-1,0)]
+  # phan_bu = [c for c in total_path if c not in main_path]
+  if p != None:
+    a = (-1) * p[0]
+    b = (-1) * p[1]
+    res = [(a,b)]
+    for step in steps:
+      if step not in res and (coor[0] + step[0],coor[1] + step[1]) in main_path:
+        res.append(step)
+      elif step not in res and (coor[0] + step[0],coor[1] + step[1]) in total_path:
+        res.append(step)
+
+  else:
+    res = []
+    for step in steps:
+      if step not in res and (coor[0] + step[0],coor[1] + step[1]) in main_path:
+        res.append(step)
+      elif step not in res and (coor[0] + step[0],coor[1] + step[1]) in total_path:
+        res.append(step) 
+  return res
+
+def FindOptimalPath(maze, main_path, total_path):
+  xs, ys = maze.get_start_point()
+  points = total_path[:]
+  coors = [(xs, ys)]
+  d = {}
+  d[(xs, ys)] = FindDimensionIsPath((xs,ys), main_path, total_path)
+  path_bot_go = [[(xs,ys), d[(xs,ys)][:]]]
+  while True:
+    if len(d[coors[-1]]) == 0:
+      coors.pop()
+      xs, ys = coors[-1]
+    else:
+      dim = d[(xs,ys)]
+      cpath = dim.pop()
+      xs += cpath[0]
+      ys += cpath[1]
+      d[(xs,ys)] = d.get((xs,ys), FindDimensionIsPath((xs,ys), main_path, total_path, p = cpath))
+      path_bot_go.append([(xs,ys), d[(xs,ys)][:]])
+      if (xs, ys) not in coors:
+        coors.append((xs, ys))
+
+    if (xs, ys) in points:
+      new_points = [point for point in points if point != (xs, ys)]
+      points = new_points
+    if len(points) == 0 and (xs, ys) == maze.get_end_point():
+      return path_bot_go

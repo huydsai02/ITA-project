@@ -65,10 +65,11 @@ def DelElementFromList(coor, points):
 
 def PathHasGone(list_gone, cr, cb, func, para, coor):
   r, (square, square), color_road, color_brick = para
+  cop = list_gone[:]
   r = []
   b = []
-  if coor not in list_gone:
-    list_gone.append(coor)
+  if coor not in cop:
+    cop.append(coor)
   for c in list_gone:
     if c in cr:
       r.append(c)
@@ -76,3 +77,4 @@ def PathHasGone(list_gone, cr, cb, func, para, coor):
       b.append(c)
   func(r, (square, square), color_road)
   func(b, (square, square), color_brick)
+  return cop
