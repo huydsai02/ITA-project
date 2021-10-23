@@ -160,7 +160,7 @@ def BestPath(maze):
 if __name__ == '__main__':
 # size lấy vào kích cỡ mê cung với tham số thứ nhất là số ô ngang mê cung, tham số thứ 2 là số ô dọc mê cung
     # Nếu đưa về list python thì tham số thứ nhất là số hàng, tham số thứ 2 là số cột
-    width, height = (30, 30)
+    width, height = (40, 40)
     maze_info = Maze(size = (width, height), num_point=20)
     maze = np.array(maze_info.get_list_maze()).T
     lst_point = np.array(maze_info.get_list_point()).T
