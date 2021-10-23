@@ -24,7 +24,7 @@ def AllNeedInfo(size = (21,21), num_point = 10, start = None, end = None, multi_
 
   #################################### Chỗ nhập thông tin ##################################################
   if huy == True:
-    (score, optimal_path, len_of_best, op_road), path_bot_go, main_path = Logic.Optimize_solution(maze)
+    score, optimal_path, len_of_best, op_road, path_bot_go, main_path = Logic.Optimize_solution(maze)
   if phong == True:
     score, optimal_path, len_of_best, op_road, path_bot_go, main_path = 1, [], 1, [], [], []
 

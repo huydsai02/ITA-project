@@ -92,15 +92,23 @@ def Optimize_solution(maze):
         if coo not in total_path:
           total_path.append(coo)
     score = 0
-    full_step = FindOptimalPath(maze, main_path, total_path)
-    length = len(full_step) - 1
+    # length = len(full_step) - 1
+    length = 1
+    for pointss in total_path:
+      if pointss in main_path:
+        length += (len(FindDimensionIsPath(pointss, main_path, total_path)) - 1)
+      else:
+        length += len(FindDimensionIsPath(pointss, main_path, total_path))
     for concoor in total_path:
       score += list_point[concoor[0]][concoor[1]]
     formular = score / length
     if formular >= max:
-      op = (score, total_path, length, full_step)
+      op = (score, total_path, length)
       max = formular
-  return op, path_bot_go, main_path
+  total_best_score, best_road, leng = op
+  full_step = FindOptimalPath(maze, main_path, best_road)
+  print(leng == (len(full_step) - 1))
+  return total_best_score, best_road, leng, full_step, path_bot_go, main_path
 
 def Find_Subset(d):
   # Hàm trả về những đầu mút của đường thêm
