@@ -6,25 +6,22 @@ from p import *
 
 # size lấy vào kích cỡ mê cung với tham số thứ nhất là số ô ngang mê cung, tham số thứ 2 là số ô dọc mê cung
 # Bây giờ mê cung sẽ luôn có path và size luôn là 2 số lẻ
-width, height = (9, 9)
+width, height = (40, 40)
 s = (random.choice(range(1,width - 2,2)),random.choice(range(1,height - 2,2)))
 e = (random.choice(range(1,width - 2,2)),random.choice(range(1,height - 2,2)))
-maze = Maze(size = (width, height), num_point= 10, start = s, end = e, multi_path = True)
+maze = Maze(size = (width, height), num_point=20, start = s, end = e)
 
 # Thông tin mê cung
 xs, ys = maze.get_start_point()
 xf, yf = maze.get_end_point()
 list_maze = maze.get_list_maze()
 size = maze.get_size()
-list_point = list_maze
 
 # Tính toán. Nếu muốn tìm đường đi thì calculate = True không thì False
 calculate = True
 
 if calculate == True:
-  list_point = maze.get_list_point()
-  solutions = FindPath(maze)
-  highest_score, optimal_path, len_of_best, point_of_best = Optimal_result(maze, solutions)
+    optimal_path, score, len_of_best = BestPath(maze)
 # print(optimal_path)
 
 ###### Màu
@@ -36,7 +33,7 @@ color_brick = (102, 38, 60)
 
 ##### Thông số cửa sổ
 pygame.init()
-square = 20
+square = 10
 SIZE = (square*size[0], square*size[1] + square)
 DISPLAYSURF = pygame.display.set_mode((SIZE[0], SIZE[1]))
 pygame.display.set_caption('Maze')
@@ -62,11 +59,11 @@ def ShowInfo(Info, size=30):
   text = fnt.render(str(Info), True, (255, 0, 0))
   return text
 
-def NextPosition(x, y, step, l = list_maze, lp = list_point):
+def NextPosition(x, y, step, l = list_maze):
   nx = x + step[0]
   ny = y + step[1]
 
-  while not CanTurn(nx, ny) and not LaNgoCut(nx, ny) and lp[nx][ny] == 0 and l[nx][ny] == 0:
+  while not CanTurn(nx, ny) and not LaNgoCut(nx, ny):
     nx += step[0]
     ny += step[1]
 
@@ -118,9 +115,10 @@ while True:
         if list_maze[i][j] == 0:
           DISPLAYSURF.blit(write_score(maze,i,j), (i * square + decrease, j * square + decrease))
 
-    for x,y in PathConvert(maze, optimal_path):
+    for x,y in PathConvert(optimal_path, (xs, ys)):
       pygame.draw.circle(DISPLAYSURF, (0, 0, 255), (x*square + square/2, y*square + square/2), square/4, square//4)
-    DISPLAYSURF.blit(ShowInfo(f'The highest score is {round(highest_score,2)} with {len_of_best} steps and {int(point_of_best)} points', size=15), (square/2, SIZE[1] - square))
+    # DISPLAYSURF.blit(ShowInfo(f'The highest score is {round(highest_score,2)} with {len_of_best} steps and {int(point_of_best)} points', size=int(square//2)), (square/2, SIZE[1] - square))
+    DISPLAYSURF.blit(ShowInfo(str(score) + '  ' + optimal_path, size=int(square/2.5)), (square/2, SIZE[1] - square/2))
 
   for event in pygame.event.get():
       if event.type == QUIT or (xs,ys) == (xf,yf):
@@ -144,5 +142,4 @@ while True:
             xs, ys = NextPosition(xs,ys,(1,0))
 
   pygame.display.update()
-
 

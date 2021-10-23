@@ -2,8 +2,8 @@ import numpy as np
 import math
 from CreateMatrix import *
 
-def IsLogical(maze, path):#Liệu bước đi có hợp lý ko
-    xs, ys = maze.get_start_point()
+def LogicCheck(maze, path, s_point):#Liệu bước đi có hợp lý ko
+    xs, ys = s_point
     list_maze = maze.get_list_maze()
     size = maze.get_size()
     x = path.count('R') - path.count('L') + xs
@@ -14,59 +14,25 @@ def IsLogical(maze, path):#Liệu bước đi có hợp lý ko
         return False
     elif list_maze[x][y] == 1:
         return False
-    elif (x, y) == (xs, ys):
+    return True
+
+def LoopCheck(path, s_point):#path có đi vòng tại điểm cuối ko, nếu có trả về điểm lặp của loop
+    path = PathConvert(path, s_point)
+    if path.count(path[-1]) == 1:
         return False
     return True
 
-def HasLoop(maze, path):#path có đi vòng tại điểm cuối ko, nếu có trả về điểm lặp của loop
-    path = PathConvert(maze, path)
-    if path.count(path[-1]) == 1:
-        return [False]
-    return [True, len(path) - 1 - path[::-1][1:].index(path[-1])]
-
-def IsConsideredLoop(maze, path):#path có cần xem xét ko, là path mà chỉ quay lại khi đạt đc điểm, nếu có trả về bc mà đạt đc điểm
-    if HasLoop(maze, path)[0]:
-        lst = PathConvert(maze, path)[HasLoop(maze, path)[1] - 1:]
-        if len(lst)%2 == 1:
-            n = (len(lst) - 1)//2
-            if maze.get_list_point()[lst[n][0]][lst[n][1]] > 0:
-                for i in range(n):
-                    if lst[i] != lst[len(lst) - i - 1]:
-                        return [False]
-                return [True, HasLoop(maze, path)[1] + n]
-    return [False]
-
-def IsGoodLoop(maze, path):#liệu path cần xem xét đó có tốt ko, VD: '.....UDU' đạt điểm tại bc U là 1 path xấu
-    copath = PathConvert(maze, path)
-    l = len(copath)
-    if IsConsideredLoop(maze, path)[0]:
-        n = IsConsideredLoop(maze, path)[1]
-        if IsConsideredLoop(maze, path[: n - 1])[0]:
-            return False
-        elif copath.count(copath[l - 2:]) > 2:
-            return False
-        return True
-    return False
-                 
-def IsRecievedPoint(maze, path):#liệu path có ăn điểm tại bước cuối ko
-    xs, ys = maze.get_start_point()
-    x = path.count('R') - path.count('L') + xs
-    y = path.count('D') - path.count('U') + ys
-    if maze.get_list_point()[x][y] > 0:
-        return True
-    return False
-
-def IsSolution(maze, solution):#liệu path đã đến đích chưa
-    xs, ys = maze.get_start_point()
-    xf, yf = maze.get_end_point()
+def EndCheck(solution, s_point, e_point):#liệu path đã đến đích chưa
+    xs, ys = s_point
+    xf, yf = e_point
     x = solution.count('R') - solution.count('L') + xs
     y = solution.count('D') - solution.count('U') + ys    
     if (x, y) == (xf, yf):
         return True
     return False
 
-def PathConvert(maze, path):#chuyển từ dãy các bc đi sang toạ độ xe
-    xt, yt = maze.get_start_point()
+def PathConvert(path, s_point):#chuyển từ dãy các bc đi sang toạ độ xe
+    xt, yt = s_point
     lst_step = [(xt, yt)]
     for step in path:
         if step == 'U':
@@ -80,78 +46,129 @@ def PathConvert(maze, path):#chuyển từ dãy các bc đi sang toạ độ xe
         lst_step.append((xt, yt))
     return lst_step
 
-def FindPath(maze):#thuật toán để tìm tất cả path tới đích
+def Manhattan(p1, p2):
+    return abs(p1[0] - p2[0]) + abs(p1[1] + p2[1])
+
+def PriorPop(maze, paths, s_point, e_point):
+    c = 4 * sum(maze.get_size())
+    Ppath = ''
+    for path in paths:
+        copath = PathConvert(path, s_point)
+        node = copath[-1]
+        if Manhattan(node, e_point) < c:
+            c = Manhattan(node, e_point)
+            Ppath = path
+    paths.remove(Ppath)
+    return Ppath
+
+
+
+def ShortestPath(maze, s_point, e_point):#thuật toán để tìm tất cả path tới đích
     paths = ['']
-    choices = ['L', 'R', 'U', 'D']
-    solutions = []
+    choices = ['R', 'L', 'D', 'U']
+    dic = {'': 0}
+    while len(paths) > 0:
+        out = PriorPop(maze, paths, s_point, e_point)
+        for choice in choices:
+            npath = out + choice
+            if LogicCheck(maze, npath, s_point):
+                if not LoopCheck(npath, s_point):
+                    if EndCheck(npath, s_point, e_point):
+                        return npath
+                    paths.append(npath)
+    return False
+
+def ConnectedNode(maze, point):
+    start = maze.get_start_point()
+    end = maze.get_end_point()
+    size = maze.get_size()
+    list_point = maze.get_list_point()
+    list_node = [start, end]
+    connect = []
+    for i in range(size[0]):
+        for j in range(size[1]):
+            if list_point[i][j] > 0:
+                list_node.append((i, j)) 
+    for i in list_node:
+        if ShortestPath(maze, point, i):
+            connect.append(i)
+    return connect
+
+def PointCollected(maze, path, s_point):
+    list_point = maze.get_list_point()
+    sum_p = 0
+    lst = [s_point]
+    for (x, y) in PathConvert(path, s_point):
+        if list_point[x][y] > 0 and (x, y) not in lst:
+            lst.append((x,y))
+            sum_p+=list_point[x][y]
+    return sum_p, lst
+
+def PathScore(maze, path, s_point):
+    return PointCollected(maze, path, s_point)[0] / len(path)
+        
+def ExpandNode(maze, node, l, ln):
+    lst = []
+    for point in l:
+        if point not in ln:
+            path = ShortestPath(maze, node, point)
+            if len(path):  
+                lst.append((path, point))
+    return lst
+
+def PriorityPop(maze, list, listT, root):
+    c = 0
+    node = root
+    Tpath = ('', node)
+    for (path, node) in list:
+        if len(path) > 0:
+            temp = PathConvert(path, root)[-1]
+            if PathScore(maze, path, root) > c and listT.count(temp) == 0:
+                c = PathScore(maze, path, root)
+                node = temp
+                Tpath = (path, node)
+    list.remove(Tpath)
+    return Tpath
+
+def BestPath(maze):
+    start = maze.get_start_point()
+    end = maze.get_end_point()
+    size = maze.get_size()
+    list_point = maze.get_list_point()
+    list_node = [start, end]
+    Tpath = ('', start)
+    listP = [Tpath]
+    listT = []
     step = 0
-    num0 = sum(i.count(0) for i in maze.get_list_maze())
+    for i in range(size[0]):
+        for j in range(size[1]):
+            if list_point[i][j] > 0:
+                list_node.append((i, j))
     while True:
-        temp = paths[:]
-        paths = []
-        for path in temp:
-            for choice in choices:
-                npath = path + choice
-                if IsLogical(maze, npath):
-                    if not HasLoop(maze, npath)[0]:
-                        if IsSolution(maze, npath):
-                            solutions.append(npath)
-                        else:
-                            paths.append(npath)
-                    elif IsConsideredLoop(maze, npath)[0]:
-                        if IsGoodLoop(maze, npath):
-                            paths.append(npath)
-        step += 1
-        if step > 2*num0:
-            break
-    return solutions
+        poppath, Tnode = PriorityPop(maze, listP, listT, start)
+        listT.append(Tnode)
+        pointcollect = PointCollected(maze, poppath, start)[1]
+        if Tnode == end:
+            return poppath, PointCollected(maze, poppath, start)[0] / len(poppath), len(poppath)
+        for pair in ExpandNode(maze, Tnode, list_node, listT):
+            if listP.count((poppath + pair[0], pair[1])) == 0 and pointcollect.count(pair[1]) == 0:
+                listP.append((poppath + pair[0], pair[1]))
+        print(step, Tnode)
+        step+=1
 
-
-
-                        
-    
-
-
-def Optimal_result(maze, solutions):#tìm thông tin path có final score cao nhất 
-    highest_score = 0
-    best_solution = ''
-    for solution in solutions:
-        score = [[], []]
-        xt, yt = maze.get_start_point()
-        for step in solution:
-            if step == 'U':
-                yt-= 1
-            elif step =='D':
-                yt+= 1
-            elif step =='L':
-                xt-= 1
-            elif step =='R':
-                xt+= 1
-            if (xt, yt) not in score[1]:
-                score[0].append(maze.get_list_point()[xt][yt])
-                score[1].append((xt, yt))
-        score = sum(score[0])
-        if score/len(solution) > highest_score:
-            highest_score = score/len(solution)
-            best_solution = solution
-    return highest_score, best_solution, len(best_solution), highest_score*len(best_solution)
             
-
 if __name__ == '__main__':
 # size lấy vào kích cỡ mê cung với tham số thứ nhất là số ô ngang mê cung, tham số thứ 2 là số ô dọc mê cung
     # Nếu đưa về list python thì tham số thứ nhất là số hàng, tham số thứ 2 là số cột
-    width, height = (19, 19)
-    s = (random.choice(range(1,width - 2,2)),random.choice(range(1,height - 2,2)))
-    e = (random.choice(range(1,width - 2,2)),random.choice(range(1,height - 2,2)))
-    maze_info = Maze(size = (width, height), num_point= 10, start = s, end = e, multi_path = True)
+    width, height = (40, 40)
+    maze_info = Maze(size = (width, height), num_point=20)
     maze = np.array(maze_info.get_list_maze()).T
     lst_point = np.array(maze_info.get_list_point()).T
-    solutions = FindPath(maze_info)
-    the_most = Optimal_result(maze_info, solutions)
+
     print(maze)
     print(maze_info.get_start_point(), maze_info.get_end_point())
-    print(solutions)
-
     print(lst_point)
-    print(the_most)
-    print('The best solution is', the_most[1], 'with core', the_most[0])
+    print(ShortestPath(maze_info, maze_info.get_start_point(), maze_info.get_end_point()))
+    print(BestPath(maze_info)[0])
+    print()
+
