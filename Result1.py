@@ -6,7 +6,7 @@ import random
 
 nghich = False
 ###### All need info 
-maze, cp1, cr, cb, score, optimal_path, len_of_best, highest_score, point_of_best, path_bot_go, main_path, op_road = AllNeedInfo(size = (45,45), num_point = 20, start = (3,3), end = (11,11), multi_path = False)
+maze, cp1, cr, cb, score, optimal_path, len_of_best, highest_score, point_of_best, path_bot_go, main_path, op_road = AllNeedInfo(size = (30,30), num_point = 10, start = (3,3), end = (11,11), multi_path = False)
 cp = cp1[:]
 xs, ys = maze.get_start_point(); xf, yf = maze.get_end_point()
 size = maze.get_size()
@@ -159,7 +159,9 @@ while True:
       one_times = True
       change_when_run = False
     # DrawCircle([(xs, ys)], square, color_start, square//2)    
-    xs, ys = ShowBotGo(DrawCircle,(cr, square, (0,0,255), square//4), path_bot_go, initial)
+    res = ShowBotGo(DrawCircle,(cr, square, (0,0,255), square//4), path_bot_go, initial)
+    if res != None:    
+      xs, ys = res
 
   if best_path:
     if int(initial) >= length1 - 1:
