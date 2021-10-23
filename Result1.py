@@ -6,7 +6,7 @@ import random
 
 nghich = False
 ###### All need info 
-maze, cp1, cr, cb, score, optimal_path, len_of_best, highest_score, point_of_best, path_bot_go, main_path, op_road = AllNeedInfo(size = (40,40), num_point = 20, start = (3,3), end = (11,11), multi_path = False)
+maze, cp1, cr, cb, score, optimal_path, len_of_best, highest_score, point_of_best, path_bot_go, main_path, op_road = AllNeedInfo(size = (35,35), num_point = 30, start = (3,3), end = (11,11), multi_path = False)
 cp = cp1[:]
 xs, ys = maze.get_start_point(); xf, yf = maze.get_end_point()
 size = maze.get_size()
@@ -175,7 +175,7 @@ while True:
       xs, ys = res
   
   if show_solution or one_times == False:
-    DISPLAYSURF.blit(ShowInfo(f'The highest score is {round(highest_score,2)} with {len_of_best} steps and {int(point_of_best)} points'.upper(), size=15), (square/2, SIZE[1]))
+    DISPLAYSURF.blit(ShowInfo(f'The highest score is {round(highest_score,2)} with {len_of_best} steps and {int(point_of_best)} points'.upper(), size=square), (square/2, SIZE[1]))
 
   # pos = (650,250), size = (230, 50)
   DISPLAYSURF.blit(ShowInfo(f'TOTAL POINT: {current_score}', size=30), (650, 350))

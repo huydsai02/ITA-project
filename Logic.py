@@ -95,12 +95,11 @@ def Optimize_solution(maze):
     # length = len(full_step) - 1
     length = 1
     for pointss in total_path:
+      score += list_point[pointss[0]][pointss[1]]
       if pointss in main_path:
         length += (len(FindDimensionIsPath(pointss, main_path, total_path)) - 1)
       else:
         length += len(FindDimensionIsPath(pointss, main_path, total_path))
-    for concoor in total_path:
-      score += list_point[concoor[0]][concoor[1]]
     formular = score / length
     if formular >= max:
       op = (score, total_path, length)
