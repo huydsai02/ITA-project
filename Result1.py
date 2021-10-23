@@ -9,7 +9,8 @@ cp = cp1[:]
 xs, ys = maze.get_start_point(); xf, yf = maze.get_end_point()
 size = maze.get_size()
 list_point = [maze.get_list_point()[i][:] for i in range(len(maze.get_list_point()))]
-direc = "".join([_[2] for _ in op_road])
+translate = {(0,1):"D",(1,0):"R",(0,-1):"U",(-1,0):"L",():""}
+direc = "".join([translate[_[1][0]] for _ in op_road])
 print(direc)
 class Button:
   """Create a button, then blit the surface in the while loop"""

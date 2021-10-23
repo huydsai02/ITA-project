@@ -151,7 +151,6 @@ def FindOptimalPath(maze, main_path, total_path):
   points = total_path[:]
   coors = [(xs, ys)]
   d = {}
-  translate = {(0,1):"D",(1,0):"R",(0,-1):"U",(-1,0):"L"}
   d[(xs, ys)] = FindDimensionIsPath((xs,ys), main_path, total_path)
   path_bot_go = []
   while True:
@@ -159,6 +158,7 @@ def FindOptimalPath(maze, main_path, total_path):
       new_points = [point for point in points if point != (xs, ys)]
       points = new_points
     if (xs, ys) == maze.get_end_point() and len(points) == 0:
+      path_bot_go.append([(xs,ys), [()]])
       return path_bot_go
     if len(d[coors[-1]]) == 0:
       coors.pop()
@@ -166,7 +166,7 @@ def FindOptimalPath(maze, main_path, total_path):
     else:
       dim = d[(xs,ys)]
       cpath = dim.pop()
-      path_bot_go.append([(xs,ys), [cpath], translate[cpath]])
+      path_bot_go.append([(xs,ys), [cpath]])
       xs += cpath[0]
       ys += cpath[1]
       d[(xs,ys)] = d.get((xs,ys), FindDimensionIsPath((xs,ys), main_path, total_path, p = cpath))

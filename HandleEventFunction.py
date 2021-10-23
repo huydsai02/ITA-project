@@ -50,11 +50,12 @@ def ShowBotGo(func, para, l, i):
     consider = l[int(i)]
     point = consider[0]
     dims = consider[1]
-    res = []    
-    for a,b in dims:
-      j = point[0] + a
-      k = point[1] + b
-      res.append((j,k))
+    res = [] 
+    if dims[0] != ():    
+      for a,b in dims:
+        j = point[0] + a
+        k = point[1] + b
+        res.append((j,k))
     func(res, square, color, radius)
     return point
 
