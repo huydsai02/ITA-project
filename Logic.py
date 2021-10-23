@@ -1,7 +1,4 @@
 from CreateMatrix import *
-import numpy as np
-import itertools
-import random
 
 def FindValidDimension(coor, list_maze, p = None):
   # Hàm trả về các hướng không phải tường 
@@ -79,15 +76,11 @@ def Optimize_solution(maze):
   full_info = Find_Subset(diction_road)
   list_subset = FullSituation(full_info)
   # print(full_info)
-  # print(list_subset)
+  print(list_subset)
   for subset in list_subset:
     total_path = main_path[:]
-    for coordinate in list(subset):
-      if coordinate not in diction_road:
-        extra_path = FindPath(maze = maze, start = coordinate, points = main_path, dict = diction_road)
-        diction_road[coordinate] = extra_path
-      else:
-        extra_path = diction_road[coordinate]
+    for coordinate in list(subset):      
+      extra_path = diction_road[coordinate]
       for coo in extra_path:
         if coo not in total_path:
           total_path.append(coo)
@@ -158,8 +151,9 @@ def FindOptimalPath(maze, main_path, total_path):
   points = total_path[:]
   coors = [(xs, ys)]
   d = {}
+  translate = {(0,1):"D",(1,0):"R",(0,-1):"U",(-1,0):"L"}
   d[(xs, ys)] = FindDimensionIsPath((xs,ys), main_path, total_path)
-  path_bot_go = [[(xs,ys), d[(xs,ys)][:]]]
+  path_bot_go = []
   while True:
     if (xs, ys) in points:
       new_points = [point for point in points if point != (xs, ys)]
@@ -172,10 +166,10 @@ def FindOptimalPath(maze, main_path, total_path):
     else:
       dim = d[(xs,ys)]
       cpath = dim.pop()
+      path_bot_go.append([(xs,ys), [cpath], translate[cpath]])
       xs += cpath[0]
       ys += cpath[1]
       d[(xs,ys)] = d.get((xs,ys), FindDimensionIsPath((xs,ys), main_path, total_path, p = cpath))
-      path_bot_go.append([(xs,ys), d[(xs,ys)][:]])
       if (xs, ys) not in coors:
         coors.append((xs, ys))
 

@@ -48,7 +48,8 @@ def ShowBotGo(func, para, l, i):
   lis, square, color, radius = para
   if i < len(l):
     consider = l[int(i)]
-    point, dims = consider
+    point = consider[0]
+    dims = consider[1]
     res = []    
     for a,b in dims:
       j = point[0] + a
