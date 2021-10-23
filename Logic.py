@@ -77,9 +77,9 @@ def Optimize_solution(maze):
   main_path, diction_road, path_bot_go = MazeAnalysis(maze)
   max = 0
   full_info = Find_Subset(diction_road)
-  print(full_info)
   list_subset = FullSituation(full_info)
-  print(list_subset)
+  # print(full_info)
+  # print(list_subset)
   for subset in list_subset:
     total_path = main_path[:]
     for coordinate in list(subset):
@@ -172,37 +172,35 @@ def FindOptimalPath(maze, main_path, total_path):
       if (xs, ys) not in coors:
         coors.append((xs, ys))
 
-def test(first_num, list_copy, d, n):
-    ans = []
-    list_copy = del_relate_info(list_copy, d[first_num])
-    if n == 1:
-        return [[i] for i in list_copy]
-    if n == 0:
-        return []
-    for coor1 in list_copy:
-        for lc in test(coor1, list_copy, d, n-1):
-            lc.append(coor1)
-            ans.append(lc)
-    return ans
-
 def del_relate_info(l1, d):
-    new_l = []
-    for point in l1:
-        if point not in d[0] and point not in d[1]:
-            new_l.append(point)
-    return new_l
+  new_l = []
+  for point in l1:
+    if point not in d[0] and point not in d[1]:
+      new_l.append(point)
+  return new_l
 
-def FullSituation(d):
-  l = list(d.keys())
-  lc = l[:]
-  cover = [{}]
-  for point in l:
-    cover.append(set([point]))
-  for n in range(1, len(l)+1):
-    for start in l:
-      for points in test(start, lc, d, n-1):
-        points = [start] + points
-        if set(points) not in cover:
-          cover.append(set(points))
-  s = [list(p) for p in cover]    
-  return s
+def FullSituation(inp):
+  s = list(inp.keys())
+  d = {}
+  for point in s:
+    a = (point,)
+    d[a] = del_relate_info(s, inp[point])
+  res = [[]]
+  for ss in ChoosePoint(inp, d):
+    res.append(list(ss))
+  return res
+
+def ChoosePoint(inp, res, n = 1):
+  l = [i for i in list(res.keys())[:] if len(i) == n]
+  if len(l) == 0:
+    return list(res.keys())
+  a = []
+  for i in l:
+    for j in res[i]:
+      ni = list(i)
+      ni.append(j)
+      if set(ni) not in a:
+        a.append(set(ni))
+        nl = del_relate_info(res[i], inp[j])
+        res[tuple(ni)] = nl
+  return ChoosePoint(inp, res, n+1)
