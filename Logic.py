@@ -3,60 +3,6 @@ import numpy as np
 import itertools
 import random
 
-########### Ý tưởng sẽ là mình đi từ điểm xuất phát đến điểm cuối cùng, trên đường mình gặp cái điểm nào thì mình sẽ ghi lại điểm đó.
-########### Khi mình đến điểm cuối cùng thì sẽ còn những nơi có điểm mình chưa tới. Khi đó, từ điểm cuối cùng, mình sẽ đi tìm tất cả 
-########### những nơi có điểm còn lại
-
-class Cell(object):
-  def __init__(self, coor, maze, main_road = False):
-    self.x = coor[0]
-    self.y = coor[1]
-    self.maze = maze    
-    self.main_road = main_road
-    if main_road == False:
-      self.times = 0
-      self.go_through = False
-    else:      
-      self.times = 1
-      self.go_through = True
-
-  def TimesGoPoint(self):
-    maze = self.maze
-    x, y = self.get_pos()
-    if maze.get_list_maze()[x][y] != 1:
-      valid_dimension = len(FindValidDimension((x,y) , maze.get_list_maze()))
-      times = self.times
-      if times < valid_dimension:
-        times += 1
-      self.times = times
-    return self.times
-  
-  def IsEnd(self, l):
-    x, y = self.get_pos()
-    count = 0
-    if l[x][y-1].go_through == True:
-      count += 1
-    if l[x][y+1].go_through == True:
-      count += 1
-    if l[x-1][y].go_through == True:
-      count += 1
-    if l[x+1][y].go_through == True:
-      count += 1
-    if count == 1 or (x,y) == self.maze.get_start_point():
-      return True
-    else:
-      return False
-
-  def GoThrough(self):
-    self.go_through = True 
-
-  def get_pos(self):
-    return (self.x, self.y)
-
-  def get_times(self):
-    return self.times
-
-# Hàm bên ngoài phụ trợ
 def FindValidDimension(coor, list_maze, p = None):
   # Hàm trả về các hướng không phải tường 
   # điểm cuối sẽ là hướng p nếu hướng p ko có gạch, điểm đầu sẽ là hướng ngược lại p
@@ -109,7 +55,6 @@ def FindPath(maze, points = []):
     
 def MazeAnalysis(maze):
   size = maze.get_size()
-  start_point = maze.get_start_point()
   end_point = maze.get_end_point()
   list_point = maze.get_list_point()
   list_consider = [(i, j) for i in range(size[0]) for j in range(size[1]) if list_point[i][j] != 0 or (i,j) == end_point]
@@ -129,22 +74,12 @@ def MazeAnalysis(maze):
   
 def Optimize_solution(maze):
   list_point = maze.get_list_point()
-  size = maze.get_size()
   main_path, diction_road, path_bot_go = MazeAnalysis(maze)
   max = 0
-  start_extra = Find_Subset(diction_road)
-  list_subset = FullSituation(start_extra)
+  full_info = Find_Subset(diction_road)
+  list_subset = FullSituation(full_info)
   for subset in list_subset:
-    l = [[0 for i in range(size[1])] for j in range(size[0])]
-    for i in range(size[0]):
-      for j in range(size[1]):
-        if (i, j) not in main_path:
-          l[i][j] = Cell((i,j), maze, main_road = False)
-        else:
-          l[i][j] = Cell((i,j), maze, main_road = True)
-
     total_path = main_path[:]
-
     for coordinate in list(subset):
       if coordinate not in diction_road:
         extra_path = FindPath(maze = maze, start = coordinate, points = main_path, dict = diction_road)
@@ -152,26 +87,17 @@ def Optimize_solution(maze):
       else:
         extra_path = diction_road[coordinate]
       for coo in extra_path:
-        l[coo[0]][coo[1]].TimesGoPoint()
         if coo not in total_path:
           total_path.append(coo)
-          l[coo[0]][coo[1]].TimesGoPoint()
-
     score = 0
-    length = 1 + len(subset)
+    full_step = FindOptimalPath(maze, main_path, total_path)
+    length = len(full_step) - 1
     for concoor in total_path:
       score += list_point[concoor[0]][concoor[1]]
-      cell = l[concoor[0]][concoor[1]]
-      if cell.IsEnd(l):
-        length += (cell.get_times() - 1)
-      else:
-        length += cell.get_times()
-
     formular = score / length
     if formular >= max:
-      op = (score, total_path, length)
+      op = (score, total_path, length, full_step)
       max = formular
-
   return op, path_bot_go, main_path
 
 def Find_Subset(d):
@@ -197,7 +123,6 @@ def FindDimensionIsPath(coor, main_path, total_path, p = None):
   # Hàm trả về các hướng không phải tường 
   # điểm cuối sẽ là hướng p nếu hướng p ko có gạch, điểm đầu sẽ là hướng ngược lại p
   steps = [(0,1), (0,-1), (1,0), (-1,0)]
-  # phan_bu = [c for c in total_path if c not in main_path]
   if p != None:
     a = (-1) * p[0]
     b = (-1) * p[1]
@@ -208,7 +133,6 @@ def FindDimensionIsPath(coor, main_path, total_path, p = None):
     for step in steps:
       if step not in res and (coor[0] + step[0],coor[1] + step[1]) in total_path:
         res.append(step)
-
   else:
     res = []
     for step in steps:
@@ -218,6 +142,7 @@ def FindDimensionIsPath(coor, main_path, total_path, p = None):
       if step not in res and (coor[0] + step[0],coor[1] + step[1]) in total_path:
         res.append(step) 
   return res
+
 
 def FindOptimalPath(maze, main_path, total_path):
   xs, ys = maze.get_start_point()
@@ -264,7 +189,6 @@ def del_relate_info(l1, d):
         if point not in d[0] and point not in d[1]:
             new_l.append(point)
     return new_l
-
 
 def FullSituation(d):
   l = list(d.keys())

@@ -16,23 +16,21 @@ def TakeCoordinateRoad(maze):
 def AllNeedInfo(size = (21,21), num_point = 10, start = None, end = None, multi_path = False):
   width, height = size
   if start == None and end == None:
-    s = (random.choice(range(1,width - 2,2)),random.choice(range(1,height - 2,2)))
-    e = (random.choice(range(1,width - 2,2)),random.choice(range(1,height - 2,2)))
+    while True:
+      s = (random.choice(range(1,width - 2,2)),random.choice(range(1,height - 2,2)))
+      e = (random.choice(range(1,width - 2,2)),random.choice(range(1,height - 2,2)))
+      if ((s[0]-e[0])**2) + ((s[1]-e[1])**2) >= (min(size)-3):
+        break
   else:
     s = start
     e = end
   maze = Maze(size = (width, height), num_point= num_point, start = s, end = e, multi_path = False)
   cp = TakeCoordinatePoint(maze)
   cr, cb = TakeCoordinateRoad(maze)
-  (score, optimal_path, len_of_best), path_bot_go, main_path = Optimize_solution(maze)
+  (score, optimal_path, len_of_best, op_road), path_bot_go, main_path = Optimize_solution(maze)
   highest_score = score / len_of_best
   point_of_best = score
-  op_road = FindOptimalPath(maze, main_path, optimal_path)
-  # len_of_best = len(op_road)-1
-  # op_road = [maze.get_start_point()]
   return maze, cp, cr, cb, score, optimal_path, len_of_best, highest_score, point_of_best, path_bot_go, main_path, op_road
 
 if __name__ == '__main__':
   maze, cp1, cr, cb, score, optimal_path, len_of_best, highest_score, point_of_best, path_bot_go, main_path, op_road = AllNeedInfo(size = (11,11), num_point = 7, start = (1,1), end = (5,5), multi_path = False)
-  # print("OPTIMAL ROAD", op_road)
-  # print("ALL PATH",path_bot_go)
