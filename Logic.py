@@ -77,7 +77,9 @@ def Optimize_solution(maze):
   main_path, diction_road, path_bot_go = MazeAnalysis(maze)
   max = 0
   full_info = Find_Subset(diction_road)
+  print(full_info)
   list_subset = FullSituation(full_info)
+  print(list_subset)
   for subset in list_subset:
     total_path = main_path[:]
     for coordinate in list(subset):
