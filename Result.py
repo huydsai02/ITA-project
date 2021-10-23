@@ -33,7 +33,7 @@ color_brick = (102, 38, 60)
 
 ##### Thông số cửa sổ
 pygame.init()
-square = 40
+square = 10
 SIZE = (square*size[0], square*size[1] + square)
 DISPLAYSURF = pygame.display.set_mode((SIZE[0], SIZE[1]))
 pygame.display.set_caption('Maze')
