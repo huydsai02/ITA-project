@@ -63,7 +63,7 @@ class Maze(object):
           neighbors.append((step,(nx, ny)))
     return neighbors
     
-  def Create_list_point(self, num = 10, ranrange= range(4, 8)):
+  def Create_list_point(self, num = 10):
     size = self.get_size()
     m = self.get_list_maze()
     self.list_point = [[0 for i in range(size[1])] for j in range(size[0])]
@@ -72,9 +72,9 @@ class Maze(object):
     for _ in range(len(point_pos)):
       i, j = point_pos[_]
       if _ != int(num/2):
-        self.list_point[i][j] = random.choice(ranrange)
+        self.list_point[i][j] = (i+j)*2
       else:
-        self.list_point[i][j] = 5 * random.choice(ranrange)
+        self.list_point[i][j] = 10 * (i+j)
     return self.list_point
 
   def MultiPath(self, bool, break_brick = 10):
