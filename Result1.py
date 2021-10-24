@@ -83,7 +83,7 @@ color_brick = (102, 38, 60)
 
 ##### Thông số cửa sổ
 pygame.init()
-SIZE = (950,600)
+SIZE = (1050,670)
 square = min(SIZE) // max(maze.get_size())
 DISPLAYSURF = pygame.display.set_mode((SIZE[0], SIZE[1]))
 pygame.display.set_caption('Maze')
@@ -121,12 +121,12 @@ def DrawCircle(l, size, color, radius):
     pygame.draw.circle(DISPLAYSURF, color, (x*size + size/2, y*size + size/2), radius-2*decrease)
 
 # Các nút trong chương trình
-btn_new_game = Button(name = "new game", pos = (650,50))
-btn_seen = Button(name = "FULL MAZE", pos = (650,100))
-btn_not_seen = Button(name = "AROUND", pos = (650,100))
-btn_show_solution = Button(name = "Show solution", pos = (650,150))
-btn_show_bot = Button(name = "EXPLAIN", pos = (650,200))
-btn_best_path = Button(name = "BEST PATH", pos = (650,250))
+btn_new_game = Button(name = "new game", pos = (775,150))
+btn_seen = Button(name = "FULL MAZE", pos = (775,200))
+btn_not_seen = Button(name = "AROUND", pos = (775,200))
+btn_show_solution = Button(name = "Show solution", pos = (775,250))
+btn_show_bot = Button(name = "EXPLAIN", pos = (775,300))
+btn_best_path = Button(name = "BEST PATH", pos = (775,350))
 while True:
   old_coor = (xs, ys)
   if int(initial) < length:
@@ -148,7 +148,7 @@ while True:
   DrawCircle([(xs, ys)], square, color_start, square//2)
   DrawCircle([(xf, yf)], square, color_end, square//2)
   if show_solution:
-    DrawCircle(optimal_path, square, (240, 240, 240), square//4)
+    DrawCircle(optimal_path, square, (225, 225, 225), square/3)
     write_score(list_point, cp, (square, square))
     
   if show_bot_go:
@@ -177,10 +177,10 @@ while True:
   #   DISPLAYSURF.blit(ShowInfo(f'The highest score is {round(highest_score,2)} with {len_of_best} steps and {int(point_of_best)} points'.upper(), size=square), (square/2, SIZE[1]))
 
   # pos = (650,250), size = (230, 50)
-  DISPLAYSURF.blit(ShowInfo(f'TOTAL POINT: {current_score}', size=30), (650, 350))
-  DISPLAYSURF.blit(ShowInfo(f'TOTAL STEP: {total_step}', size=30), (650, 450))
+  DISPLAYSURF.blit(ShowInfo(f'TOTAL POINT: {current_score}', size=square), (800, 25))
+  DISPLAYSURF.blit(ShowInfo(f'TOTAL STEP: {total_step}', size=square), (800, 50))
   stri = f'FINAL POINT: {round(current_score/total_step,2)}' if total_step != 0 else 'FINAL POINT: 0'
-  DISPLAYSURF.blit(ShowInfo(stri, size=30), (650, 550))
+  DISPLAYSURF.blit(ShowInfo(stri, size=square), (800, 75))
     
   for event in pygame.event.get():
     if event.type == QUIT:
