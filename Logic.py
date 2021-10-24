@@ -76,14 +76,14 @@ def Optimize_solution(maze):
   full_info = Find_Subset(diction_road)
   list_subset = FullSituation(full_info)
   # print(full_info)
-  print(list_subset)
+  print(len(list_subset))
+  ############################################Đoạn này chạy chưa nhanh#############
   for subset in list_subset:
     total_path = main_path[:]
     for coordinate in list(subset):      
       extra_path = diction_road[coordinate]
-      for coo in extra_path:
-        if coo not in total_path:
-          total_path.append(coo)
+      total_path += extra_path
+    total_path = list(set(total_path))
     score = 0
     # length = len(full_step) - 1
     length = 1
@@ -97,6 +97,7 @@ def Optimize_solution(maze):
     if formular >= max:
       op = (score, total_path, length)
       max = formular
+  #######################################################################################
   total_best_score, best_road, leng = op
   full_step = FindOptimalPath(maze, main_path, best_road)
   print(leng == (len(full_step) - 1))

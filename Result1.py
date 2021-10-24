@@ -4,7 +4,7 @@ from HandleEventFunction import *
 from HandleInfoFunction import * 
 
 ###### All need info 
-maze, cp1, cr, cb, score, optimal_path, len_of_best, highest_score, point_of_best, path_bot_go, main_path, op_road = AllNeedInfo(size = (40,40), num_point = 20, start = (3,3), end = (11,11), multi_path = False)
+maze, cp1, cr, cb, score, optimal_path, len_of_best, highest_score, point_of_best, path_bot_go, main_path, op_road = AllNeedInfo(size = (65,65), num_point = 15, start = (1,1), end = (63,63), multi_path = False)
 cp = cp1[:]
 xs, ys = maze.get_start_point(); xf, yf = maze.get_end_point()
 size = maze.get_size()
