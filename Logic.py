@@ -76,7 +76,6 @@ def Optimize_solution(maze):
   full_info = Find_Subset(diction_road)
   list_subset = FullSituation(full_info)
   sum_point_main = sum([list_point[x][y] for x, y in main_path])
-  print(sum_point_main)
   # print(full_info)
   print(len(list_subset))  
   ############################################Đoạn này chạy chưa nhanh#############
