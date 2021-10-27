@@ -175,11 +175,11 @@ def FindOptimalPath(maze, main_path, total_path):
         coors.append((xs, ys))
 
 def del_relate_info(l1, d):
-  new_l = []
-  for point in l1:
-    if point not in d[0] and point not in d[1]:
-      new_l.append(point)
-  return new_l
+  # new_l = []
+  # for point in l1:
+  #   if point not in d[0] and point not in d[1]:
+  #     new_l.append(point)
+  return list(set(l1) - set(d[0] + d[1]))
 
 def FullSituation(inp):
   s = list(inp.keys())
