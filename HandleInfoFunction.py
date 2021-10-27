@@ -13,7 +13,7 @@ def AllNeedInfo(size = (21,21), num_point = 10, start = None, end = None, multi_
     while True:
       s = (random.choice(range(1,width - 2,2)),random.choice(range(1,height - 2,2)))
       e = (random.choice(range(1,width - 2,2)),random.choice(range(1,height - 2,2)))
-      if ((s[0]-e[0])**2) + ((s[1]-e[1])**2) >= (min(size)-3):
+      if ((s[0]-e[0])**2) + ((s[1]-e[1])**2) >= (min(size)-3)**2:
         break
   else:
     s = start
