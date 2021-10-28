@@ -85,21 +85,17 @@ def Optimize_solution(maze):
   print(len(list_subset))  
   ############################################Đoạn này chạy chưa nhanh#############
   for subset in list_subset:
-    total_path = main_path[:]
     all_extra_path = []
-    score = sum_point_main
     score_in_extra = []
     for coordinate in list(subset):      
       extra_path = diction_road[coordinate]
-      total_path += extra_path
       all_extra_path += extra_path
       score_in_extra += full_info[coordinate][1]
-    score += sum([list_point[x][y] for x, y in list(set(score_in_extra))])
-    total_path = list(set(total_path))
-    all_extra_path = list(set(all_extra_path))
-    length = len(main_path) + 2*len(all_extra_path) - 1
+    score = sum_point_main + sum([list_point[x][y] for x, y in list(set(score_in_extra))])
+    length = len(main_path) + 2*len(set(all_extra_path)) - 1
     formula = score / length
     if formula >= max:
+      total_path = list(set(main_path + all_extra_path))
       op = (score, total_path, length)
       max = formula
   #######################################################################################
