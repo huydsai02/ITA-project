@@ -3,7 +3,7 @@ from pygame.locals import *
 from HandleEventFunction import * 
 from HandleInfoFunction import * 
 
-_size = (40,40); _num_point = 20; _start = (1,1); _end = (23,23)
+_size = (65,65); _num_point = 30; _start = (1,1); _end = (63,63)
 ###### All need info 
 
 

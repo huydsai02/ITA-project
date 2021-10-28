@@ -31,7 +31,7 @@ def FindPath(maze, points = []):
   while True:
     if len(d[coors[-1]]) == 0:
       coors.pop()
-      xs, ys = coors[-1]
+      # xs, ys = coors[-1]
     else:
       dim = d[(xs,ys)]
       cpath = dim.pop()
@@ -47,7 +47,7 @@ def FindPath(maze, points = []):
       dict_road[(xs, ys)] = road
       new_points = [point for point in points if point != (xs, ys)]
       points = new_points
-    if len(points) == 0:
+    if len(coors) == 0: ############################ M đã sửa chỗ này, sau xem xét fix bug (Có vẻ đã fix được nhưng cứ xem xét thêm) ########
       return dict_road, path_bot_go
     
 def MazeAnalysis(maze):
@@ -73,8 +73,13 @@ def Optimize_solution(maze):
   list_point = maze.get_list_point()
   main_path, diction_road, path_bot_go = MazeAnalysis(maze)
   max = 0
-  full_info = Find_Subset(diction_road)
-  list_subset = FullSituation(full_info)
+  full_info, same_extra = Find_Subset(diction_road)
+  new_inp = []
+  for inp in same_extra:
+    new_inp.append(FullSituation(inp))
+  # print(new_inp)
+  list_subset = CombineList(new_inp)
+  # print(list_subset)
   sum_point_main = sum([list_point[x][y] for x, y in main_path])
   # print(full_info)
   print(len(list_subset))  
@@ -107,11 +112,14 @@ def Find_Subset(d):
   # Hàm trả về những đầu mút của đường thêm
   l = list(d.keys())
   res = {}
+  start_extra = {}
   for consider in l:
     # tập b là tập những điểm không nằm trong danh sách consider đi qua (trừ nó)
     b = [consider]
     # tập c là tập những điểm phải đi qua mới đến consider được
     c = [consider]
+    start_extra[d[consider][0]] = start_extra.get(d[consider][0],[])
+    start_extra[d[consider][0]].append(consider)
     for _ in l:
       if consider in d[_]:
           b.append(_)
@@ -120,7 +128,13 @@ def Find_Subset(d):
     b = list(set(b))
     c = list(set(c))
     res[consider] = [b[:],c[:]]
-  return res
+  same_extra = []
+  for point in start_extra:
+  	a1 = {}
+  	for other_point in start_extra[point]:
+  		a1[other_point] = res[other_point]
+  	same_extra.append(a1)
+  return res, same_extra
 
 def FindDimensionIsPath(coor, main_path, total_path, p = None):
   # Hàm trả về các hướng không phải tường 
@@ -206,3 +220,14 @@ def ChoosePoint(inp, res, n = 1):
         nl = del_relate_info(res[i], inp[j])
         res[tuple(ni)] = nl
   return ChoosePoint(inp, res, n+1)
+
+def CombineList(l):
+  lf = []
+  ln = len(l)
+  if ln == 1:
+    return [i[:] for i in l[0]]
+  for i in l[-1]:
+    for j in CombineList(l[:ln-1]):
+      j += i
+      lf.append(j)
+  return lf

@@ -51,7 +51,7 @@ def ShowBotGo(func, para, l, i):
     point = consider[0]
     dims = consider[1]
     res = [] 
-    if dims[0] != ():    
+    if dims != [] and dims[0] != ():    
       for a,b in dims:
         j = point[0] + a
         k = point[1] + b
