@@ -20,7 +20,22 @@ def FindValidDimension(coor, list_maze, p = None):
         res.append(step)  
   return res
 
-def FindPath(maze, points = []):
+def Manhattan(x1, x2):
+  return abs(x1[0] - x2[0]) + abs(x1[1] - x2[1])
+
+def PriorPop(paths, points= []):
+  tpop = float('inf')
+  tpath = []
+  for path in paths:
+    m = min([Manhattan(path[-1], point) + len(path) - 1 for point in points])
+    if m < tpop:
+      tpop = m
+      tpath = path
+  if tpath in paths:
+    paths.remove(tpath)
+  return tpath
+
+def FindPath(maze, points = [], alg= 'dfs'):
   xs, ys = maze.get_start_point()
   list_maze = maze.get_list_maze()
   coors = [(xs, ys)]
@@ -28,34 +43,83 @@ def FindPath(maze, points = []):
   d = {}
   d[(xs, ys)] = FindValidDimension((xs,ys), list_maze)
   path_bot_go = [[(xs,ys), d[(xs,ys)][:]]]
-  while True:
-    if len(d[coors[-1]]) == 0:
-      coors.pop()
-      # xs, ys = coors[-1]
-    else:
-      dim = d[(xs,ys)]
-      cpath = dim.pop()
-      xs += cpath[0]
-      ys += cpath[1]
-      d[(xs,ys)] = d.get((xs,ys), FindValidDimension((xs,ys), list_maze, p = cpath))
-      path_bot_go.append([(xs,ys), d[(xs,ys)][:]])
-      if (xs, ys) not in coors:
-        coors.append((xs, ys))
+  if alg == 'dfs':
+    while True:
+      if len(d[coors[-1]]) == 0:
+        coors.pop()
+      else:
+        dim = d[(xs,ys)]
+        cpath = dim.pop()
+        xs += cpath[0]
+        ys += cpath[1]
+        d[(xs,ys)] = d.get((xs,ys), FindValidDimension((xs,ys), list_maze, p = cpath))
+        path_bot_go.append([(xs,ys), d[(xs,ys)][:]])
+        if (xs, ys) not in coors:
+          coors.append((xs, ys))
 
-    if (xs, ys) in points:
-      road = coors[:]
-      dict_road[(xs, ys)] = road
-      new_points = [point for point in points if point != (xs, ys)]
-      points = new_points
-    if len(coors) == 0: ############################ M đã sửa chỗ này, sau xem xét fix bug (Có vẻ đã fix được nhưng cứ xem xét thêm) ########
-      return dict_road, path_bot_go
+      if (xs, ys) in points:
+        road = coors[:]
+        dict_road[(xs, ys)] = road
+        new_points = [point for point in points if point != (xs, ys)]
+        points = new_points
+      if len(coors) == 0:
+        return dict_road, path_bot_go
+
+  elif alg == 'A*':
+    paths = [[(xs, ys)]]
+    while True:
+      path = PriorPop(paths, points)
+      (xt, yt) = path[-1]
+      if len(d[(xt, yt)]):
+        for direct in  d[(xt, yt)]:
+          x0, y0 = xt + direct[0], yt + direct[1]
+          npath = path[:]
+          npath.append((x0, y0))
+          paths.append(npath)
+          direct0 = FindValidDimension((x0, y0), list_maze, p= direct)
+          direct0.pop(0)
+          d[(x0, y0)] = d.get((x0, y0), direct0)
+          path_bot_go.append([(x0, y0), d[(x0, y0)][:]])
+          if (x0, y0) in points:
+            road = npath
+            dict_road[(x0, y0)] = road
+            new_points = [point for point in points if point != (x0, y0)]
+            points = new_points
+          if len(points) == 0:
+            return dict_road, path_bot_go
+          
+  elif alg == 'bfs':
+    paths = [[(xs, ys)]]
+    while True:
+      print(len(paths))
+      path = paths.pop(0)
+      (xt, yt) = path[-1]
+      if len(d[(xt, yt)]):
+        for direct in  d[(xt, yt)]:
+          x0, y0 = xt + direct[0], yt + direct[1]
+          npath = path[:]
+          npath.append((x0, y0))
+          paths.append(npath)
+          direct0 = FindValidDimension((x0, y0), list_maze, p= direct)
+          direct0.pop(0)
+          d[(x0, y0)] = d.get((x0, y0), direct0)
+          path_bot_go.append([(x0, y0), d[(x0, y0)][:]])
+          if (x0, y0) in points:
+            road = npath
+            dict_road[(x0, y0)] = road
+            new_points = [point for point in points if point != (x0, y0)]
+            points = new_points
+          if len(points) == 0:
+            return dict_road, path_bot_go
+
     
-def MazeAnalysis(maze):
+    
+def MazeAnalysis(maze, alg):
   size = maze.get_size()
   end_point = maze.get_end_point()
   list_point = maze.get_list_point()
   list_consider = [(i, j) for i in range(size[0]) for j in range(size[1]) if list_point[i][j] != 0 or (i,j) == end_point]
-  dict_path, path_bot_go = FindPath(maze, list_consider)
+  dict_path, path_bot_go = FindPath(maze, list_consider, alg)
   main_path = dict_path[end_point]
   dict_extra_path = {}
   for point in list_consider:
@@ -69,9 +133,9 @@ def MazeAnalysis(maze):
         dict_extra_path[point] = extra_path
   return main_path, dict_extra_path, path_bot_go
   
-def Optimize_solution(maze):
+def Optimize_solution(maze, alg):
   list_point = maze.get_list_point()
-  main_path, diction_road, path_bot_go = MazeAnalysis(maze)
+  main_path, diction_road, path_bot_go = MazeAnalysis(maze, alg)
   max = 0
   full_info, same_extra = Find_Subset(diction_road)
   new_inp = []
