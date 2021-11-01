@@ -3,7 +3,7 @@ from pygame.locals import *
 from HandleEventFunction import * 
 from HandleInfoFunction import * 
 
-_size = (41,41); _num_point = 20; _start = (1,1); _end = (39,39)
+_size = (41,41); _num_point = 20; _start = (1,1); _end = (39,39); _alg = 'bfs'
 ###### All need info 
 
 
@@ -12,7 +12,7 @@ def init():
   global size, list_point, state, speed, initial, length, seen, show_solution, show_bot_go, one_times, change_when_run
   global list_gone, current_score, total_step, best_path, length1, xs, ys, xf, yf, new_game
   maze, cp1, cr, cb, score, optimal_path, len_of_best, highest_score, point_of_best, path_bot_go, main_path, op_road = \
-    AllNeedInfo(size = _size, num_point = _num_point, start = _start, end = _end, alg= 'bfs')
+    AllNeedInfo(size = _size, num_point = _num_point, start = _start, end = _end, alg = _alg)
   cp = cp1[:]
   xs, ys = maze.get_start_point(); xf, yf = maze.get_end_point()
   size = maze.get_size()
