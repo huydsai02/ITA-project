@@ -11,7 +11,8 @@ def init():
   global maze, cp, cr, cb, score, optimal_path, len_of_best, highest_score, point_of_best, path_bot_go, main_path, op_road
   global size, list_point, state, speed, initial, length, seen, show_solution, show_bot_go, one_times, change_when_run
   global list_gone, current_score, total_step, best_path, length1, xs, ys, xf, yf, new_game
-  maze, cp1, cr, cb, score, optimal_path, len_of_best, highest_score, point_of_best, path_bot_go, main_path, op_road = AllNeedInfo(size = _size, num_point = _num_point, start = _start, end = _end)
+  maze, cp1, cr, cb, score, optimal_path, len_of_best, highest_score, point_of_best, path_bot_go, main_path, op_road = \
+    AllNeedInfo(size = _size, num_point = _num_point, start = _start, end = _end, alg= 'bfs')
   cp = cp1[:]
   xs, ys = maze.get_start_point(); xf, yf = maze.get_end_point()
   size = maze.get_size()
@@ -20,7 +21,7 @@ def init():
   direc = "".join([translate[_[1][0]] for _ in op_road])
   print(direc)
   state = True
-  speed = 1
+  speed = 0.5
   initial = 0
   length = len(path_bot_go)
   seen = False
