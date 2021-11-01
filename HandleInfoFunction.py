@@ -2,11 +2,7 @@ from CreateMatrix import *
 import Logic 
 import p
 
-def AllNeedInfo(size = (21,21), num_point = 10, start = None, end = None, multi_path = False):
-
-  ####################### Chaỵ theo code của ????????? ##############################
-  huy = True
-  phong = False
+def AllNeedInfo(size = (21,21), num_point = 10, start = None, end = None, multi_path = False, alg= 'dfs'):
 
   width, height = size
   if start == None and end == None:
@@ -18,15 +14,12 @@ def AllNeedInfo(size = (21,21), num_point = 10, start = None, end = None, multi_
   else:
     s = start
     e = end
-  maze = Maze(size = (width, height), num_point= num_point, start = s, end = e, multi_path = False)
+  maze = Maze(size = (width, height), num_point= num_point, start = s, end = e, multi_path = False, )
   cp = TakeCoordinatePoint(maze)
   cr, cb = TakeCoordinateRoad(maze)
 
   #################################### Chỗ nhập thông tin ##################################################
-  if huy == True:
-    score, optimal_path, len_of_best, op_road, path_bot_go, main_path = Logic.Optimize_solution(maze)
-  if phong == True:
-    score, optimal_path, len_of_best, op_road, path_bot_go, main_path = 1, [], 1, [], [], []
+  score, optimal_path, len_of_best, op_road, path_bot_go, main_path = Logic.Optimize_solution(maze, alg)
 
   highest_score = score / len_of_best
   point_of_best = score
