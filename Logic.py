@@ -24,16 +24,18 @@ def Manhattan(x1, x2):
   return abs(x1[0] - x2[0]) + abs(x1[1] - x2[1])
 
 def PriorPop(paths, points= []):
-  tpop = float('inf')
-  tpath = []
-  for path in paths:
-    m = min([Manhattan(path[-1], point) + len(path) - 1 for point in points])
-    if m < tpop:
-      tpop = m
-      tpath = path
-  if tpath in paths:
+  if len(points):
+    tpop = float('inf')
+    tpath = paths[-1]
+    for path in paths:
+      m = min([Manhattan(path[-1], point) + len(path) - 1 for point in points])
+      if m < tpop:
+        tpop = m
+        tpath = path
     paths.remove(tpath)
-  return tpath
+    return tpath
+  else:
+    return paths.pop(0)
 
 def FindPath(maze, points = [], alg= 'dfs'):
   xs, ys = maze.get_start_point()
@@ -85,13 +87,13 @@ def FindPath(maze, points = [], alg= 'dfs'):
             dict_road[(x0, y0)] = road
             new_points = [point for point in points if point != (x0, y0)]
             points = new_points
-          if len(points) == 0:
-            return dict_road, path_bot_go
+      print(len(paths))
+      if len(paths) == 0:
+        return dict_road, path_bot_go
           
   elif alg == 'bfs':
     paths = [[(xs, ys)]]
     while True:
-      print(len(paths))
       path = paths.pop(0)
       (xt, yt) = path[-1]
       if len(d[(xt, yt)]):
@@ -109,8 +111,8 @@ def FindPath(maze, points = [], alg= 'dfs'):
             dict_road[(x0, y0)] = road
             new_points = [point for point in points if point != (x0, y0)]
             points = new_points
-          if len(points) == 0:
-            return dict_road, path_bot_go
+      if len(paths) == 0:
+        return dict_road, path_bot_go
 
     
     
