@@ -1,7 +1,7 @@
 import random
 from random import randint
 class Maze(object):
-  def __init__(self, size = (11,11), start = (1,1), end = (9,9), matrix = None, num_point = 12, multi_path = False):
+  def __init__(self, size = (11,11), start = (1,1), end = (9,9), matrix = None, num_point = 12):
     # self.size là kích thước của mê cung, vị trí thứ nhất là chiều ngang mê cung, vị trí thứ hai là chiều dọc mê cung
     self.size = size
     self.matrix = self.CreateMaze() if matrix == None else matrix
@@ -9,7 +9,6 @@ class Maze(object):
     self.end_point = end
     self.matrix[start[0]][start[1]] = 2
     self.matrix[end[0]][end[1]] = 3
-    self.matrix = self.MultiPath(multi_path, break_brick= max(size))
     self.Create_list_point(num = num_point)
 
   def CreateMaze(self):
@@ -77,20 +76,17 @@ class Maze(object):
         self.list_point[i][j] = 10 * (i+j)
     return self.list_point
 
-  def MultiPath(self, bool, break_brick = 10):
-    m = self.matrix
-    if bool:
-      size = self.get_size()
-      l = []
-      for i in range(1,size[0] - 1):
-        for j in range(1, size[1] - 1):
-          if (i % 2 == 0 and j % 2 != 0) or (j % 2 == 0 and i % 2 != 0):
-            if m[i][j] == 1:
-              l.append((i,j))
-      br = random.sample(l, break_brick)
-      for x,y in br:
-        m[x][y] = 0
-    return m
+  def TakeCoordinatePoint(self):
+    lp = self.get_list_point()
+    size = self.get_size()
+    return [(i, j) for i in range(size[0]) for j in range(size[1]) if lp[i][j] != 0]
+
+  def TakeCoordinateRoad(self):
+    lm = self.get_list_maze()
+    size = self.get_size()
+    lr = [(i, j) for i in range(size[0]) for j in range(size[1]) if lm[i][j] != 1]
+    lb = [(i, j) for i in range(size[0]) for j in range(size[1]) if lm[i][j] == 1]
+    return lr, lb
 
   def get_list_point(self):
     return self.list_point
