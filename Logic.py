@@ -87,7 +87,6 @@ def FindPath(maze, points = [], alg= 'dfs'):
             dict_road[(x0, y0)] = road
             new_points = [point for point in points if point != (x0, y0)]
             points = new_points
-      print(len(paths))
       if len(paths) == 0:
         return dict_road, path_bot_go
           
