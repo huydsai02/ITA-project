@@ -1,63 +1,58 @@
 import pygame
-if __name__ == '__main__':
-    pygame.init()
-    screen = pygame.display.set_mode((500, 600))
-    clock = pygame.time.Clock()
-    font = pygame.font.SysFont("Arial", 20)
-    
- 
+
 class Button:
-    """Create a button, then blit the surface in the while loop"""
- 
-    def __init__(self, text,  pos, font, screen, bg="black", feedback="", size = (150,50), func = None):
-        self.x, self.y = pos
-        self.screen = screen
-        self.size = size
-        self.font = pygame.font.SysFont("Arial", font)
-        if feedback == "":
-            self.feedback = "text"
-        else:
-            self.feedback = feedback
-        self.change_text(text, bg)
-        self.handle = func
-        
- 
-    def change_text(self, text, bg="black"):
-        ### Hàm xử lý khi click vào ###
-        """Change the text whe you click"""
-        self.text = self.font.render(text, 1, pygame.Color("White"))
-        # self.size = self.text.get_size()
-        self.surface = pygame.Surface(self.size)
-        self.surface.fill(bg)
-        self.surface.blit(self.text.upper(), (0, 0))
-        self.rect = pygame.Rect(self.x, self.y, self.size[0], self.size[1])
- 
-    def show(self):
-        self.screen.blit(self.surface, (self.x, self.y))
- 
-    def click(self, event):
-        x, y = pygame.mouse.get_pos()
-        print(x,y)
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if pygame.mouse.get_pressed()[0]:
-                x, y = pygame.mouse.get_pos()
-                print(x,y)
-                if self.rect.collidepoint(x, y):
-                    self.change_text(self.feedback, bg="red")
-                    self.handle
-        pass
- 
-if __name__ == '__main__':
- 
-    button1 = Button("Click here", (100, 100), font=30,screen = screen, bg="navy", feedback="Hide")
+  """Create a button, then blit the surface in the while loop"""
+  def __init__(self, name,  pos = (0,0), color = (255,255,255), font = 20, size = (170,35), screen = None):
+    self.font = pygame.font.SysFont("Arial", font)
+    self.size = size
+    self.pos = pos
+    self.color = color
+    self.name = name
+    self.full_coor = self.get_full_coor()
+    self.screen = screen
+    self.state = False
+    self.other_state = True
 
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-            button1.click(event)
-        
-        button1.show()
+  def show(self, q, w):
+    self.hover(q,w)
+    self.draw()
+    
+  def draw(self):
+    screen = self.screen
+    x, y = self.pos
+    i,j = self.size
+    text = self.font.render(self.name.upper(), True, (0,0,0))
+    text_size = text.get_size()
+    k = (i - text_size[0]) // 2
+    h = (j - text_size[1]) // 2
+    de = 2
+    pygame.draw.rect(screen, (255,0,0), (x, y, i, j))
+    pygame.draw.rect(screen, self.color, (x + de, y + de, i - 2*de, j - 2*de))
+    screen.blit(text, (x + k, y + h))
 
-        clock.tick(30)
-        pygame.display.update()
+  def get_full_coor(self):
+    x, y = self.pos
+    i, j = self.size
+    h = x + i
+    k = y + j
+    self.full_coor = [(x,h),(y,k)]
+    return self.full_coor
+
+  def hover(self, x, y):
+    a, b = self.full_coor
+    if a[0] <= x <= a[1] and b[0] <= y <= b[1]:
+      self.color = (200,200,200)
+    else:
+      self.color = (255,255,255)
+  
+  def click(self, x, y):
+    a, b = self.full_coor
+    if a[0] <= x <= a[1] and b[0] <= y <= b[1]:
+      self.color = (255,0,0)
+    else:
+      self.color = (255,255,255)
+    self.draw()
+
+  def TurnOnOffOtherState(self, l):
+    for _ in l:
+      _.other_state = False if _.other_state == True else True
