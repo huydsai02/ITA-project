@@ -10,7 +10,7 @@ from Color import *
 
 class Game(object):
 	SPEED = 0.07
-	_size = (21,21); _num_point = 20; _start = (1,1); _end = (19,19)
+	_size = (41,41); _num_point = 20; _start = (1,1); _end = (39,39)
 	SIZE = (1050,670)
 
 	def __init__(self):
