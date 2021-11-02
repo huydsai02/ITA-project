@@ -2,9 +2,8 @@ import pygame, sys
 from pygame.locals import *
 from CreateMatrix import Maze
 from Bot import Bot
-from ButtonShowMap import ButtonShowMap
+from SimpleButtons import ButtonShowMap, ButtonNewGame, ButtonAgain
 from ButtonShowSolution import ButtonShowSolution
-from NewMazeAndAgain import ButtonNewGame, ButtonAgain
 from ButtonSolve import ButtonSolve
 from ButtonBestPath import ButtonBestPath
 
