@@ -69,6 +69,10 @@ class ButtonSolve(Button):
           _.other_state = True
         self.state = False
 
+  def ShowAndAct(self, x, y, bot):
+    self.show(x,y)
+    self.active(bot)
+    
   def DrawCircle(self,l, color):
     decrease = 0
     radius = self.side // 5

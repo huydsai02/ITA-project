@@ -3,7 +3,7 @@ from Color import *
 class Button:
   """Create a button, then blit the surface in the while loop"""
   def __init__(self, name,  pos = (0,0), font = 20, size = (170,35), screen = None):
-    self.font = pygame.font.SysFont("Arial", font)
+    self.font = pygame.font.SysFont("Arial", font, bold = True)
     self.size = size
     self.pos = pos
     self.color = COLOR_BTN_NORMAL
@@ -16,6 +16,13 @@ class Button:
   def show(self, q, w):
     self.hover(q,w)
     self.draw()
+  
+  def active(self):
+    pass
+
+  def ShowAndAct(self,x,y):
+    self.show(x,y)
+    self.active()
     
   def draw(self):
     screen = self.screen
@@ -26,8 +33,8 @@ class Button:
     k = (i - text_size[0]) // 2
     h = (j - text_size[1]) // 2
     de = 2
-    pygame.draw.rect(screen, COLOR_BTN_BORDER, (x, y, i, j))
-    pygame.draw.rect(screen, self.color, (x + de, y + de, i - 2*de, j - 2*de))
+    pygame.draw.rect(screen, COLOR_BTN_BORDER, (x, y, i, j), border_radius=5)
+    pygame.draw.rect(screen, self.color, (x + de, y + de, i - 2*de, j - 2*de), border_radius=5)
     screen.blit(text, (x + k, y + h))
 
   def get_full_coor(self):

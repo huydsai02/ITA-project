@@ -40,15 +40,15 @@ class Game(object):
 		self.btn_bfs = ButtonSolve(alg = "bfs", pos = (775,500), screen = self.DISPLAYSURF, maze = self.maze, SPEED = self.SPEED)
 		self.list_buttons = [self.btn_show_solution, self.btn_bfs, self.btn_dfs, self.btn_a, self.btn_best_path]
 
-	def ShowButtons(self,x,y):
-		self.btn_new_game.show(x,y)
-		self.btn_again.show(x,y)
-		self.btn_show_map.show(x,y)
-		self.btn_show_solution.show(x,y)
-		self.btn_dfs.show(x,y)
-		self.btn_a.show(x,y)
-		self.btn_bfs.show(x,y)
-		self.btn_best_path.show(x,y)
+	def ShowAndActButtons(self,x,y):
+		self.btn_new_game.ShowAndAct(x,y)
+		self.btn_again.ShowAndAct(x,y)
+		self.btn_show_map.ShowAndAct(x,y)
+		self.btn_show_solution.ShowAndAct(x,y)
+		self.btn_dfs.ShowAndAct(x,y, self.bot)
+		self.btn_a.ShowAndAct(x,y,self.bot)
+		self.btn_bfs.ShowAndAct(x,y,self.bot)
+		self.btn_best_path.ShowAndAct(x,y,self.bot)
 	
 	def GradeTable(self):
 		pygame.draw.rect(self.DISPLAYSURF, BACKGROUND_COLOR, (775,10,300,115))
@@ -57,13 +57,6 @@ class Game(object):
 		stri = f'FINAL POINT: {round(self.bot.point/self.bot.step,2)}' if self.bot.step != 0 else 'FINAL POINT: 0'
 		self.DISPLAYSURF.blit(self.ShowInfo(stri, size=20), (785, 85))
 
-	def ActiveButtons(self):
-		self.btn_show_map.active()
-		self.btn_show_solution.active()
-		self.btn_dfs.active(self.bot)
-		self.btn_a.active(self.bot)
-		self.btn_bfs.active(self.bot)
-		self.btn_best_path.active(self.bot)
 	def ClickButtons(self,x, y):
 		self.btn_show_map.click(x,y, self.bot)
 		self.btn_new_game.click(x,y,self)
@@ -86,8 +79,7 @@ class Game(object):
 			x, y = pygame.mouse.get_pos()
 			self.bot.CountAndRemember()
 			self.GradeTable()
-			self.ShowButtons(x,y)
-			self.ActiveButtons()			
+			self.ShowAndActButtons(x,y)		
 			for event in pygame.event.get():
 				if event.type == QUIT:
 					pygame.quit()

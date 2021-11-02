@@ -28,6 +28,9 @@ class ButtonBestPath(Button):
       consider = l[int(i)]
       point = consider[0]
       return point
+  def ShowAndAct(self, x, y, bot):
+    self.show(x,y)
+    self.active(bot)
   def active(self, bot):
     if self.state:
       self.initial += self.speed
