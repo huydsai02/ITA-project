@@ -5,7 +5,7 @@ pygame.init()
 
 class ButtonSolve(Button):
 
-  def __init__(self,maze, alg = 'dfs', pos = (0,0), font = 20, size = (170,35), screen = None, solution = None, best_path = None, SPEED = 0.07):
+  def __init__(self,maze, alg = 'dfs', pos = (0,0), font = 20, size = (170,45), screen = None, solution = None, best_path = None, SPEED = 0.07):
     super().__init__(alg ,  pos, font, size, screen)
     self.maze = maze
     self.alg = alg.lower()

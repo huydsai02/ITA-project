@@ -3,7 +3,7 @@ from Color import *
 pygame.init()
 
 class ButtonShowSolution(Button):
-  def __init__(self, pos = (0,0), font = 20, size = (170,35), screen = None):
+  def __init__(self, pos = (0,0), font = 20, size = (170,45), screen = None):
     super().__init__("show solution" ,  pos, font, size, screen)
     self.path = [(2,4)]
     self.length = 0
