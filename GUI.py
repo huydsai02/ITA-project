@@ -25,7 +25,6 @@ class Game(object):
 	
 	def NewMaze(self):
 		self.maze = Maze(size = self._size, num_point = self._num_point, start = self._start, end = self._end)
-		self.InitialState()
 	
 	def InitialState(self):
 		self.CreateButton()
