@@ -32,7 +32,7 @@ class Bot(object):
 					self.DrawRectangle([(i,j)], COLOR_BRICK)
 				else:
 					self.DrawRectangle([(i,j)], COLOR_ROAD)
-			self.DrawRectangle(lp, COLOR_END)
+			self.DrawRectangle(lp, COLOR_RECT_POINT)
 
 		elif self.view.get_state() == True:
 			self.decrease = 0
