@@ -67,7 +67,7 @@ def FindPath(maze, points = [], alg= 'dfs'):
       if len(coors) == 0:
         return dict_road, path_bot_go
 
-  elif alg == 'A*':
+  elif alg.lower() == 'A*'.lower():
     paths = [[(xs, ys)]]
     while True:
       path = PriorPop(paths, points)

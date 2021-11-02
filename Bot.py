@@ -11,15 +11,18 @@ class Bot(object):
 
 	def __init__(self, maze, view, screen, size_screen):
 		self.maze = maze
-		self.oc = self.nc = maze.get_start_point()
-		self.PathHasGone = [self.nc]
+		self.InitialBot()		
 		self.view = view
 		self.screen = screen
-		self.size_screen = size_screen
+		self.size_screen = size_screen			
+	def InitialBot(self):
+		maze = self.maze
+		self.oc = self.nc = maze.get_start_point()
+		self.PathHasGone = [self.nc]
 		self.list_point = [maze.get_list_point()[i][:] for i in range(len(maze.get_list_point()))]
 		self.decrease = 0
 		self.step = 0
-	
+		self.point = 0
 	def draw(self):
 		lr, lb = self.maze.TakeCoordinateRoad()		
 		lp = self.maze.TakeCoordinatePoint()
@@ -41,9 +44,9 @@ class Bot(object):
 			self.decrease = 0
 			self.DrawRectangle(lr, self.COLOR_ROAD)
 			self.DrawRectangle(lb, self.COLOR_BRICK)
-		self.DrawCircle([self.nc], self.COLOR_START)
 		self.DrawCircle([self.maze.get_end_point()], self.COLOR_END)
 		self.write_score()
+		self.DrawCircle([self.nc], self.COLOR_START)
 		pygame.display.update()
 	
 	def DrawRectangle(self, l, color):
@@ -82,10 +85,12 @@ class Bot(object):
 		if self.nc != self.oc:
 			self.step += 1
 			self.oc = self.nc
-			print(self.step)
+			self.point += self.list_point[self.nc[0]][self.nc[1]]
+			self.list_point[self.nc[0]][self.nc[1]] = 0
+			self.draw()
 		if self.nc not in self.PathHasGone:
 			self.PathHasGone.append(self.nc)
-
+		
 	def MoveDown(self):
 		xs, ys = self.nc
 		cr = self.maze.TakeCoordinateRoad()[0]

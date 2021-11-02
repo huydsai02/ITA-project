@@ -29,6 +29,7 @@ class Button:
     pygame.draw.rect(screen, (255,0,0), (x, y, i, j))
     pygame.draw.rect(screen, self.color, (x + de, y + de, i - 2*de, j - 2*de))
     screen.blit(text, (x + k, y + h))
+    pygame.display.update()
 
   def get_full_coor(self):
     x, y = self.pos
@@ -56,3 +57,10 @@ class Button:
   def TurnOnOffOtherState(self, l):
     for _ in l:
       _.other_state = False if _.other_state == True else True
+  
+  def get_state(self):
+    return self.state
+  
+  def change_state(self):
+    ewr = True if self.state == False else False
+    self.state = ewr
