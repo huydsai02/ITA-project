@@ -1,8 +1,8 @@
 from Button import *
 pygame.init()
 class ButtonShowMap(Button):
-  def __init__(self, pos = (0,0), color = (255,255,255), font = 20, size = (170,35), screen = None):
-    super().__init__("full maze" ,  pos, color, font, size, screen)
+  def __init__(self, pos = (0,0), font = 20, size = (170,35), screen = None):
+    super().__init__("full maze" ,  pos, font, size, screen)
     # self.seen = False
   def click(self,x, y, bot):
     super().click(x,y)
@@ -13,8 +13,8 @@ class ButtonShowMap(Button):
   def active(self):
     self.name = "full maze" if self.state == False else "around"
 class ButtonNewGame(Button):
-  def __init__(self, pos = (0,0), color = (255,255,255), font = 20, size = (170,35), screen = None):
-    super().__init__("new game" ,  pos, color, font, size, screen)
+  def __init__(self, pos = (0,0), font = 20, size = (170,35), screen = None):
+    super().__init__("new game" ,  pos, font, size, screen)
     # self.show_solution = False
   def click(self,x, y, game):
     super().click(x,y)
@@ -23,8 +23,8 @@ class ButtonNewGame(Button):
       game.NewMaze()
       game.InitialState()
 class ButtonAgain(Button):
-  def __init__(self, pos = (0,0), color = (255,255,255), font = 20, size = (170,35), screen = None):
-    super().__init__("again" ,  pos, color, font, size, screen)
+  def __init__(self, pos = (0,0), font = 20, size = (170,35), screen = None):
+    super().__init__("again" ,  pos, font, size, screen)
     # self.show_solution = False
   def click(self,x, y, game):
     super().click(x,y)

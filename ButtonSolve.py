@@ -1,12 +1,12 @@
 from Button import *
+from Color import *
 import Logic
 pygame.init()
 
 class ButtonSolve(Button):
-  COLOR = (0,0,255)
 
-  def __init__(self,maze, alg = 'dfs', pos = (0,0), color = (255,255,255), font = 20, size = (170,35), screen = None, solution = None, best_path = None, SPEED = 0.07):
-    super().__init__(alg ,  pos, color, font, size, screen)
+  def __init__(self,maze, alg = 'dfs', pos = (0,0), font = 20, size = (170,35), screen = None, solution = None, best_path = None, SPEED = 0.07):
+    super().__init__(alg ,  pos, font, size, screen)
     self.maze = maze
     self.alg = alg.lower()
     self.initial = 0
@@ -56,7 +56,7 @@ class ButtonSolve(Button):
           j = point[0] + a
           k = point[1] + b
           res.append((j,k))
-        self.DrawCircle(res, self.COLOR)
+        self.DrawCircle(res, COLOR_DIMENSION)
       return point
   def active(self, bot):
     if self.state:
@@ -75,5 +75,5 @@ class ButtonSolve(Button):
     side = self.side
     for (x, y) in l:
       pygame.draw.circle(self.screen, color, (x*side + side/2, y*side + side/2), radius-2*decrease)
-    pygame.display.update()
+
     

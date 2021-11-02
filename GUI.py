@@ -6,19 +6,18 @@ from SimpleButtons import ButtonShowMap, ButtonNewGame, ButtonAgain
 from ButtonShowSolution import ButtonShowSolution
 from ButtonSolve import ButtonSolve
 from ButtonBestPath import ButtonBestPath
+from Color import *
 
 class Game(object):
-	SPEED = 1
-	_size = (41,41); _num_point = 20; _start = (1,1); _end = (39,39)
-	BACKGROUND_COLOR = (55, 155, 255)
+	SPEED = 0.07
+	_size = (21,21); _num_point = 20; _start = (1,1); _end = (19,19)
 	SIZE = (1050,670)
-	COLOR_TEST = (0,0,0)
 
 	def __init__(self):
 		pygame.init()
 		self.DISPLAYSURF = pygame.display.set_mode((self.SIZE[0], self.SIZE[1]))
 		pygame.display.set_caption('Maze')
-		self.DISPLAYSURF.fill(self.BACKGROUND_COLOR)
+		self.DISPLAYSURF.fill(BACKGROUND_COLOR)
 		self.NewMaze()
 		self.InitialState()		
 	
@@ -34,7 +33,7 @@ class Game(object):
 		self.btn_again = ButtonAgain(pos = (775,150), screen = self.DISPLAYSURF)
 		self.btn_new_game = ButtonNewGame(pos = (775,200), screen = self.DISPLAYSURF)
 		self.btn_show_map = ButtonShowMap(pos = (775,250), screen = self.DISPLAYSURF)
-		self.btn_show_solution = ButtonShowSolution(pos = (775,300), screen = self.DISPLAYSURF, maze = self.maze)
+		self.btn_show_solution = ButtonShowSolution(pos = (775,300), screen = self.DISPLAYSURF)
 		self.btn_best_path = ButtonBestPath(pos = (775,350), screen = self.DISPLAYSURF, SPEED = self.SPEED)
 		self.btn_dfs = ButtonSolve(alg = "dfs", pos = (775,400), screen = self.DISPLAYSURF, maze = self.maze, solution=self.btn_show_solution,best_path=self.btn_best_path, SPEED = self.SPEED)
 		self.btn_a = ButtonSolve(alg = "a*", pos = (775,450), screen = self.DISPLAYSURF, maze = self.maze, SPEED = self.SPEED)
@@ -52,7 +51,7 @@ class Game(object):
 		self.btn_best_path.show(x,y)
 	
 	def GradeTable(self):
-		pygame.draw.rect(self.DISPLAYSURF, (55,155,255), (775,10,300,115))
+		pygame.draw.rect(self.DISPLAYSURF, BACKGROUND_COLOR, (775,10,300,115))
 		self.DISPLAYSURF.blit(self.ShowInfo(f'TOTAL POINT: {self.bot.point}', size=20), (785, 25))
 		self.DISPLAYSURF.blit(self.ShowInfo(f'TOTAL STEP: {self.bot.step}', size=20), (785, 55))
 		stri = f'FINAL POINT: {round(self.bot.point/self.bot.step,2)}' if self.bot.step != 0 else 'FINAL POINT: 0'
@@ -77,7 +76,7 @@ class Game(object):
 	
 	def ShowInfo(self,Info, size=30):
 		fnt = pygame.font.Font('freesansbold.ttf', size)
-		text = fnt.render(str(Info), True, (255, 0, 0))
+		text = fnt.render(str(Info), True, COLOR_SHOW_INFO)
 		return text
 	def run(self):
 		FPS = 60
@@ -104,7 +103,7 @@ class Game(object):
 						self.bot.MoveLeft()
 					if event.key in [K_d, K_RIGHT]:
 						self.bot.MoveRight()
-	
+			pygame.display.update()
 if __name__ == "__main__":
 	game = Game()
 	game.run()			
