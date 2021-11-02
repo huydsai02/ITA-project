@@ -33,14 +33,14 @@ class Game(object):
 		self.bot.draw()
 
 	def CreateButton(self):
-		self.btn_again = ButtonAgain(pos = (775,100), screen = self.DISPLAYSURF)
-		self.btn_new_game = ButtonNewGame(pos = (775,150), screen = self.DISPLAYSURF)
-		self.btn_show_map = ButtonShowMap(pos = (775,200), screen = self.DISPLAYSURF)
-		self.btn_show_solution = ButtonShowSolution(pos = (775,250), screen = self.DISPLAYSURF)
-		self.btn_best_path = ButtonBestPath(pos = (775,300), screen = self.DISPLAYSURF, SPEED = self.SPEED)
-		self.btn_dfs = ButtonSolve(alg = "dfs", pos = (775,350), screen = self.DISPLAYSURF, maze = self.maze, solution=self.btn_show_solution,best_path=self.btn_best_path, SPEED = self.SPEED)
-		self.btn_a = ButtonSolve(alg = "a*", pos = (775,400), screen = self.DISPLAYSURF, maze = self.maze, SPEED = self.SPEED)
-		self.btn_bfs = ButtonSolve(alg = "bfs", pos = (775,450), screen = self.DISPLAYSURF, maze = self.maze, SPEED = self.SPEED)
+		self.btn_again = ButtonAgain(pos = (775,150), screen = self.DISPLAYSURF)
+		self.btn_new_game = ButtonNewGame(pos = (775,200), screen = self.DISPLAYSURF)
+		self.btn_show_map = ButtonShowMap(pos = (775,250), screen = self.DISPLAYSURF)
+		self.btn_show_solution = ButtonShowSolution(pos = (775,300), screen = self.DISPLAYSURF, maze = self.maze)
+		self.btn_best_path = ButtonBestPath(pos = (775,350), screen = self.DISPLAYSURF, SPEED = self.SPEED)
+		self.btn_dfs = ButtonSolve(alg = "dfs", pos = (775,400), screen = self.DISPLAYSURF, maze = self.maze, solution=self.btn_show_solution,best_path=self.btn_best_path, SPEED = self.SPEED)
+		self.btn_a = ButtonSolve(alg = "a*", pos = (775,450), screen = self.DISPLAYSURF, maze = self.maze, SPEED = self.SPEED)
+		self.btn_bfs = ButtonSolve(alg = "bfs", pos = (775,500), screen = self.DISPLAYSURF, maze = self.maze, SPEED = self.SPEED)
 		self.list_buttons = [self.btn_show_solution, self.btn_bfs, self.btn_dfs, self.btn_a, self.btn_best_path]
 
 	def ShowButtons(self,x,y):
@@ -52,6 +52,13 @@ class Game(object):
 		self.btn_a.show(x,y)
 		self.btn_bfs.show(x,y)
 		self.btn_best_path.show(x,y)
+	
+	def GradeTable(self):
+		pygame.draw.rect(self.DISPLAYSURF, (55,155,255), (775,10,300,115))
+		self.DISPLAYSURF.blit(self.ShowInfo(f'TOTAL POINT: {self.bot.point}', size=20), (785, 25))
+		self.DISPLAYSURF.blit(self.ShowInfo(f'TOTAL STEP: {self.bot.step}', size=20), (785, 55))
+		stri = f'FINAL POINT: {round(self.bot.point/self.bot.step,2)}' if self.bot.step != 0 else 'FINAL POINT: 0'
+		self.DISPLAYSURF.blit(self.ShowInfo(stri, size=20), (785, 85))
 
 	def ActiveButtons(self):
 		self.btn_show_map.active()
@@ -70,6 +77,10 @@ class Game(object):
 		self.btn_a.click(x,y, bot = self.bot, solution = self.btn_show_solution, show_map= self.btn_show_map, l = self.list_buttons, best_path=self.btn_best_path)
 		self.btn_bfs.click(x,y, bot = self.bot, solution = self.btn_show_solution, show_map= self.btn_show_map, l = self.list_buttons, best_path=self.btn_best_path)
 	
+	def ShowInfo(self,Info, size=30):
+		fnt = pygame.font.Font('freesansbold.ttf', size)
+		text = fnt.render(str(Info), True, (255, 0, 0))
+		return text
 	def run(self):
 		FPS = 60
 		fpsClock = pygame.time.Clock()
@@ -77,6 +88,7 @@ class Game(object):
 			fpsClock.tick(FPS)
 			x, y = pygame.mouse.get_pos()
 			self.bot.CountAndRemember()
+			self.GradeTable()
 			self.ShowButtons(x,y)
 			self.ActiveButtons()			
 			for event in pygame.event.get():

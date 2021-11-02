@@ -23,9 +23,10 @@ class Bot(object):
 		self.decrease = 0
 		self.step = 0
 		self.point = 0
+		self.lr, self.lb = self.maze.TakeCoordinateRoad()		
+		self.lp = self.maze.TakeCoordinatePoint()
 	def draw(self):
-		lr, lb = self.maze.TakeCoordinateRoad()		
-		lp = self.maze.TakeCoordinatePoint()
+		lr, lb, lp = self.lr, self.lb, self.lp
 		size = self.maze.get_size()
 		self.side = int(min(self.size_screen)/max(size))
 		if self.view.get_state() == False:
