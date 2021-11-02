@@ -1,6 +1,4 @@
 from Button import *
-from HandleEventFunction import ShowBotGo
-import Logic
 pygame.init()
 
 class ButtonBestPath(Button):
