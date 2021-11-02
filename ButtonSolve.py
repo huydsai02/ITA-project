@@ -33,7 +33,6 @@ class ButtonSolve(Button):
       for btn in l:
         if self.name != btn.name:
           btn.other_state = False
-          print("D")
       self.change_state()
       self.initial = 0
       bot.InitialBot()
