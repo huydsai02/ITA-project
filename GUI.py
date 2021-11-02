@@ -78,8 +78,8 @@ class Game(object):
 			fpsClock.tick(FPS)
 			x, y = pygame.mouse.get_pos()
 			self.bot.CountAndRemember()
-			self.GradeTable()
 			self.ShowAndActButtons(x,y)		
+			self.GradeTable()
 			for event in pygame.event.get():
 				if event.type == QUIT:
 					pygame.quit()
