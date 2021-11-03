@@ -111,6 +111,13 @@ class Bot(object):
 		if (xs+1,ys) in cr:
 			xs += 1
 		self.nc = (xs, ys)
+
+	def CheckStateButtons(self, list_buttons):
+		all_state = True
+		for _ in list_buttons:
+			if _.state:
+				all_state = False
+		return all_state
 		
         
 

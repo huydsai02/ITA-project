@@ -87,13 +87,13 @@ class Game(object):
 				if event.type == pygame.MOUSEBUTTONDOWN:
 					self.ClickButtons(x,y)
 				if event.type == pygame.KEYDOWN:
-					if event.key in [K_s, K_DOWN]:
+					if event.key in [K_s, K_DOWN] and self.bot.CheckStateButtons(self.list_buttons):
 						self.bot.MoveDown()
-					if event.key in [K_w,K_UP]:
+					if event.key in [K_w,K_UP] and self.bot.CheckStateButtons(self.list_buttons):
 						self.bot.MoveUp()
-					if event.key in [K_a, K_LEFT]:
+					if event.key in [K_a, K_LEFT] and self.bot.CheckStateButtons(self.list_buttons):
 						self.bot.MoveLeft()
-					if event.key in [K_d, K_RIGHT]:
+					if event.key in [K_d, K_RIGHT] and self.bot.CheckStateButtons(self.list_buttons):
 						self.bot.MoveRight()
 			pygame.display.update()
 if __name__ == "__main__":
