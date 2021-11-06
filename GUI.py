@@ -9,8 +9,8 @@ from ButtonBestPath import ButtonBestPath
 from Color import *
 
 class Game(object):
-	SPEED = 0.07
-	_size = (41,41); _num_point = 20; _start = (1,1); _end = (39,39)
+	SPEED = 1
+	_size = (65,65); _num_point = 30; _start = (1,1); _end = (63,63)
 	SIZE = (1050,670)
 
 	def __init__(self):

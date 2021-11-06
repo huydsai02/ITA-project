@@ -287,8 +287,8 @@ def CombineList(l):
   ln = len(l)
   if ln == 1:
     return [i[:] for i in l[0]]
+  cl = CombineList(l[:ln-1])
   for i in l[-1]:
-    for j in CombineList(l[:ln-1]):
-      j += i
-      lf.append(j)
+    for j in cl:
+      lf.append(j+i)
   return lf
