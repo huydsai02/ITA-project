@@ -19,24 +19,47 @@ class Maze(object):
 
     self.matrix = [[1 if (i*j) % 2 == 0 else 0 for i in range(b)] for j in range(a)]
     n = int(size[0]/2) * int(size[1]/2)
-    nv = 1
-
-    # Điểm khởi tạo mê cung
     start_point = (random.choice(range(1, size[0], 2)), random.choice(range(1, size[1], 2)))
+    cell_pass = []
+    min_size = min(size)
+    min_random, max_random = min_size//4 + 1, min_size//2 + 1
+    self.CreateRoad(n = randint(min_random, max_random), start_point = start_point, cell_pass = cell_pass)
+    # print(cell_pass)
+    cell_considered = []
+    while len(cell_considered) < n:
+      # print(len(cell_considered), n)
+      nsp = random.choice(cell_pass)
+      if not self.find_valid_neighbours(nsp):
+        cell_considered.append(nsp)
+        cell_pass.remove(nsp) 
+      else:
+        self.CreateRoad(n = randint(min_random, max_random), start_point = nsp, cell_pass = cell_pass)
+    return self.matrix
+
+
+  def CreateRoad(self, n = randint(0,20), start_point = (1,1), cell_pass = []):
+    nv = 1
+    # Điểm khởi tạo mê cung
     current_cell = start_point
+    if current_cell not in cell_pass:
+      cell_pass.append(current_cell)
     cell_stack = []
+    
     while nv < n:
       neighbours = self.find_valid_neighbours(current_cell)
       if not neighbours:
-        current_cell = cell_stack.pop()
-        continue
+        if len(cell_stack) > 0:
+          current_cell = cell_stack.pop()
+          continue
+        else:
+          break
       step, next_cell = random.choice(neighbours)
       self.knock_down_wall(current_cell, step)
       cell_stack.append(current_cell)
       current_cell = next_cell
-      nv += 1
-    
-    return self.matrix
+      if current_cell not in cell_pass:
+        cell_pass.append(current_cell)
+      nv += 1  
 
   def knock_down_wall(self, cell, step):
     # Phá tường mà step đi qua
@@ -103,7 +126,17 @@ class Maze(object):
   def get_size(self):
     return self.size
 
-
+if __name__ == "__main__":
+  import numpy as np
+  import Logic
+  _size = (15,15); _num_point = 15; _start = (1,1); _end = (13,13)
+  while True:
+    maze = Maze(size = _size, num_point = _num_point, start = _start, end = _end)
+    a, b = Logic.FindPath(maze, points=[_end])
+    if _end not in a:
+      arr = np.array(maze.get_list_maze())
+      print(arr)
+      break
 
 
 
