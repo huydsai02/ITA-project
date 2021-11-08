@@ -22,7 +22,7 @@ class Maze(object):
     start_point = (random.choice(range(1, size[0], 2)), random.choice(range(1, size[1], 2)))
     cell_pass = []
     min_size = min(size)
-    min_random, max_random = min_size//4 + 1, min_size//2 + 1
+    min_random, max_random = min_size//3 + 1, min_size//2 + 1
     self.CreateRoad(n = randint(min_random, max_random), start_point = start_point, cell_pass = cell_pass)
     # print(cell_pass)
     cell_considered = []
