@@ -1,6 +1,7 @@
 from Button import *
 from Color import *
 import Logic
+import SolveByDFS as dfs
 pygame.init()
 
 class ButtonSolve(Button):
@@ -13,7 +14,7 @@ class ButtonSolve(Button):
     self.speed = SPEED
     if alg == "dfs":
         self.score, self.optimal_path, self.len_of_best, self.op_road, self.path_bot_go,\
-             self.main_path = Logic.Optimize_solution(maze, alg)
+             self.main_path = dfs.Optimize_solution(maze, alg)
         solution.path = self.optimal_path
         solution.point = self.score
         solution.length = self.len_of_best
@@ -38,6 +39,9 @@ class ButtonSolve(Button):
       if self.score == None:
         self.score, self.optimal_path, self.len_of_best, self.op_road, self.path_bot_go\
             , self.main_path = Logic.Optimize_solution(self.maze, self.alg)
+      print('SAME PATH:', set(solution.path) == set(self.optimal_path))
+      print("SAME STEP", solution.length == self.len_of_best)
+      print("SAME SCORE", solution.point == self.score)
       solution.path = self.optimal_path
       solution.point = self.score
       solution.length = self.len_of_best
