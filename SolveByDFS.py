@@ -163,53 +163,27 @@ def FindOptimalPath(maze, main_path, total_path):
       if (xs, ys) not in coors:
         coors.append((xs, ys))
 
-def FindPointNeighbor(maze, dict_path, list_consider):
+def FindPointNeighbor(maze, dict_path):
+  list_consider = Arrange(maze, dict_path)
   start = maze.get_start_point()
   end = maze.get_end_point()
   main_path = dict_path[end]
-  all_consider = list_consider
-  list_maze = maze.get_list_maze()
-  dict_neighbor = {}
-  for xs, ys in all_consider:
-    consider_now = (xs,ys)
-    coors = [(xs, ys)]  
-    neighbors = []
-    d = {}
-    if (xs, ys) == start:
-      d[(xs, ys)] = FindValidDimension((xs,ys), list_maze)
-    else:
-      dims = FindValidDimension((xs,ys), list_maze)
-      xo, yo = dict_path[(xs, ys)][-2]
-      del_dim = (xo-xs, yo-ys)
-      dims.remove(del_dim)
-      d[(xs, ys)] = dims
-    while True:
-      if len(d[coors[-1]]) == 0:
-        coors.pop()
-      else:
-        dim = d[(xs,ys)]
-        cpath = dim.pop()
-        xs += cpath[0]
-        ys += cpath[1]
-        if (xs, ys) not in all_consider:
-          d[(xs,ys)] = d.get((xs,ys), FindValidDimension((xs,ys), list_maze, p = cpath))
-        else:
-          d[(xs,ys)] = d.get((xs,ys), [(cpath[0]*(-1), cpath[1]*(-1))])
-        if (xs, ys) not in coors:
-          coors.append((xs, ys))
-
-      if (xs, ys) in all_consider and (xs, ys) != consider_now:
-        neighbors.append((xs, ys))
-      if len(coors) == 0:
-        break
-    dict_neighbor[consider_now] = [point for point in all_consider if point in neighbors]
-    if consider_now not in main_path:
-      length = len(dict_path[consider_now])
-      for i in range(1, length):
-        li = length - 1 - i
-        if dict_path[consider_now][li] in all_consider:
+  dict_neighbor = {start:[]}
+  for xs, ys in list_consider[1:]:
+    consider_now = (xs, ys)
+    dict_neighbor[consider_now] = dict_neighbor.get(consider_now, [])
+    length = len(dict_path[consider_now])
+    for i in range(1, length):
+      li = length - 1 - i
+      if dict_path[consider_now][li] in list_consider:
+        dict_neighbor[dict_path[consider_now][li]].append(consider_now)
+        if consider_now not in main_path:
           dict_neighbor[consider_now].append(dict_path[consider_now][li])
-          break
+        break
+  for xs, ys in list_consider:
+    if (xs, ys) not in main_path:
+      temp = dict_neighbor[(xs,ys)].pop(0)
+      dict_neighbor[(xs,ys)].append(temp)
   return dict_neighbor
 
 def MazeAnalysis(maze, alg):
@@ -219,9 +193,8 @@ def MazeAnalysis(maze, alg):
   list_consider = [(i, j) for i in range(size[0]) for j in range(size[1]) if list_point[i][j] != 0 or (i,j) == end_point]
   dict_path, path_bot_go = FindPath(maze, list_consider, alg)
   main_path = dict_path[end_point]
-  list_consider = Arrange(maze, dict_path)
-  dict_neighbor = FindPointNeighbor(maze, dict_path, list_consider)
-  return main_path, dict_neighbor, path_bot_go, dict_path
+  dict_neighbor = FindPointNeighbor(maze, dict_path)
+  return dict_neighbor, path_bot_go, dict_path
 
 def Arrange(maze, dict_path):
   total_path = []
@@ -237,13 +210,14 @@ def Arrange(maze, dict_path):
   return res
 
 def Optimize_solution(maze, alg):
-  main_path, dict_neighbor, path_bot_go, dict_path = MazeAnalysis(maze, alg)
+  dict_neighbor, path_bot_go, dict_path = MazeAnalysis(maze, alg)
+  main_path = dict_path[maze.get_end_point()]
   xs, ys = maze.get_start_point()
   best_road, best_step, best_score = VisitNextNeighbor((xs,ys), dict_neighbor, maze, dict_path)
   total_best_score = best_score
   full_step = FindOptimalPath(maze, main_path, best_road)
-  leng = best_step
-  return total_best_score, best_road, leng, full_step, path_bot_go, main_path
+  total_step = best_step
+  return total_best_score, best_road, total_step, full_step, path_bot_go, main_path
 
 def VisitNextNeighbor(start, dict_neighbor, maze, dict_path):
   point = start
