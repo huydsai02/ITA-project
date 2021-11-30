@@ -14,7 +14,7 @@ class ButtonSolve(Button):
     self.speed = SPEED
     if alg == "dfs":
         self.score, self.optimal_path, self.len_of_best, self.op_road, self.path_bot_go,\
-             self.main_path = dfs.Optimize_solution(maze, alg)
+             self.main_path = dfs.Optimal_solution(maze)
         solution.path = self.optimal_path
         solution.point = self.score
         solution.length = self.len_of_best
