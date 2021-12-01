@@ -130,27 +130,29 @@ def Find_Subset(d):
   	same_extra.append(a1)
   return res, same_extra
 
-def TakeExtraPath(dict_path, main_path):
+def TakeExtraPath(dict_path, main_path, list_pass = []):
   list_consider = list(dict_path.keys())
   dict_extra_path = {}
   for point in list_consider:
-    extra_path = []
-    path = dict_path[point]
-    for _ in range(len(path) - 1, -1, -1):
-      if path[_] in main_path:
-        break
-      extra_path.insert(0, path[_])
-    if len(extra_path) > 0:
-      dict_extra_path[point] = extra_path
+    if point not in list_pass:
+      extra_path = []
+      path = dict_path[point]
+      for _ in range(len(path) - 1, -1, -1):
+        if path[_] in main_path:
+          break
+        extra_path.insert(0, path[_])
+      if len(extra_path) > 0:
+        dict_extra_path[point] = extra_path
   return dict_extra_path
 
-def BestGainAlley(maze, dict_extra_path):
+def BestGainAlley(maze, dict_extra_path, highest, list_pass):
   list_point = maze.get_list_point()
   full_info, info_all_alleys = Find_Subset(dict_extra_path)
-  max_in_alley = 0
+  max_all_alleys = 0
   best_alley = (0, 0, 0, [])
   for inp in info_all_alleys:
     consider_list = FullSituation(inp)[1:]
+    max_one_alley = 0
     for subset in consider_list:
       all_cell = []
       cell_have_point = []
@@ -160,14 +162,18 @@ def BestGainAlley(maze, dict_extra_path):
       score = sum([list_point[x][y] for x, y in list(set(cell_have_point))])
       step = 2*len(set(all_cell))
       formula = score / step
-      if formula > max_in_alley:
+      if formula > max_all_alleys:
         best_alley = (formula, score, step, all_cell)
-        max_in_alley = formula
+        max_all_alleys = formula
+      if formula > max_one_alley:
+        max_one_alley = formula
+    if highest > max_one_alley:
+      list_pass.extend(list(inp.keys()))
   return best_alley
 
-def ExpandNode(maze, dict_path, current_best_road, sum_point, step, highest_result):
-  dict_alley = TakeExtraPath(dict_path, current_best_road)
-  info = BestGainAlley(maze, dict_alley)
+def ExpandNode(maze, dict_path, current_best_road, sum_point, step, highest_result, list_pass):
+  dict_alley = TakeExtraPath(dict_path, current_best_road, list_pass)
+  info = BestGainAlley(maze, dict_alley, highest_result, list_pass)
   if info[0] > highest_result:
     sum_point += info[1]
     step += info[2]
@@ -186,9 +192,10 @@ def Optimal_solution(maze, alg):
   sum_point = sum([list_point[x][y] for x, y in main_path])
   step = len(main_path) - 1
   highest_result = sum_point / step
+  list_pass = []
   while True:
     old_len = len(current_best_road)
-    current_best_road, sum_point, step, highest_result = ExpandNode(maze, dict_path, current_best_road, sum_point, step, highest_result)
+    current_best_road, sum_point, step, highest_result = ExpandNode(maze, dict_path, current_best_road, sum_point, step, highest_result, list_pass)
     if len(current_best_road) == old_len:
       break
   full_step = PathAllPoint(maze, main_path, current_best_road)
