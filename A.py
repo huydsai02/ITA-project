@@ -134,11 +134,12 @@ def TakeExtraPath(dict_path, main_path):
   list_consider = list(dict_path.keys())
   dict_extra_path = {}
   for point in list_consider:
-    path = dict_path[point]
     extra_path = []
-    for p in path:
-      if p not in main_path:
-        extra_path.append(p)
+    path = dict_path[point]
+    for _ in range(len(path) - 1, -1, -1):
+      if path[_] in main_path:
+        break
+      extra_path.insert(0, path[_])
     if len(extra_path) > 0:
       dict_extra_path[point] = extra_path
   return dict_extra_path
