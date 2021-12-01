@@ -191,8 +191,6 @@ def Optimal_solution(maze, alg):
     if len(current_best_road) == old_len:
       break
   full_step = PathAllPoint(maze, main_path, current_best_road)
-  sum_point = sum([list_point[x][y] for x, y in current_best_road])
-  step = len(full_step) - 1
   return sum_point, current_best_road, step, full_step, path_bot_go, main_path
 
 def DimRightRoad(coordinate, main_path, total_path, p = None):
