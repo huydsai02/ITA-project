@@ -1,6 +1,7 @@
 from Button import *
 from Color import *
 import Logic
+import A as t
 import SolveByDFS as dfs
 pygame.init()
 
@@ -14,7 +15,7 @@ class ButtonSolve(Button):
     self.speed = SPEED
     if alg == "dfs":
         self.score, self.optimal_path, self.len_of_best, self.op_road, self.path_bot_go,\
-             self.main_path = dfs.Optimal_solution(maze)
+             self.main_path = t.Optimal_solution(self.maze, self.alg)
         solution.path = self.optimal_path
         solution.point = self.score
         solution.length = self.len_of_best
