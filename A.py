@@ -164,16 +164,15 @@ def BestGainAlley(maze, dict_extra_path):
         max_in_alley = formula
   return best_alley
 
-def ExpandNode(maze, dict_path, current_best_road, sum_point, step):
+def ExpandNode(maze, dict_path, current_best_road, sum_point, step, highest_result):
   dict_alley = TakeExtraPath(dict_path, current_best_road)
   info = BestGainAlley(maze, dict_alley)
-  highest_result = sum_point / step
   if info[1] > highest_result:
     sum_point += info[2]
     step += info[3]
     highest_result = sum_point/step
     current_best_road = list(set(current_best_road + info[4]))
-  return (current_best_road, sum_point, step)
+  return (current_best_road, sum_point, step, highest_result)
 
 def Optimal_solution(maze, alg):
   size = maze.get_size()
@@ -185,9 +184,10 @@ def Optimal_solution(maze, alg):
   current_best_road = main_path[:]
   sum_point = sum([list_point[x][y] for x, y in main_path])
   step = len(main_path) - 1
+  highest_result = sum_point / step
   while True:
     old_len = len(current_best_road)
-    current_best_road, sum_point, step = ExpandNode(maze, dict_path, current_best_road, sum_point, step)
+    current_best_road, sum_point, step, highest_result = ExpandNode(maze, dict_path, current_best_road, sum_point, step, highest_result)
     if len(current_best_road) == old_len:
       break
   full_step = PathAllPoint(maze, main_path, current_best_road)
