@@ -170,19 +170,28 @@ def TakeInfoAlley(list_point, dict_extra_path, highest_result):
       res.append(best_alley)
   return res
 
-def BestGainAlley(list_info_alleys):
+def BestGainAlley(list_info_alleys, highest_result):
   max_in_alley = 0
+  list_remove = []
+  best_alley = []
   for info in list_info_alleys:
-    if info[0] > max_in_alley:
+    if info[0] > max_in_alley and info[0] > highest_result:
       best_alley = info
       max_in_alley = info[0]
-  list_info_alleys.remove(best_alley)
+    elif info[0] <= highest_result:
+      list_remove.append(info)
+  if best_alley != []:
+    list_info_alleys.remove(best_alley)
+  for _ in list_remove:
+    list_info_alleys.remove(_)
   return best_alley
 
 def ExpandNode(list_point, dict_path, current_best_road, sum_point, step, highest_result, all_info_alleys):
   if len(all_info_alleys) == 0:
     return (current_best_road, sum_point, step, highest_result)
-  best_alley = BestGainAlley(all_info_alleys)
+  best_alley = BestGainAlley(all_info_alleys, highest_result)
+  if best_alley == []:
+    return (current_best_road, sum_point, step, highest_result)
   if best_alley[0] > highest_result:
     sum_point += best_alley[1]
     step += best_alley[2]
@@ -265,6 +274,7 @@ def PathAllPoint(maze, main_path, total_path):
       if (xs, ys) not in coors:
         coors.append((xs, ys))
 
+################################### NEED TO RUN FASTER ########################
 def del_relate_info(l1, d):
   return list(set(l1) - set(d[0] + d[1]))
 
@@ -293,3 +303,4 @@ def ChoosePoint(inp, res, n = 1):
         nl = del_relate_info(res[i], inp[j])
         res[tuple(ni)] = nl
   return ChoosePoint(inp, res, n+1)
+############################################################################
