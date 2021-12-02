@@ -1,4 +1,5 @@
 from CreateMatrix import *
+import time
 
 def FindValidDimension(coordinate, list_maze, p = None):
   # Return dimension which is not wall. If p != None, the opposite dimension of p will take the first position
@@ -128,7 +129,7 @@ def Find_Subset(d):
   	for other_point in start_extra[point]:
   		a1[other_point] = res[other_point]
   	same_extra.append(a1)
-  return res, same_extra
+  return same_extra
 
 def TakeExtraPath(dict_path, main_path):
   list_consider = list(dict_path.keys())
@@ -143,32 +144,6 @@ def TakeExtraPath(dict_path, main_path):
     if len(extra_path) > 0:
       dict_extra_path[point] = extra_path
   return dict_extra_path
-
-def TakeInfoAlley(list_point, dict_extra_path, highest_result):
-  full_info, info_all_alleys = Find_Subset(dict_extra_path)
-  res = []
-  for inp in info_all_alleys:
-    consider_list = FullSituation(inp)[1:]
-    max_in_alley = 0
-    add_to_res = False
-    for subset in consider_list:
-      all_cell = []
-      cell_have_point = []
-      for coordinate in list(subset):      
-        all_cell += dict_extra_path[coordinate]
-        cell_have_point += full_info[coordinate][1]
-      cell_have_point =  list(set(cell_have_point))
-      score = sum([list_point[x][y] for x, y in cell_have_point])
-      step = 2*len(set(all_cell))
-      formula = score / step
-      if formula > max_in_alley and formula > highest_result:
-        add_to_res = True
-        point_left_in_alley = list(set(inp.keys()) - set(cell_have_point))
-        best_alley = (formula, score, step, all_cell, point_left_in_alley)
-        max_in_alley = formula
-    if add_to_res:
-      res.append(best_alley)
-  return res
 
 def BestGainAlley(list_info_alleys, highest_result):
   max_in_alley = 0
@@ -192,16 +167,16 @@ def ExpandNode(list_point, dict_path, current_best_road, sum_point, step, highes
   best_alley = BestGainAlley(all_info_alleys, highest_result)
   if best_alley == []:
     return (current_best_road, sum_point, step, highest_result)
-  if best_alley[0] > highest_result:
-    sum_point += best_alley[1]
-    step += best_alley[2]
-    highest_result = sum_point/step
-    current_best_road = list(set(current_best_road + best_alley[3]))
-    d = {}
-    for point in best_alley[4]:
-      d[point] = dict_path[point]
-    new_alley = TakeExtraPath(d, current_best_road)
-    all_info_alleys.extend(TakeInfoAlley(list_point, new_alley, highest_result))
+  sum_point += best_alley[1]
+  step += best_alley[2]
+  highest_result = sum_point/step
+  current_best_road = list(set(current_best_road + best_alley[3]))
+
+  d = {}
+  for point in best_alley[4]:
+    d[point] = dict_path[point]
+  new_alley = TakeExtraPath(d, current_best_road)
+  all_info_alleys.extend(TakeInfoAlley(list_point, new_alley, highest_result))
   return (current_best_road, sum_point, step, highest_result)
 
 def MazeAnalysis(maze, alg):
@@ -227,7 +202,6 @@ def Calculation(main_path, dict_path, list_point):
   step = len(main_path) - 1
   highest_result = sum_point / step
   all_info_alleys = TakeInfoAlley(list_point, alley, highest_result)
-
   while True:
     old_len = len(current_best_road)
     current_best_road, sum_point, step, highest_result = ExpandNode(list_point, dict_path, current_best_road, sum_point, step, highest_result, all_info_alleys)
@@ -278,29 +252,45 @@ def PathAllPoint(maze, main_path, total_path):
 def del_relate_info(l1, d):
   return list(set(l1) - set(d[0] + d[1]))
 
-def FullSituation(inp):
-  s = list(inp.keys())
-  d = {}
-  for point in s:
-    a = (point,)
-    d[a] = del_relate_info(s, inp[point])
-  res = [[]]
-  for ss in ChoosePoint(inp, d):
-    res.append(list(ss))
+def TakeInfoAlley(list_point, dict_extra_path, highest_result):
+  info_all_alleys = Find_Subset(dict_extra_path)
+  res = []
+  for inp in info_all_alleys:
+    t1 = time.time()
+    best_in_alley = FullSituation(inp, dict_extra_path, list_point)
+    print(time.time() - t1)
+    if best_in_alley[0] > highest_result:
+      res.append(best_in_alley)
   return res
 
-def ChoosePoint(inp, res, n = 1):
-  l = [i for i in list(res.keys())[:] if len(i) == n]
-  if len(l) == 0:
-    return list(res.keys())
-  a = []
-  for i in l:
-    for j in res[i]:
-      ni = list(i)
-      ni.append(j)
-      if set(ni) not in a:
-        a.append(set(ni))
-        nl = del_relate_info(res[i], inp[j])
-        res[tuple(ni)] = nl
-  return ChoosePoint(inp, res, n+1)
+def FullSituation(inp, dict_extra_path, list_point):
+  s = list(inp.keys())
+  best_in_alley = [(0,0,0,[],[])]
+  BackTracking(inp, s, dict_extra_path, list_point, best_in_alley, remember=[])
+  return best_in_alley[0]
+
+def CompareWithMax(points, dict_extra_path, point_same_alley, list_point, best_in_alley):
+  all_cell = []
+  cell_have_point = []
+  for coordinate in points:    
+    all_cell += dict_extra_path[coordinate]
+    cell_have_point += point_same_alley[coordinate][1]
+  cell_have_point =  list(set(cell_have_point))
+  score = sum([list_point[x][y] for x, y in cell_have_point])
+  step = 2*len(set(all_cell))
+  formula = score / step
+  if formula > best_in_alley[0][0]:
+    point_left_in_alley = list(set(point_same_alley.keys()) - set(cell_have_point))
+    best_in_alley[0] = (formula, score, step, all_cell, point_left_in_alley)
+
+def BackTracking(inp, list_satisfy, dict_extra_path, list_point, best_in_alley ,points = [], remember = []):
+  for next_node in list_satisfy:
+    points.append(next_node)
+    if set(points) not in remember:
+      next_satisfy = del_relate_info(list_satisfy, inp[next_node])
+      remember.append(set(points))
+      CompareWithMax(points, dict_extra_path, inp, list_point, best_in_alley)
+      BackTracking(inp, next_satisfy, dict_extra_path, list_point, best_in_alley, points, remember)
+    points.pop()
+
 ############################################################################
