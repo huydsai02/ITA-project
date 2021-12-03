@@ -268,16 +268,11 @@ def FullSituation(inp, dict_extra_path, list_point):
   current_best = (0,0,0,[],[])
   info_situation = [(points, current_best)]
   situation_has_consider = [set(points)]
-  best_points = points
   while True:
     if len(info_situation) == 0:
-      if current_best[0] == 0:
-        break
-      else:
-        if best_in_alley[0] < current_best[0]:
-          best_in_alley = current_best
-        current_best = (0,0,0,[],[])
-        info_situation.append((best_points, current_best))
+      break
+    no_add = True
+    l = []
     situation = info_situation.pop(0)
     best_this_situation = situation[1]
     old_max = best_this_situation[0]
@@ -290,11 +285,16 @@ def FullSituation(inp, dict_extra_path, list_point):
         if set(new_points) not in situation_has_consider:
           situation_has_consider.append(set(new_points))
           new_best = CompareWithMax(new_points, dict_extra_path, inp, list_point, best_this_situation)
-          if new_best[0] > current_best[0]:
-            current_best = new_best
-            best_points = new_points
+          if new_best[0] != -1:
+            l.append(new_points)
           if old_max < new_best[0]:
             info_situation.append((new_points, new_best))
+            no_add = False
+          if new_best[0] > best_in_alley[0]:
+            best_in_alley = new_best
+    if no_add:
+      for ps in l:
+        info_situation.append((ps, (0,0,0,[],[])))
   return best_in_alley
 ##############################################################################################
 
@@ -308,7 +308,7 @@ def CompareWithMax(points, dict_extra_path, point_same_alley, list_point, best_i
   score = sum([list_point[x][y] for x, y in cell_have_point])
   step = 2*len(set(all_cell))
   if step == 0:
-    return best_in_alley
+    return (-1,)
   formula = score / step
   if formula > best_in_alley[0]:
     point_left_in_alley = list(set(point_same_alley.keys()) - set(cell_have_point))
