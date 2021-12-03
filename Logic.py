@@ -1,24 +1,15 @@
 from CreateMatrix import *
 
-def FindValidDimension(coor, list_maze, p = None):
-  # Hàm trả về các hướng không phải tường 
-  # điểm cuối sẽ là hướng p nếu hướng p ko có gạch, điểm đầu sẽ là hướng ngược lại p
+########################### Khánh ###################################
+def FindValidDimension(coordinate, list_maze, p = None):
+  # Return dimension which is not wall. If p != None, the opposite dimension of p will take the first position
   steps = [(0,1), (0,-1), (1,0), (-1,0)]
-  if p != None:
-    a = (-1) * p[0]
-    b = (-1) * p[1]
-    res = [(a,b)]
-    for step in steps:
-      if step not in res and list_maze[coor[0] + step[0]][coor[1] + step[1]] != 1 and step != p:
-        res.append(step)
-    if list_maze[coor[0] + p[0]][coor[1] + p[1]] != 1:
-      res.append(p)
-  else:
-    res = []
-    for step in steps:
-      if list_maze[coor[0] + step[0]][coor[1] + step[1]] != 1:
-        res.append(step)  
+  res = [] if p == None else [((-1) * p[0], (-1) * p[1])]
+  for step in steps:
+    if list_maze[coordinate[0] + step[0]][coordinate[1] + step[1]] != 1 and step not in res:
+      res.append(step)  
   return res
+
 
 def Manhattan(x1, x2):
   return abs(x1[0] - x2[0]) + abs(x1[1] - x2[1])
@@ -38,6 +29,8 @@ def PriorPop(paths, points= []):
     return paths.pop(0)
 
 def FindPath(maze, points = [], alg= 'dfs'):
+  # lấy cái object maze, points là tọa độ các ô có điểm và điểm kết thúc, alg là thuật toán
+  # trả ra là 1 cái dict chứa đường đi từ điểm đầu đến các điểm nằm trong points và cái path_bot_go (ko quan trọng)
   xs, ys = maze.get_start_point()
   list_maze = maze.get_list_maze()
   coors = [(xs, ys)]
@@ -113,67 +106,11 @@ def FindPath(maze, points = [], alg= 'dfs'):
       if len(paths) == 0:
         return dict_road, path_bot_go
 
-    
-    
-def MazeAnalysis(maze, alg):
-  size = maze.get_size()
-  end_point = maze.get_end_point()
-  list_point = maze.get_list_point()
-  list_consider = [(i, j) for i in range(size[0]) for j in range(size[1]) if list_point[i][j] != 0 or (i,j) == end_point]
-  dict_path, path_bot_go = FindPath(maze, list_consider, alg)
-  main_path = dict_path[end_point]
-  dict_extra_path = {}
-  for point in list_consider:
-    if point != end_point:
-      path = dict_path[point]
-      extra_path = []
-      for p in path:
-        if p not in main_path:
-          extra_path.append(p)
-      if len(extra_path) > 0:
-        dict_extra_path[point] = extra_path
-  return main_path, dict_extra_path, path_bot_go
-  
-def Optimize_solution(maze, alg):
-  list_point = maze.get_list_point()
-  main_path, diction_road, path_bot_go = MazeAnalysis(maze, alg)
-  max = -1
-  full_info, same_extra = Find_Subset(diction_road)
-  new_inp = []
-  for inp in same_extra:
-    new_inp.append(FullSituation(inp))
-  # print(new_inp)
-  list_subset = CombineList(new_inp)
-  # print(list_subset)
-  sum_point_main = sum([list_point[x][y] for x, y in main_path])
-  # print(full_info)
-  print(len(list_subset))  
-  ############################################Đoạn này chạy chưa nhanh#############
-  for subset in list_subset:
-    all_extra_path = []
-    score_in_extra = []
-    for coordinate in list(subset):      
-      extra_path = diction_road[coordinate]
-      all_extra_path += extra_path
-      score_in_extra += full_info[coordinate][1]
-    score = sum_point_main + sum([list_point[x][y] for x, y in list(set(score_in_extra))])
-    length = len(main_path) + 2*len(set(all_extra_path)) - 1
-    formula = score / length
-    if formula > max:
-      total_path = list(set(main_path + all_extra_path))
-      op = (score, total_path, length)
-      max = formula
-      count = 1
-    elif formula == max:
-      count += 1
-  #######################################################################################
-  total_best_score, best_road, leng = op
-  full_step = FindOptimalPath(maze, main_path, best_road)
-  print("Number of result:", count)
-  return total_best_score, best_road, leng, full_step, path_bot_go, main_path
-
 def Find_Subset(d):
-  # Hàm trả về những đầu mút của đường thêm
+  # d là dict_extra_path vừa nãy
+ # a: a b c d e f g 
+ # d: d e f g
+ # tập b sẽ gồm b = []
   l = list(d.keys())
   res = {}
   start_extra = {}
@@ -201,8 +138,8 @@ def Find_Subset(d):
   return res, same_extra
 
 def FindDimensionIsPath(coor, main_path, total_path, p = None):
-  # Hàm trả về các hướng không phải tường 
-  # điểm cuối sẽ là hướng p nếu hướng p ko có gạch, điểm đầu sẽ là hướng ngược lại p
+  #Totalpath là danh sách tất cả các tọa độ trong 1 đường đi có nhánh từ điểm đầu đến cuối
+
   steps = [(0,1), (0,-1), (1,0), (-1,0)]
   if p != None:
     a = (-1) * p[0]
@@ -226,6 +163,8 @@ def FindDimensionIsPath(coor, main_path, total_path, p = None):
 
 
 def FindOptimalPath(maze, main_path, total_path):
+  # Totalpath là danh sách tất cả các tọa độ trong 1 đường đi có nhánh từ điểm đầu đến cuối
+  # Trả về đường đi ngắn nhất mà qua tất cả các điểm đặc biệt
   xs, ys = maze.get_start_point()
   points = total_path[:]
   coors = [(xs, ys)]
@@ -252,14 +191,78 @@ def FindOptimalPath(maze, main_path, total_path):
       if (xs, ys) not in coors:
         coors.append((xs, ys))
 
+###########################################################################
+    
+
+############################################## An #############################
+def MazeAnalysis(maze, alg):
+  # Lấy cái object maze và thuật toán.
+  # Trả về cái main_path, dict_extra_path 
+  size = maze.get_size()
+  end_point = maze.get_end_point()
+  list_point = maze.get_list_point()
+  list_consider = [(i, j) for i in range(size[0]) for j in range(size[1]) if list_point[i][j] != 0 or (i,j) == end_point]
+  # Là tọa độ những ô có điểm và điểm kết thúc
+  dict_path, path_bot_go = FindPath(maze, list_consider, alg)
+  main_path = dict_path[end_point]
+  dict_extra_path = {}
+  # Đường phụ cắt main_path
+  for point in list_consider:
+    if point != end_point:             
+      path = dict_path[point]      
+      extra_path = []
+      for p in path:
+        if p not in main_path:
+          extra_path.append(p)
+      if len(extra_path) > 0:
+        dict_extra_path[point] = extra_path
+  return main_path, dict_extra_path, path_bot_go
+  
+def Optimal_solution(maze, alg):
+  list_point = maze.get_list_point()
+  main_path, dict_extra_path, path_bot_go = MazeAnalysis(maze, alg)
+  max = -1
+  full_info, same_extra = Find_Subset(dict_extra_path)
+  new_inp = []
+  for inp in same_extra:
+    new_inp.append(FullSituation(inp))
+  list_subset = CombineList(new_inp)
+  sum_point_main = sum([list_point[x][y] for x, y in main_path])
+  print(len(list_subset))  
+  for subset in list_subset:
+    all_extra_path = []
+    score_in_extra = []
+    for coordinate in list(subset):      
+      extra_path = dict_extra_path[coordinate]
+      all_extra_path += extra_path
+      score_in_extra += full_info[coordinate][1]
+    score = sum_point_main + sum([list_point[x][y] for x, y in list(set(score_in_extra))])
+    step = len(main_path) + 2*len(set(all_extra_path)) - 1
+    formula = score / step
+    if formula > max:
+      total_path = list(set(main_path + all_extra_path))
+      op = (score, total_path, step)
+      max = formula
+      count = 1
+    elif formula == max:
+      count += 1
+  total_best_score, best_road, leng = op
+  full_step = FindOptimalPath(maze, main_path, best_road)
+  print("Number of result:", count)
+  return total_best_score, best_road, leng, full_step, path_bot_go, main_path
+
+###########################################################################
+
+
+
+
+
+######################################### Nhật ##############################
 def del_relate_info(l1, d):
-  # new_l = []
-  # for point in l1:
-  #   if point not in d[0] and point not in d[1]:
-  #     new_l.append(point)
   return list(set(l1) - set(d[0] + d[1]))
 
 def FullSituation(inp):
+  # inp sẽ là cái element của list same_extra
   s = list(inp.keys())
   d = {}
   for point in s:
@@ -271,6 +274,8 @@ def FullSituation(inp):
   return res
 
 def ChoosePoint(inp, res, n = 1):
+  # inp sẽ là cái element của list same_extra
+  # res là kết quả
   l = [i for i in list(res.keys())[:] if len(i) == n]
   if len(l) == 0:
     return list(res.keys())
@@ -286,6 +291,9 @@ def ChoosePoint(inp, res, n = 1):
   return ChoosePoint(inp, res, n+1)
 
 def CombineList(l):
+  # l sẽ bao gồm các list cần gộp vào với nhau theo kiểu từng phần tử 1
+  # VD: l: [[[1],[2]], [[3],[4],[5]]]
+  # đầu ra là [[1,3],[1,4], [1,5], [2,3], [2,4], [2,5]]
   lf = []
   ln = len(l)
   if ln == 1:

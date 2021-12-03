@@ -39,7 +39,7 @@ class ButtonSolve(Button):
       bot.InitialBot()
       if self.score == None:
         self.score, self.optimal_path, self.len_of_best, self.op_road, self.path_bot_go\
-            , self.main_path = Logic.Optimize_solution(self.maze, self.alg)
+            , self.main_path = Logic.Optimal_solution(self.maze, self.alg)
       print('SAME PATH:', set(solution.path) == set(self.optimal_path))
       print("SAME STEP", solution.length == self.len_of_best)
       print("SAME SCORE", solution.point == self.score)

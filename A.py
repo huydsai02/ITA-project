@@ -145,39 +145,6 @@ def TakeExtraPath(dict_path, main_path):
       dict_extra_path[point] = extra_path
   return dict_extra_path
 
-def BestGainAlley(list_info_alleys, highest_result):
-  max_in_alley = 0
-  list_remove = []
-  best_alley = []
-  for info in list_info_alleys:
-    if info[0] > max_in_alley and info[0] > highest_result:
-      best_alley = info
-      max_in_alley = info[0]
-    elif info[0] <= highest_result:
-      list_remove.append(info)
-  if best_alley != []:
-    list_info_alleys.remove(best_alley)
-  for _ in list_remove:
-    list_info_alleys.remove(_)
-  return best_alley
-
-def ExpandNode(list_point, dict_path, current_best_road, sum_point, step, highest_result, all_info_alleys):
-  if len(all_info_alleys) == 0:
-    return (current_best_road, sum_point, step, highest_result)
-  best_alley = BestGainAlley(all_info_alleys, highest_result)
-  if best_alley == []:
-    return (current_best_road, sum_point, step, highest_result)
-  sum_point += best_alley[1]
-  step += best_alley[2]
-  highest_result = sum_point/step
-  current_best_road = list(set(current_best_road + best_alley[3]))
-
-  d = {}
-  for point in best_alley[4]:
-    d[point] = dict_path[point]
-  new_alley = TakeExtraPath(d, current_best_road)
-  all_info_alleys.extend(TakeInfoAlley(list_point, new_alley, highest_result))
-  return (current_best_road, sum_point, step, highest_result)
 
 def MazeAnalysis(maze, alg):
   size = maze.get_size()
@@ -208,6 +175,39 @@ def Calculation(main_path, dict_path, list_point):
     if len(current_best_road) == old_len:
       break
   return sum_point, current_best_road, step
+
+def ExpandNode(list_point, dict_path, current_best_road, sum_point, step, highest_result, all_info_alleys):
+  if len(all_info_alleys) == 0:
+    return (current_best_road, sum_point, step, highest_result)
+  best_alley = BestGainAlley(all_info_alleys, highest_result)
+  if best_alley == []:
+    return (current_best_road, sum_point, step, highest_result)
+  sum_point += best_alley[1]
+  step += best_alley[2]
+  highest_result = sum_point/step
+  current_best_road = list(set(current_best_road + best_alley[3]))
+  d = {}
+  for point in best_alley[4]:
+    d[point] = dict_path[point]
+  new_alley = TakeExtraPath(d, current_best_road)
+  all_info_alleys.extend(TakeInfoAlley(list_point, new_alley, highest_result))
+  return (current_best_road, sum_point, step, highest_result)
+
+def BestGainAlley(list_info_alleys, highest_result):
+  max_in_alley = 0
+  list_remove = []
+  best_alley = []
+  for info in list_info_alleys:
+    if info[0] > max_in_alley and info[0] > highest_result:
+      best_alley = info
+      max_in_alley = info[0]
+    elif info[0] <= highest_result:
+      list_remove.append(info)
+  if best_alley != []:
+    list_info_alleys.remove(best_alley)
+  for _ in list_remove:
+    list_info_alleys.remove(_)
+  return best_alley
 
 def DimRightRoad(coordinate, main_path, total_path, p = None):
   # Return the dimension which can come to one cell special
