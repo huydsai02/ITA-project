@@ -1,5 +1,4 @@
 from CreateMatrix import *
-import time
 
 def FindValidDimension(coordinate, list_maze, p = None):
   # Return dimension which is not wall. If p != None, the opposite dimension of p will take the first position
@@ -119,9 +118,10 @@ def Find_Subset(d):
       if consider in d[_]:
           b.append(_)
       if _ in d[consider]:
-          c.append(_)
+          c.append(_)    
     b = list(set(b))
     c = list(set(c))
+    # b.remove(consider)
     res[consider] = [b[:],c[:]]
   same_extra = []
   for point in start_extra:
@@ -256,18 +256,47 @@ def TakeInfoAlley(list_point, dict_extra_path, highest_result):
   info_all_alleys = Find_Subset(dict_extra_path)
   res = []
   for inp in info_all_alleys:
-    t1 = time.time()
     best_in_alley = FullSituation(inp, dict_extra_path, list_point)
-    print(time.time() - t1)
     if best_in_alley[0] > highest_result:
       res.append(best_in_alley)
   return res
 
+################################################# Cần xem xét hàm này ###################################
 def FullSituation(inp, dict_extra_path, list_point):
-  s = list(inp.keys())
-  best_in_alley = [(0,0,0,[],[])]
-  BackTracking(inp, s, dict_extra_path, list_point, best_in_alley, remember=[])
-  return best_in_alley[0]
+  points = list(inp.keys())
+  best_in_alley = CompareWithMax(points, dict_extra_path, inp, list_point, (0,0,0,[],[]))
+  current_best = (0,0,0,[],[])
+  info_situation = [(points, current_best)]
+  situation_has_consider = [set(points)]
+  while True:
+    if len(info_situation) == 0:
+      break
+    no_add = True
+    l = []
+    situation = info_situation.pop(0)
+    best_this_situation = situation[1]
+    old_max = best_this_situation[0]
+    points = situation[0]
+    for point in points:
+      case1 = list(set(points) - set(inp[point][0]))
+      case2 = case1 + [point]
+      cases = [case2, case1]
+      for new_points in cases:
+        if set(new_points) not in situation_has_consider:
+          situation_has_consider.append(set(new_points))
+          new_best = CompareWithMax(new_points, dict_extra_path, inp, list_point, best_this_situation)
+          if new_best[0] != -1:
+            l.append(new_points)
+          if old_max < new_best[0]:
+            info_situation.append((new_points, new_best))
+            no_add = False
+          if new_best[0] > best_in_alley[0]:
+            best_in_alley = new_best
+    if no_add:
+      for ps in l:
+        info_situation.append((ps, (0,0,0,[],[])))
+  return best_in_alley
+##############################################################################################
 
 def CompareWithMax(points, dict_extra_path, point_same_alley, list_point, best_in_alley):
   all_cell = []
@@ -278,19 +307,12 @@ def CompareWithMax(points, dict_extra_path, point_same_alley, list_point, best_i
   cell_have_point =  list(set(cell_have_point))
   score = sum([list_point[x][y] for x, y in cell_have_point])
   step = 2*len(set(all_cell))
+  if step == 0:
+    return (-1,)
   formula = score / step
-  if formula > best_in_alley[0][0]:
+  if formula > best_in_alley[0]:
     point_left_in_alley = list(set(point_same_alley.keys()) - set(cell_have_point))
-    best_in_alley[0] = (formula, score, step, all_cell, point_left_in_alley)
-
-def BackTracking(inp, list_satisfy, dict_extra_path, list_point, best_in_alley ,points = [], remember = []):
-  for next_node in list_satisfy:
-    points.append(next_node)
-    if set(points) not in remember:
-      next_satisfy = del_relate_info(list_satisfy, inp[next_node])
-      remember.append(set(points))
-      CompareWithMax(points, dict_extra_path, inp, list_point, best_in_alley)
-      BackTracking(inp, next_satisfy, dict_extra_path, list_point, best_in_alley, points, remember)
-    points.pop()
+    best_in_alley = (formula, score, step, all_cell, point_left_in_alley)
+  return best_in_alley
 
 ############################################################################
