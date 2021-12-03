@@ -1,7 +1,7 @@
 from Button import *
 from Color import *
 import Logic
-import A as t
+import Atest as t
 import SolveByDFS as dfs
 pygame.init()
 
