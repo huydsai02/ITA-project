@@ -137,7 +137,7 @@ def MazeAnalysis(maze, alg):
 def Optimize_solution(maze, alg):
   list_point = maze.get_list_point()
   main_path, diction_road, path_bot_go = MazeAnalysis(maze, alg)
-  max = 0
+  max = -1
   full_info, same_extra = Find_Subset(diction_road)
   new_inp = []
   for inp in same_extra:
@@ -159,14 +159,17 @@ def Optimize_solution(maze, alg):
     score = sum_point_main + sum([list_point[x][y] for x, y in list(set(score_in_extra))])
     length = len(main_path) + 2*len(set(all_extra_path)) - 1
     formula = score / length
-    if formula >= max:
+    if formula > max:
       total_path = list(set(main_path + all_extra_path))
       op = (score, total_path, length)
       max = formula
+      count = 1
+    elif formula == max:
+      count += 1
   #######################################################################################
   total_best_score, best_road, leng = op
   full_step = FindOptimalPath(maze, main_path, best_road)
-  print(leng == (len(full_step) - 1))
+  print("Number of result:", count)
   return total_best_score, best_road, leng, full_step, path_bot_go, main_path
 
 def Find_Subset(d):
