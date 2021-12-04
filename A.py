@@ -125,10 +125,10 @@ def Find_Subset(d):
     res[consider] = [b[:],c[:]]
   same_extra = []
   for point in start_extra:
-  	a1 = {}
-  	for other_point in start_extra[point]:
-  		a1[other_point] = res[other_point]
-  	same_extra.append(a1)
+    a1 = {}
+    for other_point in start_extra[point]:
+      a1[other_point] = res[other_point]
+    same_extra.append(a1)
   return same_extra
 
 def TakeExtraPath(dict_path, main_path):
@@ -256,20 +256,14 @@ def TakeInfoAlley(list_point, dict_extra_path, highest_result):
   info_all_alleys = Find_Subset(dict_extra_path)
   res = []
   for inp in info_all_alleys:
-    t1 = time.time()
-    best_in_alley = FullSituation(inp, dict_extra_path, list_point)
-    print(time.time() - t1)
+    best_in_alley = BackTracking(inp, list(inp.keys()), dict_extra_path, list_point, remember=[])
     if best_in_alley[0] > highest_result:
       res.append(best_in_alley)
   return res
 
-def FullSituation(inp, dict_extra_path, list_point):
-  s = list(inp.keys())
-  best_in_alley = [(0,0,0,[],[])]
-  BackTracking(inp, s, dict_extra_path, list_point, best_in_alley, remember=[])
-  return best_in_alley[0]
-
-def CompareWithMax(points, dict_extra_path, point_same_alley, list_point, best_in_alley):
+def CompareWithMax(points, dict_extra_path, point_same_alley, list_point):
+  if points == []:
+    return (0,0,0,[],[])
   all_cell = []
   cell_have_point = []
   for coordinate in points:    
@@ -279,18 +273,19 @@ def CompareWithMax(points, dict_extra_path, point_same_alley, list_point, best_i
   score = sum([list_point[x][y] for x, y in cell_have_point])
   step = 2*len(set(all_cell))
   formula = score / step
-  if formula > best_in_alley[0][0]:
-    point_left_in_alley = list(set(point_same_alley.keys()) - set(cell_have_point))
-    best_in_alley[0] = (formula, score, step, all_cell, point_left_in_alley)
+  point_left_in_alley = list(set(point_same_alley.keys()) - set(cell_have_point))
+  return (formula, score, step, all_cell, point_left_in_alley)
 
-def BackTracking(inp, list_satisfy, dict_extra_path, list_point, best_in_alley ,points = [], remember = []):
+def BackTracking(inp, list_satisfy, dict_extra_path, list_point ,points = [], remember = []):
+  current_max = CompareWithMax(points, dict_extra_path, inp, list_point)
   for next_node in list_satisfy:
     points.append(next_node)
     if set(points) not in remember:
       next_satisfy = del_relate_info(list_satisfy, inp[next_node])
       remember.append(set(points))
-      CompareWithMax(points, dict_extra_path, inp, list_point, best_in_alley)
-      BackTracking(inp, next_satisfy, dict_extra_path, list_point, best_in_alley, points, remember)
+      max_next_node = BackTracking(inp, next_satisfy, dict_extra_path, list_point, points, remember)
+      if max_next_node[0] > current_max[0]:
+        current_max = max_next_node
     points.pop()
-
+  return current_max
 ############################################################################

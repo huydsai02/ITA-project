@@ -131,10 +131,10 @@ def Find_Subset(d):
     res[consider] = [b[:],c[:]]
   same_extra = []
   for point in start_extra:
-  	a1 = {}
-  	for other_point in start_extra[point]:
-  		a1[other_point] = res[other_point]
-  	same_extra.append(a1)
+    a1 = {}
+    for other_point in start_extra[point]:
+      a1[other_point] = res[other_point]
+    same_extra.append(a1)
   return res, same_extra
 
 def FindDimensionIsPath(coor, main_path, total_path, p = None):

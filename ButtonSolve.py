@@ -1,8 +1,9 @@
 from Button import *
 from Color import *
+import A as t
 import Logic
-import Atest as t
 import SolveByDFS as dfs
+import time
 pygame.init()
 
 class ButtonSolve(Button):
@@ -14,15 +15,15 @@ class ButtonSolve(Button):
     self.initial = 0
     self.speed = SPEED
     if alg == "dfs":
-        self.score, self.optimal_path, self.len_of_best, self.op_road, self.path_bot_go,\
-             self.main_path = t.Optimal_solution(self.maze, self.alg)
-        solution.path = self.optimal_path
-        solution.point = self.score
-        solution.length = self.len_of_best
-        best_path.op_road = self.op_road
-        best_path.optimal_path = self.optimal_path       
+      self.score, self.optimal_path, self.len_of_best, self.op_road, self.path_bot_go,\
+            self.main_path = t.Optimal_solution(self.maze, self.alg)
+      solution.path = self.optimal_path
+      solution.point = self.score
+      solution.length = self.len_of_best
+      best_path.op_road = self.op_road
+      best_path.optimal_path = self.optimal_path       
     else: 
-        self.score = self.optimal_path = self.len_of_best = self.op_road = self.path_bot_go = self.main_path = None
+      self.score = self.optimal_path = self.len_of_best = self.op_road = self.path_bot_go = self.main_path = None
   def click(self,x, y, bot, solution, show_map, l, best_path):
     super().click(x,y)
     a, b = self.full_coor
