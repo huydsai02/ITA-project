@@ -120,7 +120,7 @@ def Arrange(maze, dict_path):
       res.append(point)
   return res
 
-def Optimal_solution(maze):
+def Optimal_solution(maze, alg = "dfs"):
   dict_neighbor, path_bot_go, dict_path = MazeAnalysis(maze)
   main_path = dict_path[maze.get_end_point()]
   best_road, best_step, best_score = VisitNextNeighbor(dict_neighbor, maze, dict_path)
@@ -152,11 +152,7 @@ def VisitNextNeighbor(dict_neighbor, maze, dict_path):
       if point not in points:
         neighbors = dict_neighbor[point][:]
       else:
-        length = len(points)
-        for i in range(length):
-          li = length - i - 1
-          if points[li] == point:
-            break
+        li = len(points) - points[::-1].index(point) - 1
         neighbors = dims[li][:]
       
       points.append(point)  
