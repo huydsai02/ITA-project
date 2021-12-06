@@ -158,11 +158,6 @@ def Optimal_solution(maze, alg):
   dict_path, path_bot_go = MazeAnalysis(maze, alg)
   main_path = dict_path[maze.get_end_point()]
   list_point = maze.get_list_point()
-  sum_point, current_best_road, step = Calculation(main_path, dict_path, list_point)
-  full_step = PathAllPoint(maze, main_path, current_best_road)
-  return sum_point, current_best_road, step, full_step, path_bot_go, main_path
-
-def Calculation(main_path, dict_path, list_point):
   alley = TakeExtraPath(dict_path, main_path)
   current_best_road = main_path[:]
   sum_point = sum([list_point[x][y] for x, y in main_path])
@@ -174,7 +169,8 @@ def Calculation(main_path, dict_path, list_point):
     current_best_road, sum_point, step, highest_result = ExpandNode(list_point, dict_path, current_best_road, sum_point, step, highest_result, all_info_alleys)
     if len(current_best_road) == old_len:
       break
-  return sum_point, current_best_road, step
+  full_step = PathAllPoint(maze, main_path, current_best_road)
+  return sum_point, current_best_road, step, full_step, path_bot_go, main_path
 
 def ExpandNode(list_point, dict_path, current_best_road, sum_point, step, highest_result, all_info_alleys):
   if len(all_info_alleys) == 0:
@@ -248,22 +244,50 @@ def PathAllPoint(maze, main_path, total_path):
       if (xs, ys) not in coors:
         coors.append((xs, ys))
 
-################################### NEED TO RUN FASTER ########################
-def del_relate_info(l1, d):
-  return list(set(l1) - set(d[0] + d[1]))
-
 def TakeInfoAlley(list_point, dict_extra_path, highest_result):
   info_all_alleys = Find_Subset(dict_extra_path)
   res = []
   for inp in info_all_alleys:
-    best_in_alley = BackTracking(inp, list(inp.keys()), dict_extra_path, list_point, remember=[])
+    best_in_alley = OptimizeBackTracking(inp, dict_extra_path, list_point)
     if best_in_alley[0] > highest_result:
       res.append(best_in_alley)
   return res
 
-def CompareWithMax(points, dict_extra_path, point_same_alley, list_point):
-  if points == []:
-    return (0,0,0,[],[])
+def OptimizeBackTracking(inp, dict_extra_path, list_point):
+  l_key = []
+  l_value = []
+  all = list(inp.keys())
+  best = (0,0,0,[],[])
+  l_intersect = {}
+  for key in inp:
+    l_key.append({key})
+    st = {p for p in all if p not in inp[key][0] and p not in inp[key][1]}
+    l_value.append(st)
+    l_intersect[key] = st
+    r = Calculate({key}, dict_extra_path, inp, list_point)
+    if r[0] > best[0]:
+      best = r 
+  while True:
+    loop = True
+    new_l_key = []
+    new_l_value = []
+    for i in range(len(l_key)):
+      for point_add in l_value[i]:
+        points = l_key[i].union({point_add})
+        if points not in new_l_key:
+          loop = False
+          new_l_key.append(points)
+          new_l_value.append(set.intersection(l_value[i], l_intersect[point_add]))
+          r = Calculate(points, dict_extra_path, inp, list_point)
+          if r[0] > best[0]:
+            best = r
+    if loop:
+      break
+    l_key = new_l_key
+    l_value = new_l_value
+  return best
+
+def Calculate(points, dict_extra_path, point_same_alley, list_point):
   all_cell = []
   cell_have_point = []
   for coordinate in points:    
@@ -275,17 +299,3 @@ def CompareWithMax(points, dict_extra_path, point_same_alley, list_point):
   formula = score / step
   point_left_in_alley = list(set(point_same_alley.keys()) - set(cell_have_point))
   return (formula, score, step, all_cell, point_left_in_alley)
-
-def BackTracking(inp, list_satisfy, dict_extra_path, list_point ,points = [], remember = []):
-  current_max = CompareWithMax(points, dict_extra_path, inp, list_point)
-  for next_node in list_satisfy:
-    points.append(next_node)
-    if set(points) not in remember:
-      next_satisfy = del_relate_info(list_satisfy, inp[next_node])
-      remember.append(set(points))
-      max_next_node = BackTracking(inp, next_satisfy, dict_extra_path, list_point, points, remember)
-      if max_next_node[0] > current_max[0]:
-        current_max = max_next_node
-    points.pop()
-  return current_max
-############################################################################
