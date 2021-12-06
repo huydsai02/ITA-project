@@ -2,7 +2,7 @@ from Button import *
 pygame.init()
 
 class ButtonBestPath(Button):
-  def __init__(self, name = "Best path", pos = (0,0), font = 20, size = (170,45), screen = None, SPEED = 0.07):
+  def __init__(self, name = "run solution", pos = (0,0), font = 20, size = (170,45), screen = None, SPEED = 0.07):
     super().__init__(name ,  pos, font, size, screen)
     self.initial = 0
     self.speed = SPEED

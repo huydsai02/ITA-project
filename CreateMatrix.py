@@ -1,5 +1,5 @@
 import random
-from random import randint
+from random import randint, randrange
 class Maze(object):
   def __init__(self, size = (11,11), start = (1,1), end = (9,9), matrix = None, num_point = 12):
     # self.size là kích thước của mê cung, vị trí thứ nhất là chiều ngang mê cung, vị trí thứ hai là chiều dọc mê cung
@@ -94,9 +94,9 @@ class Maze(object):
     for _ in range(len(point_pos)):
       i, j = point_pos[_]
       if _ != int(num/2):
-        self.list_point[i][j] = (i+j)*2
+        self.list_point[i][j] = randrange(20, 50)
       else:
-        self.list_point[i][j] = 10 * (i+j)
+        self.list_point[i][j] = randrange(20, 50)
     return self.list_point
 
   def TakeCoordinatePoint(self):

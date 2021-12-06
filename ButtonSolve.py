@@ -48,8 +48,7 @@ class ButtonSolve(Button):
       solution.point = self.score
       solution.length = self.len_of_best
       best_path.op_road = self.op_road
-      best_path.optimal_path = self.optimal_path         
-
+      best_path.optimal_path = self.optimal_path
 
   def ShowBotGo(self, l, i):		
     if int(i) < len(l):

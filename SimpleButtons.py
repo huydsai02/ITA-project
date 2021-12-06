@@ -11,7 +11,7 @@ class ButtonShowMap(Button):
       self.change_state()
       bot.draw()
   def active(self):
-    self.name = "full maze" if self.state == False else "around"
+    self.name = "full maze" if self.state == False else "hide maze"
 class ButtonNewGame(Button):
   def __init__(self, pos = (0,0), font = 20, size = (170,45), screen = None):
     super().__init__("new game" ,  pos, font, size, screen)
@@ -24,7 +24,7 @@ class ButtonNewGame(Button):
       game.InitialState()
 class ButtonAgain(Button):
   def __init__(self, pos = (0,0), font = 20, size = (170,45), screen = None):
-    super().__init__("again" ,  pos, font, size, screen)
+    super().__init__("reset" ,  pos, font, size, screen)
     # self.show_solution = False
   def click(self,x, y, game):
     super().click(x,y)
