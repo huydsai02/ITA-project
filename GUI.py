@@ -10,7 +10,7 @@ from Color import *
 
 class Game(object):
 	SPEED = 1
-	_size = (41,41); _num_point = 20; _start = (1,1); _end = (39,39)
+	_size = (41,41); _num_point = 20; _start = (1,1); _end = (29,29)
 	SIZE = (1050,670)
 
 	def __init__(self):
@@ -56,6 +56,8 @@ class Game(object):
 		self.DISPLAYSURF.blit(self.ShowInfo(f'TOTAL STEP: {self.bot.step}', size=20), (785, 55))
 		stri = f'FINAL POINT: {round(self.bot.point/self.bot.step,2)}' if self.bot.step != 0 else 'FINAL POINT: 0'
 		self.DISPLAYSURF.blit(self.ShowInfo(stri, size=20), (785, 85))
+		self.DISPLAYSURF.blit(self.ShowInfo('DISCOVER', size = 15), (815, 550))
+		pygame.draw.rect(self.DISPLAYSURF, COLOR_SHOW_INFO, (770, 397, 181, 150), 2, 5)
 
 	def ClickButtons(self,x, y):
 		self.btn_show_map.click(x,y, self.bot)
@@ -67,7 +69,7 @@ class Game(object):
 		self.btn_a.click(x,y, bot = self.bot, solution = self.btn_show_solution, show_map= self.btn_show_map, l = self.list_buttons, best_path=self.btn_best_path)
 		self.btn_bfs.click(x,y, bot = self.bot, solution = self.btn_show_solution, show_map= self.btn_show_map, l = self.list_buttons, best_path=self.btn_best_path)
 	
-	def ShowInfo(self,Info, size=30):
+	def ShowInfo(self,Info, size=20):
 		fnt = pygame.font.Font('freesansbold.ttf', size)
 		text = fnt.render(str(Info), True, COLOR_SHOW_INFO)
 		return text

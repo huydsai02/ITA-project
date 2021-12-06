@@ -3,7 +3,7 @@ from Color import *
 class Button:
   """Create a button, then blit the surface in the while loop"""
   def __init__(self, name,  pos = (0,0), font = 20, size = (170,35), screen = None):
-    self.font = pygame.font.SysFont("Arial", font, bold = True)
+    self.font = pygame.font.Font('freesansbold.ttf', font)
     self.size = size
     self.pos = pos
     self.color = COLOR_BTN_NORMAL

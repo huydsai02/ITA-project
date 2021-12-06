@@ -54,7 +54,7 @@ def FindPath(maze, points = [], alg= 'dfs'):
         dict_road[(xs, ys)] = road
         new_points = [point for point in points if point != (xs, ys)]
         points = new_points
-      if len(coors) == 0:
+      if len(points) == 0:
         return dict_road, path_bot_go
 
   elif alg.lower() == 'A*'.lower():
@@ -77,7 +77,7 @@ def FindPath(maze, points = [], alg= 'dfs'):
             dict_road[(x0, y0)] = road
             new_points = [point for point in points if point != (x0, y0)]
             points = new_points
-      if len(paths) == 0:
+      if len(points) == 0:
         return dict_road, path_bot_go
           
   elif alg == 'bfs':
@@ -100,7 +100,7 @@ def FindPath(maze, points = [], alg= 'dfs'):
             dict_road[(x0, y0)] = road
             new_points = [point for point in points if point != (x0, y0)]
             points = new_points
-      if len(paths) == 0:
+      if len(points) == 0:
         return dict_road, path_bot_go
 
 def Find_Subset(d):

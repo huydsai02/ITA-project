@@ -4,7 +4,7 @@ pygame.init()
 
 class ButtonShowSolution(Button):
   def __init__(self, pos = (0,0), font = 20, size = (170,45), screen = None):
-    super().__init__("show solution" ,  pos, font, size, screen)
+    super().__init__("solution" ,  pos, font, size, screen)
     self.path = [(2,4)]
     self.length = 0
     self.point = 0
@@ -15,7 +15,7 @@ class ButtonShowSolution(Button):
       self.bot = bot
       bot.InitialBot()
       self.state = True
-      show_map.state = True
+      # show_map.state = False
       # show_map.other_state = False
       self.decrease = bot.decrease
       self.side = bot.side
