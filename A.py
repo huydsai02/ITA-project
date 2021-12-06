@@ -268,20 +268,18 @@ def OptimizeBackTracking(inp, dict_extra_path, list_point):
     if r[0] > best[0]:
       best = r 
   while True:
-    loop = True
     new_l_key = []
     new_l_value = []
     for i in range(len(l_key)):
       for point_add in l_value[i]:
         points = l_key[i].union({point_add})
         if points not in new_l_key:
-          loop = False
           new_l_key.append(points)
           new_l_value.append(set.intersection(l_value[i], l_intersect[point_add]))
           r = Calculate(points, dict_extra_path, inp, list_point)
           if r[0] > best[0]:
             best = r
-    if loop:
+    if len(new_l_key) == 0:
       break
     l_key = new_l_key
     l_value = new_l_value
