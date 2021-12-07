@@ -270,7 +270,7 @@ def OptimizeBackTracking(inp, dict_extra_path, list_point):
     d_path[all[i]] = set(dict_extra_path[all[i]])
     d_prev[all[i]] = set(inp[all[i]][1])
     info = Calculate(all[i], (0,set(),0,set()), d_path, d_prev, list_point)
-    st = {p for p in all[:i] if p not in inp[all[i]][0] and p not in inp[all[i]][1]}
+    st = set(all[:i]) - set(inp[all[i]][0]) - set(inp[all[i]][1])
     if len(st) != 0:
       l_key.append(info)
       l_value.append(st)
