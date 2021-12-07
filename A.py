@@ -253,38 +253,6 @@ def TakeInfoAlley(list_point, dict_extra_path, highest_result):
       res.append(best_in_alley)
   return res
 
-def OptimizeBackTracking(inp, dict_extra_path, list_point):
-  l_key = []
-  l_value = []
-  all = list(inp.keys())
-  best = (0,0,0,[],[])
-  l_intersect = {}
-  for key in inp:
-    l_key.append({key})
-    st = {p for p in all if p not in inp[key][0] and p not in inp[key][1]}
-    l_value.append(st)
-    l_intersect[key] = st
-    r = Calculate({key}, dict_extra_path, inp, list_point)
-    if r[0] > best[0]:
-      best = r 
-  while True:
-    new_l_key = []
-    new_l_value = []
-    for i in range(len(l_key)):
-      for point_add in l_value[i]:
-        points = l_key[i].union({point_add})
-        if points not in new_l_key:
-          new_l_key.append(points)
-          new_l_value.append(set.intersection(l_value[i], l_intersect[point_add]))
-          r = Calculate(points, dict_extra_path, inp, list_point)
-          if r[0] > best[0]:
-            best = r
-    if len(new_l_key) == 0:
-      break
-    l_key = new_l_key
-    l_value = new_l_value
-  return best
-
 def Calculate(points, dict_extra_path, point_same_alley, list_point):
   all_cell = []
   cell_have_point = []
@@ -297,3 +265,31 @@ def Calculate(points, dict_extra_path, point_same_alley, list_point):
   formula = score / step
   point_left_in_alley = list(set(point_same_alley.keys()) - set(cell_have_point))
   return (formula, score, step, all_cell, point_left_in_alley)
+
+def OptimizeBackTracking(inp, dict_extra_path, list_point):
+  l_key = []
+  l_value = []
+  all = list(inp.keys())
+  best = (0,0,0,[],[])
+  l_intersect = {}
+  for i in range(len(all)):
+    l_key.append({all[i]})
+    st = {p for p in all[:i] if p not in inp[all[i]][0] and p not in inp[all[i]][1]}
+    l_value.append(st)
+    l_intersect[all[i]] = st
+    r = Calculate({all[i]}, dict_extra_path, inp, list_point)
+    if r[0] > best[0]:
+      best = r 
+  while True:
+    p = l_key.pop()
+    new_ps = l_value.pop()
+    for point_add in new_ps:
+      new_p = p.union({point_add})
+      l_key.append(new_p)
+      l_value.append(set.intersection(new_ps, l_intersect[point_add]))
+      r = Calculate(new_p, dict_extra_path, inp, list_point)
+      if r[0] > best[0]:
+        best = r
+    if len(l_key) == 0:
+      break
+  return best
