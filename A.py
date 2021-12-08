@@ -254,27 +254,26 @@ def TakeInfoAlley(list_point, dict_extra_path, highest_result):
   return res
 
 def Calculate(point_add, old_info, dict_path, dict_prev, list_point):
-  old_points = old_info[1]
-  score = old_info[2] + sum(list_point[x][y] for x, y in dict_prev[point_add] - old_points)
-  new_points = old_points.union(dict_prev[point_add])
-  all_cell = old_info[3].union(dict_path[point_add])
+  score = old_info[1] + sum(list_point[x][y] for x, y in dict_prev[point_add] - old_info[2])
+  all_cell = old_info[2].union(dict_path[point_add])
   formula = score / (2*len(all_cell))
-  return (formula, new_points, score, all_cell)
+  return (formula, score, all_cell)
 
 def OptimizeBackTracking(inp, dict_extra_path, list_point):
   l_key, l_value = [], []
   all = list(inp.keys())
-  best = (0,set(),0,set())
+  best = (0,0,set())
   l_intersect, d_path, d_prev = {}, {}, {}
   for i in range(len(all)):
-    d_path[all[i]] = set(dict_extra_path[all[i]])
-    d_prev[all[i]] = set(inp[all[i]][1])
-    info = Calculate(all[i], (0,set(),0,set()), d_path, d_prev, list_point)
-    st = set(all[:i]) - set(inp[all[i]][0]) - set(inp[all[i]][1])
+    point = all[i]
+    d_path[point] = set(dict_extra_path[point])
+    d_prev[point] = set(inp[point][1])
+    info = Calculate(point, (0,0,set()), d_path, d_prev, list_point)
+    st = set(all[:i]) - set(inp[point][0]) - set(inp[point][1])
     if len(st) != 0:
       l_key.append(info)
       l_value.append(st)
-    l_intersect[all[i]] = st
+    l_intersect[point] = st
     if info[0] > best[0]:
       best = info 
   while True:
@@ -291,8 +290,8 @@ def OptimizeBackTracking(inp, dict_extra_path, list_point):
       if new_info[0] > best[0]:
         best = new_info
     
-  formula, points, score, all_cell = best
+  formula, score, all_cell = best
   step = 2*len(all_cell)
-  point_left_in_alley = list(set(all) - points)
+  point_left_in_alley = list(set(all) - all_cell)
   all_cell = list(all_cell)
   return (formula, score, step, all_cell, point_left_in_alley)
