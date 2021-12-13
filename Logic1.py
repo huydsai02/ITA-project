@@ -1,13 +1,23 @@
 from CreateMatrix import *
-import time
 
-def FindValidDimension(coordinate, list_maze, p = None):
-  # Return dimension which is not wall. If p != None, the opposite dimension of p will take the first position
+def FindValidDimension(coor, list_maze, p = None):
+  # Hàm trả về các hướng không phải tường 
+  # điểm cuối sẽ là hướng p nếu hướng p ko có gạch, điểm đầu sẽ là hướng ngược lại p
   steps = [(0,1), (0,-1), (1,0), (-1,0)]
-  res = [] if p == None else [((-1) * p[0], (-1) * p[1])]
-  for step in steps:
-    if list_maze[coordinate[0] + step[0]][coordinate[1] + step[1]] != 1 and step not in res:
-      res.append(step)  
+  if p != None:
+    a = (-1) * p[0]
+    b = (-1) * p[1]
+    res = [(a,b)]
+    for step in steps:
+      if step not in res and list_maze[coor[0] + step[0]][coor[1] + step[1]] != 1 and step != p:
+        res.append(step)
+    if list_maze[coor[0] + p[0]][coor[1] + p[1]] != 1:
+      res.append(p)
+  else:
+    res = []
+    for step in steps:
+      if list_maze[coor[0] + step[0]][coor[1] + step[1]] != 1:
+        res.append(step)  
   return res
 
 def Manhattan(x1, x2):
@@ -54,7 +64,7 @@ def FindPath(maze, points = [], alg= 'dfs'):
         dict_road[(xs, ys)] = road
         new_points = [point for point in points if point != (xs, ys)]
         points = new_points
-      if len(points) == 0:
+      if len(coors) == 0:
         return dict_road, path_bot_go
 
   elif alg.lower() == 'A*'.lower():
@@ -77,7 +87,7 @@ def FindPath(maze, points = [], alg= 'dfs'):
             dict_road[(x0, y0)] = road
             new_points = [point for point in points if point != (x0, y0)]
             points = new_points
-      if len(points) == 0:
+      if len(paths) == 0:
         return dict_road, path_bot_go
           
   elif alg == 'bfs':
@@ -100,8 +110,53 @@ def FindPath(maze, points = [], alg= 'dfs'):
             dict_road[(x0, y0)] = road
             new_points = [point for point in points if point != (x0, y0)]
             points = new_points
-      if len(points) == 0:
+      if len(paths) == 0:
         return dict_road, path_bot_go
+
+    
+    
+def MazeAnalysis(maze, alg):
+  size = maze.get_size()
+  end_point = maze.get_end_point()
+  list_point = maze.get_list_point()
+  list_consider = [(i, j) for i in range(size[0]) for j in range(size[1]) if list_point[i][j] != 0 or (i,j) == end_point]
+  dict_path, path_bot_go = FindPath(maze, list_consider, alg)
+  main_path = dict_path[end_point]
+  dict_extra_path = {}
+  for point in list_consider:
+    if point != end_point:
+      path = dict_path[point]
+      extra_path = []
+      for p in path:
+        if p not in main_path:
+          extra_path.append(p)
+      if len(extra_path) > 0:
+        dict_extra_path[point] = extra_path
+  return main_path, dict_extra_path, path_bot_go
+  
+def Optimal_solution(maze, alg):
+  list_point = maze.get_list_point()
+  main_path, dict_extra_path, path_bot_go = MazeAnalysis(maze, alg)
+  max = 0
+  list_subset = FullSituation(dict_extra_path, list_point)
+  sum_point_main = sum(list_point[x][y] for x, y in main_path)
+  step_main = len(main_path) - 1
+  print(len(list_subset))
+  for score, step, points in list_subset:
+    total_score = sum_point_main + score
+    total_step = step_main + step
+    result = total_score/ total_step
+    if result > max:
+      max = result
+      points_add = points
+      total_best_score = total_score
+      number_best_step = total_step
+  best_road = main_path[:]
+  for point in points_add:
+    best_road += dict_extra_path[point]
+  best_road = list(set(best_road))
+  full_step = FindOptimalPath(maze, main_path, best_road)
+  return total_best_score, best_road, number_best_step, full_step, path_bot_go, main_path
 
 def Find_Subset(d):
   # Hàm trả về những đầu mút của đường thêm
@@ -131,98 +186,37 @@ def Find_Subset(d):
     same_extra.append(a1)
   return same_extra
 
-def TakeExtraPath(dict_path, main_path):
-  list_consider = list(dict_path.keys())
-  dict_extra_path = {}
-  for point in list_consider:
-    extra_path = []
-    path = dict_path[point]
-    for _ in range(len(path) - 1, -1, -1):
-      if path[_] in main_path:
-        break
-      extra_path.insert(0, path[_])
-    if len(extra_path) > 0:
-      dict_extra_path[point] = extra_path
-  return dict_extra_path
-
-
-def MazeAnalysis(maze, alg):
-  size = maze.get_size()
-  end_point = maze.get_end_point()
-  list_point = maze.get_list_point()
-  list_consider = [(i, j) for i in range(size[0]) for j in range(size[1]) if list_point[i][j] != 0 or (i,j) == end_point]
-  dict_path, path_bot_go = FindPath(maze, list_consider, alg)
-  return dict_path, path_bot_go
-
-def Optimal_solution(maze, alg):
-  dict_path, path_bot_go = MazeAnalysis(maze, alg)
-  main_path = dict_path[maze.get_end_point()]
-  list_point = maze.get_list_point()
-  alley = TakeExtraPath(dict_path, main_path)
-  current_best_road = main_path[:]
-  sum_point = sum([list_point[x][y] for x, y in main_path])
-  step = len(main_path) - 1
-  highest_result = sum_point / step
-  all_info_alleys = TakeInfoAlley(list_point, alley, highest_result)
-  while True:
-    old_len = len(current_best_road)
-    current_best_road, sum_point, step, highest_result = ExpandNode(list_point, dict_path, current_best_road, sum_point, step, highest_result, all_info_alleys)
-    if len(current_best_road) == old_len:
-      break
-  full_step = PathAllPoint(maze, main_path, current_best_road)
-  return sum_point, current_best_road, step, full_step, path_bot_go, main_path
-
-def ExpandNode(list_point, dict_path, current_best_road, sum_point, step, highest_result, all_info_alleys):
-  if len(all_info_alleys) == 0:
-    return (current_best_road, sum_point, step, highest_result)
-  best_alley = BestGainAlley(all_info_alleys, highest_result)
-  if best_alley == []:
-    return (current_best_road, sum_point, step, highest_result)
-  sum_point += best_alley[1]
-  step += best_alley[2]
-  highest_result = sum_point/step
-  current_best_road = list(set(current_best_road + best_alley[3]))
-  d = {}
-  for point in best_alley[4]:
-    d[point] = dict_path[point]
-  new_alley = TakeExtraPath(d, current_best_road)
-  all_info_alleys.extend(TakeInfoAlley(list_point, new_alley, highest_result))
-  return (current_best_road, sum_point, step, highest_result)
-
-def BestGainAlley(list_info_alleys, highest_result):
-  max_in_alley = 0
-  list_remove = []
-  best_alley = []
-  for info in list_info_alleys:
-    if info[0] > max_in_alley and info[0] > highest_result:
-      best_alley = info
-      max_in_alley = info[0]
-    elif info[0] <= highest_result:
-      list_remove.append(info)
-  if best_alley != []:
-    list_info_alleys.remove(best_alley)
-  for _ in list_remove:
-    list_info_alleys.remove(_)
-  return best_alley
-
-def DimRightRoad(coordinate, main_path, total_path, p = None):
-  # Return the dimension which can come to one cell special
+def FindDimensionIsPath(coor, main_path, total_path, p = None):
+  # Hàm trả về các hướng không phải tường 
+  # điểm cuối sẽ là hướng p nếu hướng p ko có gạch, điểm đầu sẽ là hướng ngược lại p
   steps = [(0,1), (0,-1), (1,0), (-1,0)]
-  res = [] if p == None else [((-1) * p[0], (-1) * p[1])]
-  for step in steps:
-    if step not in res and (coordinate[0] + step[0],coordinate[1] + step[1]) in main_path:
-      res.append(step)
-  for step in steps:
-    if step not in res and (coordinate[0] + step[0],coordinate[1] + step[1]) in total_path:
-      res.append(step) 
+  if p != None:
+    a = (-1) * p[0]
+    b = (-1) * p[1]
+    res = [(a,b)]
+    for step in steps:
+      if step not in res and (coor[0] + step[0],coor[1] + step[1]) in main_path:
+        res.append(step)
+    for step in steps:
+      if step not in res and (coor[0] + step[0],coor[1] + step[1]) in total_path:
+        res.append(step)
+  else:
+    res = []
+    for step in steps:
+      if step not in res and (coor[0] + step[0],coor[1] + step[1]) in main_path:
+        res.append(step)
+    for step in steps:
+      if step not in res and (coor[0] + step[0],coor[1] + step[1]) in total_path:
+        res.append(step) 
   return res
 
-def PathAllPoint(maze, main_path, total_path):
+
+def FindOptimalPath(maze, main_path, total_path):
   xs, ys = maze.get_start_point()
   points = total_path[:]
   coors = [(xs, ys)]
   d = {}
-  d[(xs, ys)] = DimRightRoad((xs,ys), main_path, total_path)
+  d[(xs, ys)] = FindDimensionIsPath((xs,ys), main_path, total_path)
   path_bot_go = []
   while True:
     if (xs, ys) in points:
@@ -240,43 +234,64 @@ def PathAllPoint(maze, main_path, total_path):
       path_bot_go.append([(xs,ys), [cpath]])
       xs += cpath[0]
       ys += cpath[1]
-      d[(xs,ys)] = d.get((xs,ys), DimRightRoad((xs,ys), main_path, total_path, p = cpath))
+      d[(xs,ys)] = d.get((xs,ys), FindDimensionIsPath((xs,ys), main_path, total_path, p = cpath))
       if (xs, ys) not in coors:
         coors.append((xs, ys))
 
-def TakeInfoAlley(list_point, dict_extra_path, highest_result):
-  info_all_alleys = Find_Subset(dict_extra_path)
-  res = []
-  for inp in info_all_alleys:
-    best_in_alley = OptimizeBackTracking(inp, dict_extra_path, list_point)
-    if best_in_alley[0] > highest_result:
-      res.append(best_in_alley)
-  return res
+def FullSituation(dict_extra_path, list_point):
+  import time
+  alleys = Find_Subset(dict_extra_path)
+  all = []
+  a = False
+  for info_alley in alleys:
+    t1 = time.time()
+    test = OptimizeBackTracking(info_alley, dict_extra_path, list_point)
+    t2 = time.time()
+    if t2 - t1 > 0.5:
+      print("Alley:", len(test))
+      print(t2-t1)
+      a = True
+    all.append(test)
+  if a:
+    print("DONE")
+  return CombineList(all)
+
+def CombineList(l):
+  lf = []
+  ln = len(l)
+  if ln == 1:
+    return l[0]
+  elif ln == 0:
+    return []
+  cl = CombineList(l[:ln-1])
+  for score1, step1, points1 in l[-1]:
+    for score2, step2, points2 in cl:
+      lf.append((score1 + score2, step1 + step2, points1 + points2))
+  return lf
 
 def Calculate(point_add, old_info, dict_path, dict_prev, list_point):
-  old_all_cell = old_info[2]
-  score = old_info[1] + sum(list_point[x][y] for x, y in dict_prev[point_add] - old_all_cell)
-  all_cell = old_all_cell.union(dict_path[point_add])
+  old_points = old_info[1]
+  score = old_info[2] + sum(list_point[x][y] for x, y in dict_prev[point_add] - old_points)
+  new_points = old_points.union(dict_prev[point_add])
+  all_cell = old_info[3].union(dict_path[point_add])
   formula = score / (2*len(all_cell))
-  return (formula, score, all_cell)
+  return (formula, new_points, score, all_cell)
 
 def OptimizeBackTracking(inp, dict_extra_path, list_point):
   l_key, l_value = [], []
   all = list(inp.keys())
-  best = (0,0,set())
+  all_info = [(0,0,[])]
   l_intersect, d_path, d_prev = {}, {}, {}
   for i in range(len(all)):
-    point = all[i]
-    d_path[point] = set(dict_extra_path[point])
-    d_prev[point] = set(inp[point][1])
-    info = Calculate(point, (0,0,set()), d_path, d_prev, list_point)
-    st = set(all[:i]) - set(inp[point][0]) - set(inp[point][1])
+    d_path[all[i]] = set(dict_extra_path[all[i]])
+    d_prev[all[i]] = set(inp[all[i]][1])
+    info = Calculate(all[i], (0,set(),0,set()), d_path, d_prev, list_point)
+    st = set(all[:i]) - set(inp[all[i]][0]) - set(inp[all[i]][1])
     if len(st) != 0:
       l_key.append(info)
       l_value.append(st)
-    l_intersect[point] = st
-    if info[0] > best[0]:
-      best = info 
+    l_intersect[all[i]] = st
+    all_info.append((info[2], 2*len(info[3]), list(info[1])))
   while True:
     if len(l_key) == 0:
       break
@@ -288,11 +303,5 @@ def OptimizeBackTracking(inp, dict_extra_path, list_point):
       if len(new_points) != 0:
         l_key.append(new_info)
         l_value.append(new_points)
-      if new_info[0] > best[0]:
-        best = new_info
-    
-  formula, score, all_cell = best
-  step = 2*len(all_cell)
-  point_left_in_alley = list(set(all) - all_cell)
-  all_cell = list(all_cell)
-  return (formula, score, step, all_cell, point_left_in_alley)
+      all_info.append((new_info[2], 2*len(new_info[3]), list(new_info[1])))
+  return all_info
