@@ -31,6 +31,4 @@ def Cartesian_product(list_sets):
   for i in list_sets:
     Set = [k for j in i for k in j]
     list_tranform.append(Set)
-  res = list(itertools.product(*list_tranform))
-  print(res)
-  return res
+  return list(itertools.product(*list_tranform))
