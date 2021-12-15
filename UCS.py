@@ -1,6 +1,4 @@
-from CreateMatrix import *
 from GeneralFunction import *
-import time
 
 def MazeAnalysis(maze, alg):
   size = maze.get_size()

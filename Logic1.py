@@ -1,4 +1,3 @@
-from CreateMatrix import *
 from GeneralFunction import *
     
 def MazeAnalysis(maze, alg):
