@@ -19,7 +19,7 @@ class ButtonSolve(Button):
     self.speed = SPEED
     if alg == "dfs":
       self.score, self.optimal_path, self.len_of_best, self.op_road, self.path_bot_go,\
-            self.main_path = t.Optimal_solution(self.maze, self.alg)
+         = t.Optimal_solution(self.maze, self.alg)
       solution.path = self.optimal_path
       solution.point = self.score
       solution.length = self.len_of_best
@@ -43,7 +43,7 @@ class ButtonSolve(Button):
       bot.InitialBot()
       if self.score == None:
         self.score, self.optimal_path, self.len_of_best, self.op_road, self.path_bot_go\
-            , self.main_path = Logic.Optimal_solution(self.maze, self.alg)
+           = Logic.Optimal_solution(self.maze, self.alg)
       print('SAME PATH:', set(solution.path) == set(self.optimal_path))
       print("SAME STEP", solution.length == self.len_of_best)
       print("SAME SCORE", solution.point == self.score)
