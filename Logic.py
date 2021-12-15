@@ -22,6 +22,7 @@ def Optimal_solution(maze, alg):
   full_info, same_extra = Find_Subset(dict_extra_path, enumerate = True)
   new_inp = []
   for inp in same_extra:
+  ######################################### Nếu ông muốn dùng code của mình thì thêm test. còn không thì bỏ đi ####
     new_inp.append(test.FullSituation(inp))
   list_subset = test.Cartesian_product(new_inp)
   sum_point_main = sum([list_point[x][y] for x, y in main_path])
@@ -83,7 +84,7 @@ def ChoosePoint(inp, res, n = 1):
         res[tuple(ni)] = nl
   return ChoosePoint(inp, res, n+1)
 
-def CombineList(l):
+def Cartesian_product(l):
   # l sẽ bao gồm các list cần gộp vào với nhau theo kiểu từng phần tử 1
   # VD: l: [[[1],[2]], [[3],[4],[5]]]
   # đầu ra là [[1,3],[1,4], [1,5], [2,3], [2,4], [2,5]]
@@ -93,7 +94,7 @@ def CombineList(l):
     return [i[:] for i in l[0]]
   elif ln < 1:
     return [[]]
-  cl = CombineList(l[:ln-1])
+  cl = Cartesian_product(l[:ln-1])
   for i in l[-1]:
     for j in cl:
       lf.append(j+i)

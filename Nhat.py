@@ -26,7 +26,6 @@ def ChoosePoint(same_extra_element, new_dict, n = 1):
 def Cartesian_product(list_sets):
   # Hàm cũ : CombineList
   # speed x5.3(đã test)
-  print(list_sets)
   list_tranform = []
   for i in list_sets:
     Set = [k for j in i for k in j]
