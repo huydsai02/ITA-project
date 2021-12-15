@@ -10,9 +10,8 @@ def FullSituation(same_extra_element):
   for i in range(len(same_extra_points)):
     point = same_extra_points[i]
     points = Remove_Duplicate(same_extra_points[:i], same_extra_element[point])
-    if len(points) != 0:
-      l_key.append([point])
-      l_value.append(points)
+    l_key.append([point])
+    l_value.append(points)
     l_intersect[point] = points
     
   while True:
