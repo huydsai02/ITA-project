@@ -163,16 +163,17 @@ def Optimal_solution(maze, alg):
   sum_point = sum([list_point[x][y] for x, y in main_path])
   step = len(main_path) - 1
   highest_result = sum_point / step
-  all_info_alleys = TakeInfoAlley(list_point, alley, highest_result)
+  dict_score_div_step = PointScoreDivStep(alley, list_point)
+  all_info_alleys = TakeInfoAlley(list_point, alley, dict_score_div_step, highest_result)
   while True:
     old_len = len(current_best_road)
-    current_best_road, sum_point, step, highest_result = ExpandNode(list_point, dict_path, current_best_road, sum_point, step, highest_result, all_info_alleys)
+    current_best_road, sum_point, step, highest_result = ExpandNode(list_point, dict_path, current_best_road, sum_point, step, highest_result, all_info_alleys, dict_score_div_step)
     if len(current_best_road) == old_len:
       break
   full_step = PathAllPoint(maze, main_path, current_best_road)
   return sum_point, current_best_road, step, full_step, path_bot_go, main_path
 
-def ExpandNode(list_point, dict_path, current_best_road, sum_point, step, highest_result, all_info_alleys):
+def ExpandNode(list_point, dict_path, current_best_road, sum_point, step, highest_result, all_info_alleys, dict_score_div_step):
   if len(all_info_alleys) == 0:
     return (current_best_road, sum_point, step, highest_result)
   best_alley = BestGainAlley(all_info_alleys, highest_result)
@@ -186,7 +187,7 @@ def ExpandNode(list_point, dict_path, current_best_road, sum_point, step, highes
   for point in best_alley[4]:
     d[point] = dict_path[point]
   new_alley = TakeExtraPath(d, current_best_road)
-  all_info_alleys.extend(TakeInfoAlley(list_point, new_alley, highest_result))
+  all_info_alleys.extend(TakeInfoAlley(list_point, new_alley, dict_score_div_step, highest_result))
   return (current_best_road, sum_point, step, highest_result)
 
 def BestGainAlley(list_info_alleys, highest_result):
@@ -244,11 +245,11 @@ def PathAllPoint(maze, main_path, total_path):
       if (xs, ys) not in coors:
         coors.append((xs, ys))
 
-def TakeInfoAlley(list_point, dict_extra_path, highest_result):
+def TakeInfoAlley(list_point, dict_extra_path, dict_score_div_step, highest_result):
   info_all_alleys = Find_Subset(dict_extra_path)
   res = []
   for inp in info_all_alleys:
-    best_in_alley = OptimizeBackTracking(inp, dict_extra_path, list_point)
+    best_in_alley = OptimizeBackTracking(inp, dict_extra_path, list_point, dict_score_div_step)
     if best_in_alley[0] > highest_result:
       res.append(best_in_alley)
   return res
@@ -260,26 +261,26 @@ def Calculate(point_add, old_info, dict_path, dict_prev, list_point):
   formula = score / (2*len(all_cell))
   return (formula, score, all_cell, old_info[3])
 
-def SortPoint(inp, dict_extra_path, list_point):
+def PointScoreDivStep(dict_extra_path, list_point):
   all_cell = []
-  for point in inp:
+  for point in dict_extra_path:
     all_cell += dict_extra_path[point]
   all_cell = list(set(all_cell))
   dict_score_div_step = {}
-  for point in inp:
+  for point in dict_extra_path:
     step = 2
     reverse = dict_extra_path[point][::-1]
     for coordinate in reverse:
       if coordinate != point: 
-        if (coordinate in inp or len(DimRightRoad(coordinate, [], all_cell)) > 2):
+        if (coordinate in dict_extra_path or len(DimRightRoad(coordinate, [], all_cell)) > 2):
           break
         step += 2
     dict_score_div_step[point] = list_point[point[0]][point[1]] / step
-  return dict_score_div_step, sorted(list(inp), key = lambda x: dict_score_div_step[x])
+  return dict_score_div_step
     
-def OptimizeBackTracking(inp, dict_extra_path, list_point):
+def OptimizeBackTracking(inp, dict_extra_path, list_point, dict_score_div_step):
   l_key, l_value = [], []
-  dict_score_div_step, all = SortPoint(inp, dict_extra_path, list_point)
+  all = sorted(list(inp), key= lambda x : dict_score_div_step[x])
   best = (0,0,set(), tuple())
   l_intersect, d_path, d_prev = {}, {}, {}
   for i in range(len(all)):
@@ -309,7 +310,6 @@ def OptimizeBackTracking(inp, dict_extra_path, list_point):
         l_value.append(new_points)
       if new_info[0] > best[0]:
         best = new_info
-    
   formula, score, all_cell, _ = best
   step = 2*len(all_cell)
   point_left_in_alley = list(set(all) - all_cell)

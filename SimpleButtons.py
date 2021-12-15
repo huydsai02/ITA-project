@@ -20,6 +20,7 @@ class ButtonNewGame(Button):
     super().click(x,y)
     a, b = self.full_coor
     if a[0] <= x <= a[1] and b[0] <= y <= b[1]:
+      # print("-"*100)
       game.NewMaze()
       game.InitialState()
 class ButtonAgain(Button):
