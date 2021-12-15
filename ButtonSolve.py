@@ -3,8 +3,8 @@ from Color import *
 
 ########################## m muốn so sánh code của m với file nào thì sửa ở cái chữ import dưới. muốn so sánh 
 # file logic với file A thì để là import A as t, muốn với file B thì để là import B as t
-import A as t
-import Logic1 as Logic
+import UCS as t
+import Logic
 import SolveByDFS as dfs
 import time
 pygame.init()

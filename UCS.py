@@ -258,19 +258,36 @@ def Calculate(point_add, old_info, dict_path, dict_prev, list_point):
   score = old_info[1] + sum(list_point[x][y] for x, y in dict_prev[point_add] - old_all_cell)
   all_cell = old_all_cell.union(dict_path[point_add])
   formula = score / (2*len(all_cell))
-  return (formula, score, all_cell)
+  return (formula, score, all_cell, old_info[3])
 
+def SortPoint(inp, dict_extra_path, list_point):
+  all_cell = []
+  for point in inp:
+    all_cell += dict_extra_path[point]
+  all_cell = list(set(all_cell))
+  dict_score_div_step = {}
+  for point in inp:
+    step = 2
+    reverse = dict_extra_path[point][::-1]
+    for coordinate in reverse:
+      if coordinate != point: 
+        if (coordinate in inp or len(DimRightRoad(coordinate, [], all_cell)) > 2):
+          break
+        step += 2
+    dict_score_div_step[point] = list_point[point[0]][point[1]] / step
+  return dict_score_div_step, sorted(list(inp), key = lambda x: dict_score_div_step[x])
+    
 def OptimizeBackTracking(inp, dict_extra_path, list_point):
   l_key, l_value = [], []
-  all = list(inp.keys())
-  best = (0,0,set())
+  dict_score_div_step, all = SortPoint(inp, dict_extra_path, list_point)
+  best = (0,0,set(), tuple())
   l_intersect, d_path, d_prev = {}, {}, {}
   for i in range(len(all)):
     point = all[i]
     d_path[point] = set(dict_extra_path[point])
     d_prev[point] = set(inp[point][1])
-    info = Calculate(point, (0,0,set()), d_path, d_prev, list_point)
-    st = set(all[:i]) - set(inp[point][0]) - set(inp[point][1])
+    info = Calculate(point, (0,0,set(),point), d_path, d_prev, list_point)
+    st = set(all[i+1:]) - set(inp[point][0]) - set(inp[point][1])
     if len(st) != 0:
       l_key.append(info)
       l_value.append(st)
@@ -282,6 +299,8 @@ def OptimizeBackTracking(inp, dict_extra_path, list_point):
       break
     old_info = l_key.pop()
     points = l_value.pop()
+    if best[0] > dict_score_div_step[old_info[3]]:
+      continue
     for point in points:
       new_info = Calculate(point, old_info, d_path, d_prev, list_point)
       new_points = set.intersection(points, l_intersect[point])
@@ -291,7 +310,7 @@ def OptimizeBackTracking(inp, dict_extra_path, list_point):
       if new_info[0] > best[0]:
         best = new_info
     
-  formula, score, all_cell = best
+  formula, score, all_cell, _ = best
   step = 2*len(all_cell)
   point_left_in_alley = list(set(all) - all_cell)
   all_cell = list(all_cell)
