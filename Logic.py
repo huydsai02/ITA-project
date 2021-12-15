@@ -1,4 +1,5 @@
 from GeneralFunction import *
+import Nhat as test
 
 ############################################## An #############################
 def MazeAnalysis(maze, alg):
@@ -21,8 +22,8 @@ def Optimal_solution(maze, alg):
   full_info, same_extra = Find_Subset(dict_extra_path, enumerate = True)
   new_inp = []
   for inp in same_extra:
-    new_inp.append(FullSituation(inp))
-  list_subset = CombineList(new_inp)
+    new_inp.append(test.FullSituation(inp))
+  list_subset = test.Cartesian_product(new_inp)
   sum_point_main = sum([list_point[x][y] for x, y in main_path])
   print(len(list_subset))  
   for subset in list_subset:
