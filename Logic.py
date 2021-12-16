@@ -23,8 +23,8 @@ def Optimal_solution(maze, alg):
   new_inp = []
   for inp in same_extra:
   ######################################### Nếu ông muốn dùng code của mình thì thêm test. còn không thì bỏ đi ####
-    new_inp.append(test.FullSituation(inp))
-  list_subset = test.Cartesian_product(new_inp)
+    new_inp.append(FullSituation(inp))
+  list_subset = Cartesian_product(new_inp)
   sum_point_main = sum([list_point[x][y] for x, y in main_path])
   print(len(list_subset))  
   for subset in list_subset:

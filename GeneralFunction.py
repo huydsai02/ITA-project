@@ -1,6 +1,12 @@
 from CreateMatrix import *
 
 def FindValidDirection(pos, list_maze, direction = None):
+  '''INPUT
+        pos: current position of the agent
+        list_maze: matrix respresentation of the maze
+        direction: the action that the agent took to reach the pos
+     OUTPUT
+        return directions that do not lead to wall '''  
   steps = [(0,1), (0,-1), (1,0), (-1,0)]
   directions = [] if direction == None else [(-1 * direction[0], -1 * direction[1])]
   for step in steps:
@@ -11,10 +17,16 @@ def FindValidDirection(pos, list_maze, direction = None):
 
 
 def Manhattan(x1, x2):
+  '''INPUT
+        Two different positions x1 and x2
+     OUTPUT
+        return Manhattan distance between two positions'''
   return abs(x1[0] - x2[0]) + abs(x1[1] - x2[1])
 
 
 def PriorPop(paths, points= []):
+  '''OUTPUT:
+         return the path that is closest to a point in points in term of Manhattan distance''' 
   if len(points):
     min_value = float('inf')
     min_path = paths[-1]
@@ -30,6 +42,8 @@ def PriorPop(paths, points= []):
 
 
 def DiscoverMaze(maze, points = [], alg= 'dfs'):
+  '''OUTPUT:
+         return every simple path between start position to a point position or end position''' 
   xs,ys = maze.get_start_point()
   list_maze = maze.get_list_maze()
   paths = {}
@@ -109,39 +123,8 @@ def TakeExtraPath(dict_path, main_path):
     if len(extra_path) > 0:
       dict_extra_path[point] = extra_path
   return dict_extra_path
-  
-######################################### Cần xem xét từ đây ####################################
 
-def Find_Subset(dict_extra_path, enumerate = False):
-  extra_points = list(dict_extra_path.keys())
-  res = {}
-  start_extra = {}
-  for point in extra_points:
-    # tập b là tập những điểm phải đi qua point mới đến được
-    b = [point]
-    # tập c là tập những điểm phải đi qua mới đến point được
-    c = [point]
-    start_extra[dict_extra_path[point][0]] = start_extra.get(dict_extra_path[point][0],[])
-    start_extra[dict_extra_path[point][0]].append(point)
-    for other_point in extra_points:
-      if point in dict_extra_path[other_point]:
-          b.append(other_point)
-      if other_point in dict_extra_path[point]:
-          c.append(other_point)
-    b = list(set(b))
-    c = list(set(c))
-    res[point] = [b[:],c[:]]
-  same_extra = []
-  for point in start_extra:
-    a = {}
-    for other_point in start_extra[point]:
-      a[other_point] = res[other_point]
-    same_extra.append(a)
-  if enumerate:
-    return res, same_extra
-  return same_extra  
-
-def DimRightRoad(pos, main_path, total_path, direction = None): # Là hàm FindDirectionIsPath cũ
+def DirectionRightRoad(pos, main_path, total_path, direction = None):
   steps = [(0,1), (0,-1), (1,0), (-1,0)]
   directions = []
   if direction != None:
@@ -154,28 +137,56 @@ def DimRightRoad(pos, main_path, total_path, direction = None): # Là hàm FindD
       directions.append(step)
   return directions
 
+def Find_Subset(dict_extra_path, enumerate = False):
+  extra_points = list(dict_extra_path.keys())
+  res = {}
+  start_extra = {}
+  for point in extra_points:
+    # b is the set containing all point positions that the agent has to pass the given point to reach
+    descendant_points = [point]
+    # c is the set containing all point positions that the agent has to pass to reach the given point
+    ascendant_points = [point]
+    start_extra[dict_extra_path[point][0]] = start_extra.get(dict_extra_path[point][0],[])
+    start_extra[dict_extra_path[point][0]].append(point)
+    for other_point in extra_points:
+      if point in dict_extra_path[other_point]:
+          descendant_points.append(other_point)
+      if other_point in dict_extra_path[point]:
+          ascendant_points.append(other_point)
+    descendant_points = list(set(descendant_points))
+    ascendant_points = list(set(ascendant_points))
+    res[point] = [descendant_points[:],ascendant_points[:]]
+  same_extra = []
+  for point in start_extra:
+    temp = {}
+    for other_point in start_extra[point]:
+      temp[other_point] = res[other_point]
+    same_extra.append(temp)
+  if enumerate:
+    return res, same_extra
+  return same_extra    
+
 def PathAllPoint(maze, main_path, total_path):
-  xs, ys = maze.get_start_point()
+  x, y = maze.get_start_point()
   points = list(set(total_path))
-  coors = [(xs, ys)]
-  dims = {}
-  dims[(xs, ys)] = DimRightRoad((xs,ys), main_path, total_path)
+  positions = [(x, y)]
+  directions = {}
+  directions[(x, y)] = DirectionRightRoad((x,y), main_path, total_path)
   path_bot_go = []
   while True:
-    if (xs, ys) in points:
-      points.remove((xs, ys))
-    if (xs, ys) == maze.get_end_point() and len(points) == 0:
-      path_bot_go.append([(xs,ys), [()]])
+    if (x, y) in points:
+      points.remove((x, y))
+    if (x, y) == maze.get_end_point() and len(points) == 0:
+      path_bot_go.append([(x,y), [()]])
       return path_bot_go
-    if len(dims[coors[-1]]) == 0:
-      coors.pop()
-      xs, ys = coors[-1]
+    if len(directions[positions[-1]]) == 0:
+      positions.pop()
+      x, y = positions[-1]
     else:
-      dim = dims[(xs,ys)]
-      cpath = dim.pop()
-      path_bot_go.append([(xs,ys), [cpath]])
-      xs += cpath[0]
-      ys += cpath[1]
-      dims[(xs,ys)] = dims.get((xs,ys), DimRightRoad((xs,ys), main_path, total_path, direction = cpath))
-      if (xs, ys) not in coors:
-        coors.append((xs, ys))
+      direction = directions[(x,y)].pop()
+      path_bot_go.append([(x,y), [direction]])
+      x += direction[0]
+      y += direction[1]
+      directions[(x,y)] = directions.get((x,y), DirectionRightRoad((x,y), main_path, total_path, direction))
+      if (x, y) not in positions:
+        positions.append((x, y))

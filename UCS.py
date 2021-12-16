@@ -89,7 +89,7 @@ def PointScoreDivStep(dict_extra_path, list_point):
     reverse = dict_extra_path[point][::-1]
     for coordinate in reverse:
       if coordinate != point: 
-        if (coordinate in dict_extra_path or len(DimRightRoad(coordinate, [], all_cell)) > 2):
+        if (coordinate in dict_extra_path or len(DirectionRightRoad(coordinate, [], all_cell)) > 2):
           break
         step += 2
     dict_score_div_step[point] = list_point[point[0]][point[1]] / step
