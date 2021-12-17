@@ -17,7 +17,7 @@ class MenuSolve(Menu):
     self.screen = screen
     _, _, _, self.full_step, _ = UCS.Optimal_solution(maze, bot.dict_path)
     self.btn_again = ButtonAgain(name = "back", pos = (775,150), screen = self.screen)
-    self.btn_new_game = ButtonNewGame(pos = (775,200), screen = self.screen)
+    self.btn_new_game = ButtonNewGame(pos = (775,500), screen = self.screen)
     self.list_btn = [None, None, None]
     self.btn_best_path = ButtonBestPath(pos = (775, 250), screen = self.screen, SPEED = speed, list_button = self.list_btn)
     self.btn_ucs = ButtonSolve(maze, alg = "ucs", screen = self.screen, pos = (775, 300), SPEED= 0.01, list_button = self.list_btn)
@@ -62,7 +62,8 @@ class MenuSolve(Menu):
       self.btn_ucs.click(x, y, self.maze, self.bot, self)
       self.btn_enumerate.click(x, y, self.maze, self.bot, self)
       self.btn_cancel.click(x, y, self.bot)
-
+      return -1, -1
+    return x, y
       # self.btn_show_map.click(x,y, self.bot)
       # self.btn_dfs.click(x, y, self.bot, self.btn_show_map, self.list_btn_discover)
       # self.btn_a.click(x, y, self.bot, self.btn_show_map, self.list_btn_discover)

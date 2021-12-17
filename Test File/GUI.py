@@ -82,8 +82,8 @@ class Game(object):
 					pygame.quit()
 					sys.exit()
 				if event.type == pygame.MOUSEBUTTONDOWN:
-					self.menu_discover.ClickButtons(x,y)
-					self.menu_solve.ClickButtons(x,y, self)
+					x, y = self.menu_discover.ClickButtons(x,y)
+					x, y = self.menu_solve.ClickButtons(x,y, self)
 
 				if event.type == pygame.KEYDOWN:
 					if event.key in [K_s, K_DOWN] and self.bot.CheckStateButtons(self.menu_discover.list_btn_discover):

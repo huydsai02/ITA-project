@@ -43,6 +43,8 @@ class MenuDiscover(Menu):
       self.btn_bfs.click(x, y, self.bot, self.btn_show_map, self.list_btn_discover, self)
       self.btn_skip.click(x, y, self.list_menu[1], self.btn_show_map, self.bot)
       self.btn_cancel.click(x, y, self.bot)
+      return -1, -1
+    return x, y
 
   def ShowInfo(self, Info, pos = (0,0), size=20):
     fnt = pygame.font.Font('freesansbold.ttf', size)
