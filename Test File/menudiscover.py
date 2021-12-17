@@ -17,15 +17,15 @@ class MenuDiscover(Menu):
     self.btn_a = ButtonDiscover(alg = "a*", pos = (775,300), screen = screen, maze = self.maze, SPEED = speed)
     self.btn_bfs = ButtonDiscover(alg = "bfs", pos = (775,350), screen = screen, maze = self.maze, SPEED = speed)
     self.btn_show_map = ButtonShowMap(pos = (775,450), screen = screen)
-    self.btn_skip = ButtonSkip(pos = (775,500), screen = screen, bot = bot, maze = maze)
+    self.btn_skip = ButtonSkip(pos = (775,550), screen = screen, bot = bot, maze = maze)
     self.list_btn_discover = [self.btn_dfs, self.btn_a, self.btn_bfs]
-    self.btn_cancel = ButtonCancel(self.list_btn_discover, pos = (775,550), screen = screen)
+    self.btn_cancel = ButtonCancel(self.list_btn_discover, pos = (775,500), screen = screen)
 
   def ShowAndAct(self, x, y):
     if self.state:
       pygame.draw.rect(self.screen, BACKGROUND_COLOR, (700,0,400,1100))
-      self.ShowInfo(f'TIME: {self.time}', pos = (775,175), size=20)
-      self.ShowInfo("DISCOVER MAZE ?", pos = (775,200), size=20)
+      self.ShowInfo(f'TIME: {self.time}', pos = (775,225), size=20)
+      # self.ShowInfo("DISCOVER MAZE ?", pos = (775,200), size=20)
       self.ShowInfo('DISCOVER', size = 15, pos = (815, 400))
       pygame.draw.rect(self.screen, COLOR_SHOW_INFO, (770, 247, 181, 150), 2, 5)
       self.btn_dfs.ShowAndAct(x,y, self.bot)

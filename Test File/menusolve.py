@@ -16,16 +16,16 @@ class MenuSolve(Menu):
     self.maze = maze
     self.screen = screen
     _, _, _, self.full_step, _ = UCS.Optimal_solution(maze, bot.dict_path)
-    self.btn_again = ButtonAgain(name = "back", pos = (775,150), screen = self.screen)
-    self.btn_new_game = ButtonNewGame(pos = (775,500), screen = self.screen)
+    self.btn_again = ButtonAgain(name = "back", pos = (775,550), screen = self.screen)
+    self.btn_new_game = ButtonNewGame(pos = (775,450), screen = self.screen)
     self.list_btn = [None, None, None]
-    self.btn_best_path = ButtonBestPath(pos = (775, 250), screen = self.screen, SPEED = speed, list_button = self.list_btn)
-    self.btn_ucs = ButtonSolve(maze, alg = "ucs", screen = self.screen, pos = (775, 300), SPEED= 0.01, list_button = self.list_btn)
-    self.btn_enumerate = ButtonSolve(maze, alg = "enumerate", screen = self.screen, pos = (775, 350), SPEED= 0.05, list_button = self.list_btn)
+    self.btn_best_path = ButtonBestPath(pos = (775, 350), screen = self.screen, SPEED = speed, list_button = self.list_btn)
+    self.btn_ucs = ButtonSolve(maze, alg = "ucs", screen = self.screen, pos = (775, 250), SPEED= 0.01, list_button = self.list_btn)
+    self.btn_enumerate = ButtonSolve(maze, alg = "enumerate", screen = self.screen, pos = (775, 300), SPEED= 0.05, list_button = self.list_btn)
     self.list_btn[0] = self.btn_best_path
     self.list_btn[1] = self.btn_ucs
     self.list_btn[2] = self.btn_enumerate
-    self.btn_cancel = ButtonCancel(self.list_btn, pos = (775,550), screen = screen)
+    self.btn_cancel = ButtonCancel(self.list_btn, pos = (775,500), screen = screen)
 
     
 
