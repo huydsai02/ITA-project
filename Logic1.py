@@ -25,10 +25,10 @@ def Optimal_solution(maze, alg):
     point = all[i]
     d_prev[point] = set(relation_each_point[point][1])
     info = Calculate(point, best, dict_extra_path, d_prev, list_point)
-    st = set(all[:i]) - set(relation_each_point[point][0]) - set(relation_each_point[point][1])
+    point_can_choose = set(all[:i]) - set(relation_each_point[point][0]) - set(relation_each_point[point][1])
     l_key.append(info)
-    l_value.append(st)
-    l_intersect[point] = st
+    l_value.append(point_can_choose)
+    l_intersect[point] = point_can_choose
 
   while True:
     if len(l_key) == 0:

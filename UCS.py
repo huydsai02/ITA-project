@@ -21,20 +21,23 @@ def Optimal_solution(maze, alg):
   step = len(main_path) - 1
   highest_result = sum_point / step
   all_info_alleys = TakeHighestEachAlley(list_point, alley, dict_score_div_step, highest_result)
+  info_optimal_result = (current_best_road, sum_point, step, highest_result)
   while True:
-    old_len = len(current_best_road)
-    current_best_road, sum_point, step, highest_result = ExpandNode(list_point, dict_path, current_best_road, sum_point, step, highest_result, all_info_alleys, dict_score_div_step)
-    if len(current_best_road) == old_len:
+    old_len = len(info_optimal_result[0])
+    info_optimal_result = ExpandNode(list_point, dict_path, info_optimal_result, all_info_alleys, dict_score_div_step)
+    if len(info_optimal_result[0]) == old_len:
       break
+  current_best_road, sum_point, step, highest_result = info_optimal_result
   full_step = PathAllPoint(maze, main_path, current_best_road)
   return sum_point, current_best_road, step, full_step, path_bot_go
 
-def ExpandNode(list_point, dict_path, current_best_road, sum_point, step, highest_result, all_info_alleys, dict_score_div_step):
+def ExpandNode(list_point, dict_path, info_optimal_result, all_info_alleys, dict_score_div_step):
   if len(all_info_alleys) == 0:
-    return (current_best_road, sum_point, step, highest_result)
+    return info_optimal_result
+  current_best_road, sum_point, step, highest_result = info_optimal_result
   best_alley = HighestInAllAlley(all_info_alleys, highest_result)
   if best_alley == []:
-    return (current_best_road, sum_point, step, highest_result)
+    return info_optimal_result
   sum_point += best_alley[1]
   step += best_alley[2]
   highest_result = sum_point/step
@@ -105,11 +108,11 @@ def HighestInOneAlley(inp, dict_extra_path, list_point, dict_score_div_step):
     d_path[point] = set(dict_extra_path[point])
     d_prev[point] = set(inp[point][1])
     info = Calculate(point, (0,0,set(),point), d_path, d_prev, list_point)
-    st = set(all[i+1:]) - set(inp[point][0]) - set(inp[point][1])
-    if len(st) != 0:
+    point_can_choose = set(all[i+1:]) - set(inp[point][0]) - set(inp[point][1])
+    if len(point_can_choose) != 0:
       l_key.append(info)
-      l_value.append(st)
-    l_intersect[point] = st
+      l_value.append(point_can_choose)
+    l_intersect[point] = point_can_choose
     if info[0] > best[0]:
       best = info 
   while True:
