@@ -20,7 +20,7 @@ def Optimal_solution(maze, alg):
   sum_point = sum([list_point[x][y] for x, y in main_path])
   step = len(main_path) - 1
   highest_result = sum_point / step
-  all_info_alleys = TakeInfoAlley(list_point, alley, dict_score_div_step, highest_result)
+  all_info_alleys = TakeHighestEachAlley(list_point, alley, dict_score_div_step, highest_result)
   while True:
     old_len = len(current_best_road)
     current_best_road, sum_point, step, highest_result = ExpandNode(list_point, dict_path, current_best_road, sum_point, step, highest_result, all_info_alleys, dict_score_div_step)
@@ -32,7 +32,7 @@ def Optimal_solution(maze, alg):
 def ExpandNode(list_point, dict_path, current_best_road, sum_point, step, highest_result, all_info_alleys, dict_score_div_step):
   if len(all_info_alleys) == 0:
     return (current_best_road, sum_point, step, highest_result)
-  best_alley = BestGainAlley(all_info_alleys, highest_result)
+  best_alley = HighestInAllAlley(all_info_alleys, highest_result)
   if best_alley == []:
     return (current_best_road, sum_point, step, highest_result)
   sum_point += best_alley[1]
@@ -43,10 +43,10 @@ def ExpandNode(list_point, dict_path, current_best_road, sum_point, step, highes
   for point in best_alley[4]:
     d[point] = dict_path[point]
   new_alley = TakeExtraPath(d, current_best_road)
-  all_info_alleys.extend(TakeInfoAlley(list_point, new_alley, dict_score_div_step, highest_result))
+  all_info_alleys.extend(TakeHighestEachAlley(list_point, new_alley, dict_score_div_step, highest_result))
   return (current_best_road, sum_point, step, highest_result)
 
-def BestGainAlley(list_info_alleys, highest_result):
+def HighestInAllAlley(list_info_alleys, highest_result):
   max_in_alley = 0
   list_remove = []
   best_alley = []
@@ -62,11 +62,11 @@ def BestGainAlley(list_info_alleys, highest_result):
     list_info_alleys.remove(_)
   return best_alley
 
-def TakeInfoAlley(list_point, dict_extra_path, dict_score_div_step, highest_result):
+def TakeHighestEachAlley(list_point, dict_extra_path, dict_score_div_step, highest_result):
   info_all_alleys = Find_Subset(dict_extra_path)
   res = []
   for inp in info_all_alleys:
-    best_in_alley = OptimizeBackTracking(inp, dict_extra_path, list_point, dict_score_div_step)
+    best_in_alley = HighestInOneAlley(inp, dict_extra_path, list_point, dict_score_div_step)
     if best_in_alley[0] > highest_result:
       res.append(best_in_alley)
   return res
@@ -95,7 +95,7 @@ def PointScoreDivStep(dict_extra_path, list_point):
     dict_score_div_step[point] = list_point[point[0]][point[1]] / step
   return dict_score_div_step
     
-def OptimizeBackTracking(inp, dict_extra_path, list_point, dict_score_div_step):
+def HighestInOneAlley(inp, dict_extra_path, list_point, dict_score_div_step):
   l_key, l_value = [], []
   all = sorted(list(inp), key = lambda x : dict_score_div_step[x])
   best = (0,0,set(), tuple())
