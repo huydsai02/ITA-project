@@ -17,7 +17,7 @@ class ButtonSkip(Button):
     a, b = self.full_coor
     if a[0] <= x <= a[1] and b[0] <= y <= b[1]:
       menu.TurnOn()
-      show_map.state = False
+      show_map.state = True
       bot.PathHasGone = []
       for key in bot.dict_path:
         bot.PathHasGone += bot.dict_path[key]

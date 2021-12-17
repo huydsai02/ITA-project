@@ -1,3 +1,4 @@
+from os import curdir
 from Button import *
 from Color import *
 import time
@@ -15,7 +16,8 @@ class ButtonSolve(Button):
     self.initial = 0
     self.speed = SPEED
     self.remember = []
-    self.DrawRed = []
+    self.DrawRed = set()
+    self.set_add = set()
 
   def click(self,x, y, maze, bot, menu):
     super().click(x,y)
@@ -26,7 +28,8 @@ class ButtonSolve(Button):
       # for btn in l:
       #   if self.name != btn.name:
       #     btn.other_state = False
-      self.DrawRed = []
+      self.DrawRed = set()
+      self.set_add = set()
       self.change_state()
       self.initial = 0
       bot.InitialBot()
@@ -49,9 +52,15 @@ class ButtonSolve(Button):
       # best_path.optimal_path = self.optimal_path
 
   def ShowBotGo(self, l, i, bot):		
-    if int(i) < len(l):
-      self.DrawRed += list(l[int(i)])
+    number = int(i)
+    if number < len(l):
+      current_set = set(l[number])
+      if current_set != self.DrawRed:
+        self.set_add = current_set - self.DrawRed
+        self.DrawRed = current_set
+      bot.draw()
       self.DrawCircle(self.DrawRed, (255, 0, 0 ))
+      self.DrawCircle(self.set_add, (0,255,0))
       return True
       res = [] 
       if dims != [] and dims[0] != ():    
@@ -70,6 +79,9 @@ class ButtonSolve(Button):
       #   bot.nc = res
       # else:
       if res == None:
+        time.sleep(0.5)
+        self.DrawCircle(self.DrawRed, (255, 0, 0 ))
+        self.set_add = set()
         # for _ in self.l:
         #   _.other_state = True
         self.state = False

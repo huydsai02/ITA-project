@@ -19,7 +19,7 @@ class MenuSolve(Menu):
     self.btn_again = ButtonAgain(pos = (775,150), screen = self.screen)
     self.btn_new_game = ButtonNewGame(pos = (775,200), screen = self.screen)
     self.btn_best_path = ButtonBestPath(pos = (775, 250), screen = self.screen, SPEED = speed)
-    self.btn_ucs = ButtonSolve(maze, alg = "ucs", screen = self.screen, pos = (775, 300), SPEED= 0.05)
+    self.btn_ucs = ButtonSolve(maze, alg = "ucs", screen = self.screen, pos = (775, 300), SPEED= 0.01)
     self.btn_enumerate = ButtonSolve(maze, alg = "enumerate", screen = self.screen, pos = (775, 350), SPEED= 0.05)
 
     # self.btn_dfs = ButtonDiscover(alg = "dfs", pos = (775,250), screen = screen, maze = self.maze, SPEED = speed)
