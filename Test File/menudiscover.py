@@ -2,6 +2,7 @@ import pygame
 from ButtonDiscover import ButtonDiscover
 from menu import Menu
 from SimpleButtons import ButtonShowMap
+from ButtonCancel import ButtonCancel
 from Color import *
 from ButtonSkip import ButtonSkip
 
@@ -18,6 +19,7 @@ class MenuDiscover(Menu):
     self.btn_show_map = ButtonShowMap(pos = (775,450), screen = screen)
     self.btn_skip = ButtonSkip(pos = (775,500), screen = screen, bot = bot, maze = maze)
     self.list_btn_discover = [self.btn_dfs, self.btn_a, self.btn_bfs]
+    self.btn_cancel = ButtonCancel(self.list_btn_discover, pos = (775,550), screen = screen)
 
   def ShowAndAct(self, x, y):
     if self.state:
@@ -31,6 +33,7 @@ class MenuDiscover(Menu):
       self.btn_bfs.ShowAndAct(x,y,self.bot)
       self.btn_show_map.ShowAndAct(x,y)
       self.btn_skip.ShowAndAct(x, y)
+      self.btn_cancel.ShowAndAct(x, y)
 
   def ClickButtons(self, x, y):
     if self.state:
@@ -39,6 +42,7 @@ class MenuDiscover(Menu):
       self.btn_a.click(x, y, self.bot, self.btn_show_map, self.list_btn_discover, self)
       self.btn_bfs.click(x, y, self.bot, self.btn_show_map, self.list_btn_discover, self)
       self.btn_skip.click(x, y, self.list_menu[1], self.btn_show_map, self.bot)
+      self.btn_cancel.click(x, y, self.bot)
 
   def ShowInfo(self, Info, pos = (0,0), size=20):
     fnt = pygame.font.Font('freesansbold.ttf', size)

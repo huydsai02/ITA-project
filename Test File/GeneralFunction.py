@@ -62,9 +62,9 @@ def DiscoverMaze(maze, points = [], alg= 'dfs'):
         x += direction[0]
         y += direction[1]
         valid_direction[(x,y)] = valid_direction.get((x,y), FindValidDirection((x,y), list_maze, direction))
+        path_bot_go.append([(x,y), valid_direction[(x,y)][:]])
         if (x, y) not in subpath:
           subpath.append((x, y))
-          path_bot_go.append([(x,y), valid_direction[(x,y)][:]])
 
       if (x, y) in points:
         path = subpath[:]

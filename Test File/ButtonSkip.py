@@ -3,7 +3,7 @@ import GeneralFunction
 
 class ButtonSkip(Button):
   def __init__(self, pos = (0,0), font = 20, size = (170,45), screen = None, bot = None, maze = None):
-    super().__init__("SKIP" ,  pos, font, size, screen)
+    super().__init__("next" ,  pos, font, size, screen)
     self.maze = maze
     if bot.dict_path == None:
       size = self.maze.get_size()
@@ -18,6 +18,7 @@ class ButtonSkip(Button):
     if a[0] <= x <= a[1] and b[0] <= y <= b[1]:
       menu.TurnOn()
       show_map.state = True
+      bot.InitialBot()
       bot.PathHasGone = []
       for key in bot.dict_path:
         bot.PathHasGone += bot.dict_path[key]

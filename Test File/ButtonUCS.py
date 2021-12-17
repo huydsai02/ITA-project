@@ -9,7 +9,7 @@ import Logic
 pygame.init()
 
 class ButtonSolve(Button):
-  def __init__(self,maze, alg = 'ucs', pos = (0,0), font = 20, size = (170,45), screen = None, SPEED = 0.07):
+  def __init__(self,maze, alg = 'ucs', pos = (0,0), font = 20, size = (170,45), screen = None, SPEED = 0.07, list_button = None):
     super().__init__(alg ,  pos, font, size, screen)
     self.maze = maze
     self.alg = alg.lower()
@@ -18,16 +18,15 @@ class ButtonSolve(Button):
     self.remember = []
     self.DrawRed = set()
     self.set_add = set()
-
+    self.list_button = list_button
   def click(self,x, y, maze, bot, menu):
     super().click(x,y)
     a, b = self.full_coor
     if a[0] <= x <= a[1] and b[0] <= y <= b[1] and self.other_state and not self.state:
-      # self.l = l
       self.side = bot.side
-      # for btn in l:
-      #   if self.name != btn.name:
-      #     btn.other_state = False
+      for btn in self.list_button:
+        if self.name != btn.name:
+          btn.other_state = False
       self.DrawRed = set()
       self.set_add = set()
       self.change_state()
@@ -59,8 +58,8 @@ class ButtonSolve(Button):
         self.set_add = current_set - self.DrawRed
         self.DrawRed = current_set
       bot.draw()
-      self.DrawCircle(self.DrawRed, (255, 0, 0 ))
-      self.DrawCircle(self.set_add, (0,255,0))
+      self.DrawCircle(self.DrawRed, (179, 210, 229), bot)
+      self.DrawCircle(self.set_add, (255, 105, 0), bot)
       return True
       res = [] 
       if dims != [] and dims[0] != ():    
@@ -80,10 +79,10 @@ class ButtonSolve(Button):
       # else:
       if res == None:
         time.sleep(0.5)
-        self.DrawCircle(self.DrawRed, (255, 0, 0 ))
+        self.DrawCircle(self.DrawRed, (179, 210, 229), bot)
         self.set_add = set()
-        # for _ in self.l:
-        #   _.other_state = True
+        for _ in self.list_button:
+          _.other_state = True
         self.state = False
         bot.PathHasGone = self.remember
 
@@ -91,11 +90,12 @@ class ButtonSolve(Button):
     self.show(x,y)
     self.active(bot)
     
-  def DrawCircle(self,l, color):
+  def DrawCircle(self,l, color, bot):
     decrease = 0
     radius = self.side // 3
     side = self.side
     for (x, y) in l:
       pygame.draw.circle(self.screen, color, (x*side + side/2, y*side + side/2), radius-2*decrease)
+    bot.write_score()
 
     

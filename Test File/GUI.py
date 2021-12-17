@@ -8,7 +8,7 @@ from menusolve import MenuSolve
 
 class Game(object):
 	SPEED = 1
-	_size = (41,41); _num_point = 100; _start = (1,1); _end = (39,39)
+	_size = (41,41); _num_point = 20; _start = (1,1); _end = (39,39)
 	SIZE = (1050,670)
 
 	def __init__(self):

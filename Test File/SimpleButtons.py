@@ -24,8 +24,8 @@ class ButtonNewGame(Button):
       game.NewMaze()
       game.InitialState()
 class ButtonAgain(Button):
-  def __init__(self, pos = (0,0), font = 20, size = (170,45), screen = None):
-    super().__init__("reset" ,  pos, font, size, screen)
+  def __init__(self, name = "reset", pos = (0,0), font = 20, size = (170,45), screen = None):
+    super().__init__(name ,  pos, font, size, screen)
     # self.show_solution = False
   def click(self,x, y, game):
     super().click(x,y)
@@ -33,5 +33,3 @@ class ButtonAgain(Button):
     if a[0] <= x <= a[1] and b[0] <= y <= b[1]:
       game.InitialState()
 
-
-    
