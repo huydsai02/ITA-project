@@ -4,9 +4,7 @@ from Color import *
 ########################## m muốn so sánh code của m với file nào thì sửa ở cái chữ import dưới. muốn so sánh 
 # file logic với file A thì để là import A as t, muốn với file B thì để là import B as t
 import UCS as t
-import Logic1 as Logic
-import SolveByDFS as dfs
-import time
+import Logic as Logic
 pygame.init()
 
 class ButtonSolve(Button):
@@ -45,9 +43,9 @@ class ButtonSolve(Button):
         self.score, self.optimal_path, self.len_of_best, self.op_road, self.path_bot_go\
            = Logic.Optimal_solution(self.maze, self.alg)
       if solution.point/solution.length == self.score/self.len_of_best:
-        print(True)
+        print("SAME RESULT", True)
       else:
-        print(False)
+        print("SAME RESULT", False)
         print(f'OLD STEP: {solution.length} and OLD SCORE: {solution.point}')
         print(f'NEW STEP: {self.len_of_best} and NEW SCORE: {self.score}')
 

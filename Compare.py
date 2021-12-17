@@ -2,7 +2,7 @@ from CreateMatrix import Maze
 
 ############################# Muốn so sánh thì đổi tên Logic hoặc Logic1 bên dưới ############
 import Logic as Logic
-import Logic1 as t
+import UCS as t
 
 _size = (41,41); _num_point = 20; _start = (1,1); _end = (39,39)
 alg = "dfs"
