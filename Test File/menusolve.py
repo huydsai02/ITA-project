@@ -38,7 +38,7 @@ class MenuSolve(Menu):
   def ShowAndAct(self, x, y):
     if self.state:
       pygame.draw.rect(self.screen, BACKGROUND_COLOR, (700,0,400,1100))
-      self.ShowInfo(f'TIME: {self.time}', pos = (775,125), size=20)
+      self.ShowInfo(f'TIME: {self.time}', pos = (775,225), size=20)
       self.btn_again.ShowAndAct(x,y)
       self.btn_new_game.ShowAndAct(x,y)
       self.btn_best_path.ShowAndAct(x, y, self.bot)
@@ -75,7 +75,7 @@ class MenuSolve(Menu):
     self.screen.blit(text, pos)
 
   def GradeTable(self):
-    self.ShowInfo(f'TOTAL POINT: {self.bot.point}', size=20, pos = (785, 25))
-    self.ShowInfo(f'TOTAL STEP: {self.bot.step}', size=20, pos = (785, 55))
+    self.ShowInfo(f'TOTAL POINT: {self.bot.point}', size=20, pos = (775, 150))
+    self.ShowInfo(f'TOTAL STEP: {self.bot.step}', size=20, pos = (775, 175))
     string = f'FINAL POINT: {round(self.bot.point/self.bot.step,2)}' if self.bot.step != 0 else 'FINAL POINT: 0'
-    self.ShowInfo(string, size=20, pos = (785, 85)) 
+    self.ShowInfo(string, size=20, pos = (775, 200)) 
