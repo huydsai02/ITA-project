@@ -41,6 +41,7 @@ class ButtonSolve(Button):
       menu.time = round(time.time() - t1,3)
       self.remember = bot.PathHasGone
       bot.PathHasGone = []
+      bot.point = bot.step = 0
       # print('SAME PATH:', set(solution.path) == set(self.optimal_path))
       # print("SAME STEP", solution.length == self.len_of_best)
       # print("SAME SCORE", solution.point == self.score)
@@ -53,13 +54,16 @@ class ButtonSolve(Button):
   def ShowBotGo(self, l, i, bot):		
     number = int(i)
     if number < len(l):
-      current_set = set(l[number])
+      info_extend = l[number]
+      current_set = set(info_extend[0])
+      bot.point = info_extend[1]
+      bot.step = info_extend[2]
       if current_set != self.DrawRed:
         self.set_add = current_set - self.DrawRed
         self.DrawRed = current_set
       bot.draw()
       self.DrawCircle(self.DrawRed, (179, 210, 229), bot)
-      self.DrawCircle(self.set_add, (255, 105, 0), bot)
+      self.DrawCircle(self.set_add, (255, 195, 0), bot)
       return True
       res = [] 
       if dims != [] and dims[0] != ():    
@@ -85,6 +89,7 @@ class ButtonSolve(Button):
           _.other_state = True
         self.state = False
         bot.PathHasGone = self.remember
+        # bot.write_score()
 
   def ShowAndAct(self, x, y, bot):
     self.show(x,y)

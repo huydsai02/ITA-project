@@ -47,7 +47,7 @@ def Optimal_solution(maze, dict_path):
   best_road = list(best[3])
   number_best_step = best[2]
   full_step = PathAllPoint(maze, main_path, best_road)
-  return total_best_score, best_road, number_best_step, full_step, [best_road]
+  return total_best_score, best_road, number_best_step, full_step, [(best_road, total_best_score, number_best_step)]
 
 def Calculate(point_add, old_info, dict_path, dict_prev, list_point):
   old_all_cell = old_info[3]

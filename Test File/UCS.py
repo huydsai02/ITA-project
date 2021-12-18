@@ -15,7 +15,7 @@ def Optimal_solution(maze, dict_path):
   step_expand = []
   while True:
     old_len = len(info_optimal_result[0])
-    step_expand.append(info_optimal_result[0])
+    step_expand.append(info_optimal_result[:3])
     info_optimal_result = ExpandNode(list_point, dict_path, info_optimal_result, all_info_alleys, dict_score_div_step)
     if len(info_optimal_result[0]) == old_len:
       break
