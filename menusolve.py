@@ -79,4 +79,4 @@ class MenuSolve(Menu):
     self.ShowInfo(f'TOTAL POINT: {self.bot.point}', size=20, pos = (775, 100))
     self.ShowInfo(f'TOTAL STEP: {self.bot.step}', size=20, pos = (775, 125))
     string = f'FINAL POINT: {round(self.bot.point/self.bot.step,2)}' if self.bot.step != 0 else 'FINAL POINT: 0'
-    self.ShowInfo(string, size=20, pos = (775, 150)) 
+    self.ShowInfo(string, size=20, pos = (775, 75)) 
