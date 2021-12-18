@@ -24,16 +24,9 @@ class MenuDiscover(Menu):
   def ShowAndAct(self, x, y):
     if self.state:
       pygame.draw.rect(self.screen, BACKGROUND_COLOR, (700,0,400,1100))
-<<<<<<< HEAD
-      self.ShowInfo(f'TIME: {self.time}', pos = (775,225), size=20)
-      self.ShowInfo('DISCOVER', size = 15, pos = (815, 400))
-      pygame.draw.rect(self.screen, COLOR_SHOW_INFO, (770, 247, 181, 150), 2, 5)
-=======
       self.ShowInfo(f'TIME: {self.time}', pos = (775,175), size=20)
-      # self.ShowInfo("DISCOVER MAZE ?", pos = (775,200), size=20)
       self.ShowInfo('DISCOVER', size = 15, pos = (815, 350))
       pygame.draw.rect(self.screen, COLOR_SHOW_INFO, (770, 197, 181, 150), 2, 5)
->>>>>>> 81a398233337010e62c4277eec4d2b821f2df4cb
       self.btn_dfs.ShowAndAct(x,y, self.bot)
       self.btn_a.ShowAndAct(x,y,self.bot)
       self.btn_bfs.ShowAndAct(x,y,self.bot)

@@ -7,9 +7,7 @@ class Bot(object):
 		self.InitialBot()		
 		self.view = view
 		self.screen = screen
-		self.size_screen = size_screen	
-		self.dict_path = None	
-			
+		self.size_screen = size_screen			
 	def InitialBot(self):
 		maze = self.maze
 		self.oc = self.nc = maze.get_start_point()
@@ -57,14 +55,14 @@ class Bot(object):
 		for (x, y) in l:
 			pygame.draw.circle(self.screen, color, (x*side + side/2, y*side + side/2), radius-2*decrease)
 
-	def write_score(self, color = COLOR_SCORE):
+	def write_score(self):
 		side = self.side
 		font = pygame.font.Font('freesansbold.ttf', side // 2)
 		decrease = self.decrease
 		l = self.maze.TakeCoordinatePoint()
 		lp = self.list_point
 		for i, j in l:
-			text = font.render(str(lp[i][j]), True, color)
+			text = font.render(str(lp[i][j]), True, COLOR_SCORE)
 			text_size = text.get_size()
 			x = (side - text_size[0]) // 2
 			y = (side - text_size[1]) // 2

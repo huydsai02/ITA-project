@@ -1,6 +1,5 @@
 from Button import *
 from Color import *
-import Logic
 pygame.init()
 
 class ButtonShowSolution(Button):
@@ -16,6 +15,8 @@ class ButtonShowSolution(Button):
       self.bot = bot
       bot.InitialBot()
       self.state = True
+      # show_map.state = False
+      # show_map.other_state = False
       self.decrease = bot.decrease
       self.side = bot.side
       bot.draw()

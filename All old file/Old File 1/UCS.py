@@ -1,27 +1,35 @@
 from GeneralFunction import *
 
-def Optimal_solution(maze, dict_path):
-  main_path = dict_path[maze.get_end_point()]
-  alley = TakeExtraPath(dict_path, main_path)
+def MazeAnalysis(maze, alg):
+  size = maze.get_size()
+  end_point = maze.get_end_point()
   list_point = maze.get_list_point()
+  list_consider = [(i, j) for i in range(size[0]) for j in range(size[1]) if list_point[i][j] != 0 or (i,j) == end_point]
+  dict_path, path_bot_go = DiscoverMaze(maze, list_consider, alg)
+  main_path = dict_path[end_point]
+  alley = TakeExtraPath(dict_path, main_path)
   dict_score_div_step = PointScoreDivStep(alley, list_point)
+  return dict_path, path_bot_go, alley, dict_score_div_step
 
+def Optimal_solution(maze, alg):
+  dict_path, path_bot_go, alley, dict_score_div_step = MazeAnalysis(maze, alg)
+  main_path = dict_path[maze.get_end_point()]
+  list_point = maze.get_list_point()
+  
   current_best_road = main_path[:]
   sum_point = sum([list_point[x][y] for x, y in main_path])
   step = len(main_path) - 1
   highest_result = sum_point / step
   all_info_alleys = TakeHighestEachAlley(list_point, alley, dict_score_div_step, highest_result)
   info_optimal_result = (current_best_road, sum_point, step, highest_result)
-  step_expand = []
   while True:
     old_len = len(info_optimal_result[0])
-    step_expand.append(info_optimal_result[:3])
     info_optimal_result = ExpandNode(list_point, dict_path, info_optimal_result, all_info_alleys, dict_score_div_step)
     if len(info_optimal_result[0]) == old_len:
       break
   current_best_road, sum_point, step, highest_result = info_optimal_result
   full_step = PathAllPoint(maze, main_path, current_best_road)
-  return sum_point, current_best_road, step, full_step, step_expand
+  return sum_point, current_best_road, step, full_step, path_bot_go
 
 def ExpandNode(list_point, dict_path, info_optimal_result, all_info_alleys, dict_score_div_step):
   if len(all_info_alleys) == 0:

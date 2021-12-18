@@ -10,10 +10,9 @@ def MazeAnalysis(maze, alg):
   dict_extra_path = TakeExtraPath(dict_path, main_path)
   return main_path, dict_extra_path, path_bot_go
   
-def Optimal_solution(maze, dict_path):
+def Optimal_solution(maze, alg):
   list_point = maze.get_list_point()
-  main_path = dict_path[maze.get_end_point()]
-  dict_extra_path = TakeExtraPath(dict_path, main_path)
+  main_path, dict_extra_path, path_bot_go = MazeAnalysis(maze, alg)
   relation_each_point, _ = Find_Subset(dict_extra_path, enumerate=True)
   l_key, l_value = [], []
   all = list(dict_extra_path.keys())
@@ -47,7 +46,7 @@ def Optimal_solution(maze, dict_path):
   best_road = list(best[3])
   number_best_step = best[2]
   full_step = PathAllPoint(maze, main_path, best_road)
-  return total_best_score, best_road, number_best_step, full_step, [(best_road, total_best_score, number_best_step)]
+  return total_best_score, best_road, number_best_step, full_step, path_bot_go
 
 def Calculate(point_add, old_info, dict_path, dict_prev, list_point):
   old_all_cell = old_info[3]
