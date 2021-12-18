@@ -156,14 +156,14 @@ def Find_Subset(dict_extra_path, enumerate = False):
     descendant_points = list(set(descendant_points))
     ascendant_points = list(set(ascendant_points))
     res[point] = [descendant_points[:],ascendant_points[:]]
+  if enumerate:
+    return res
   same_extra = []
   for point in start_extra:
     temp = {}
     for other_point in start_extra[point]:
       temp[other_point] = res[other_point]
     same_extra.append(temp)
-  if enumerate:
-    return res, same_extra
   return same_extra    
 
 def PathAllPoint(maze, main_path, total_path):

@@ -14,7 +14,7 @@ def Optimal_solution(maze, dict_path):
   list_point = maze.get_list_point()
   main_path = dict_path[maze.get_end_point()]
   dict_extra_path = TakeExtraPath(dict_path, main_path)
-  relation_each_point, _ = Find_Subset(dict_extra_path, enumerate=True)
+  relation_each_point = Find_Subset(dict_extra_path, enumerate=True)
   l_key, l_value = [], []
   all = list(dict_extra_path.keys())
   l_intersect, d_prev = {}, {}
