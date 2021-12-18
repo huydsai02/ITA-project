@@ -2,8 +2,6 @@ from os import curdir
 from Button import *
 from Color import *
 import time
-########################## m muốn so sánh code của m với file nào thì sửa ở cái chữ import dưới. muốn so sánh 
-# file logic với file A thì để là import A as t, muốn với file B thì để là import B as t
 import UCS
 import Logic
 pygame.init()
@@ -42,14 +40,6 @@ class ButtonSolve(Button):
       self.remember = bot.PathHasGone
       bot.PathHasGone = []
       bot.point = bot.step = 0
-      # print('SAME PATH:', set(solution.path) == set(self.optimal_path))
-      # print("SAME STEP", solution.length == self.len_of_best)
-      # print("SAME SCORE", solution.point == self.score)
-      # solution.path = self.optimal_path
-      # solution.point = self.score
-      # solution.length = self.len_of_best
-      # best_path.op_road = self.op_road
-      # best_path.optimal_path = self.optimal_path
 
   def ShowBotGo(self, l, i, bot):		
     number = int(i)
@@ -65,22 +55,11 @@ class ButtonSolve(Button):
       self.DrawCircle(self.DrawRed, (179, 210, 229), bot)
       self.DrawCircle(self.set_add, (255, 195, 0), bot)
       return True
-      res = [] 
-      if dims != [] and dims[0] != ():    
-        for a,b in dims:
-          j = point[0] + a
-          k = point[1] + b
-          res.append((j,k))
-        self.DrawCircle(res, COLOR_DIMENSION)
-      return point
 
   def active(self, bot):
     if self.state:
       self.initial += self.speed
       res = self.ShowBotGo(self.step_expand, self.initial, bot)
-      # if res != None:
-      #   bot.nc = res
-      # else:
       if res == None:
         time.sleep(0.5)
         self.DrawCircle(self.DrawRed, (179, 210, 229), bot)
@@ -89,7 +68,6 @@ class ButtonSolve(Button):
           _.other_state = True
         self.state = False
         bot.PathHasGone = self.remember
-        # bot.write_score()
 
   def ShowAndAct(self, x, y, bot):
     self.show(x,y)

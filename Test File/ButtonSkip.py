@@ -11,7 +11,7 @@ class ButtonSkip(Button):
       list_point = self.maze.get_list_point()
       list_consider = [(i, j) for i in range(size[0]) for j in range(size[1]) if list_point[i][j] != 0 or (i,j) == end_point]
       bot.dict_path, _ = GeneralFunction.DiscoverMaze(self.maze, list_consider, "dfs")
-    # self.show_solution = False
+
   def click(self,x, y, menu, show_map, bot):
     super().click(x,y)
     a, b = self.full_coor
