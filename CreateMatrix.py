@@ -7,8 +7,6 @@ class Maze(object):
     self.matrix = self.CreateMaze() if matrix == None else matrix
     self.start_point = start
     self.end_point = end
-    self.matrix[start[0]][start[1]] = 2
-    self.matrix[end[0]][end[1]] = 3
     self.Create_list_point(num = num_point)
 
   def CreateMaze(self):
