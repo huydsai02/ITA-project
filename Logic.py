@@ -21,9 +21,6 @@ def Optimal_solution(maze, dict_path):
   sum_point_main = sum(list_point[x][y] for x, y in main_path)
   step_main = len(main_path) - 1
   best = (sum_point_main/step_main, sum_point_main, step_main, set(main_path))
-  ################################## Memory ###########################
-  max_space = 0
-  #####################################################################
 
   for i in range(len(all)):
     point = all[i]
@@ -37,11 +34,6 @@ def Optimal_solution(maze, dict_path):
   while True:
     if len(l_key) == 0:
       break
-    ################################## Memory ###########################
-    space = sum([len(_) for _ in l_value] + [len(_[3]) for _ in l_key])
-    #####################################################################
-    if space > max_space:
-      max_space = space
     old_info = l_key.pop()
     points = l_value.pop()
     if old_info[0] > best[0]:
@@ -51,9 +43,7 @@ def Optimal_solution(maze, dict_path):
       new_points = set.intersection(points, l_intersect[point])
       l_key.append(new_info)
       l_value.append(new_points)
-  ################################## Memory ###########################
-  print(max_space)
-  #####################################################################
+      
   total_best_score = best[1]
   best_road = list(best[3])
   number_best_step = best[2]
