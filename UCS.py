@@ -95,6 +95,10 @@ def HighestInOneAlley(inp, dict_extra_path, list_point, dict_score_div_step):
   all = sorted(list(inp), key = lambda x : dict_score_div_step[x])
   best = (0,0,set(), tuple())
   l_intersect, d_path, d_prev = {}, {}, {}
+  ################################## Memory ###########################
+  max_space = 0
+  #####################################################################
+
   for i in range(len(all)):
     point = all[i]
     d_path[point] = set(dict_extra_path[point])
@@ -110,6 +114,11 @@ def HighestInOneAlley(inp, dict_extra_path, list_point, dict_score_div_step):
   while True:
     if len(l_key) == 0:
       break
+    ################################## Memory ###########################
+    space = sum([len(_) for _ in l_value] + [len(_[2]) for _ in l_key])
+    if space > max_space:
+      max_space = space
+    #####################################################################
     old_info = l_key.pop()
     points = l_value.pop()
     if best[0] > dict_score_div_step[old_info[3]]:
@@ -122,6 +131,9 @@ def HighestInOneAlley(inp, dict_extra_path, list_point, dict_score_div_step):
         l_value.append(new_points)
       if new_info[0] > best[0]:
         best = new_info
+  ################################## Memory ###########################
+  print(max_space)
+  #####################################################################
   formula, score, all_cell, _ = best
   step = 2*len(all_cell)
   point_left_in_alley = list(set(all) - all_cell)
