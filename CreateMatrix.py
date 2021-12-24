@@ -126,11 +126,11 @@ class Maze(object):
 
 if __name__ == "__main__":
   import numpy as np
-  import Logic
+  import BruteForce
   _size = (15,15); _num_point = 15; _start = (1,1); _end = (13,13)
   while True:
     maze = Maze(size = _size, num_point = _num_point, start = _start, end = _end)
-    a, b = Logic.FindPath(maze, points=[_end])
+    a, b = BruteForce.FindPath(maze, points=[_end])
     if _end not in a:
       arr = np.array(maze.get_list_maze())
       print(arr)

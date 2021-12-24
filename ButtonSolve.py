@@ -2,12 +2,12 @@ from os import curdir
 from Button import *
 from Color import *
 import time
-import UCS
-import Logic
+import Greedy
+import BruteForce
 pygame.init()
 
 class ButtonSolve(Button):
-  def __init__(self,maze, alg = 'ucs', pos = (0,0), font = 20, size = (170,45), screen = None, SPEED = 0.07, list_button = None):
+  def __init__(self,maze, alg = 'greedy', pos = (0,0), font = 20, size = (170,45), screen = None, SPEED = 0.07, list_button = None):
     super().__init__(alg ,  pos, font, size, screen)
     self.maze = maze
     self.alg = alg.lower()
@@ -31,10 +31,10 @@ class ButtonSolve(Button):
       self.initial = 0
       bot.InitialBot()
       t1 = time.time()
-      if self.alg == "ucs":
-        bot.point, _, bot.step, menu.full_step, self.step_expand = UCS.Optimal_solution(maze, bot.dict_path)
-      elif self.alg == "enumerate":
-        bot.point, _, bot.step, menu.full_step, self.step_expand = Logic.Optimal_solution(maze, bot.dict_path)
+      if self.alg == "greedy":
+        bot.point, _, bot.step, menu.full_step, self.step_expand = Greedy.Optimal_solution(maze, bot.dict_path)
+      elif self.alg == "brute force":
+        bot.point, _, bot.step, menu.full_step, self.step_expand = BruteForce.Optimal_solution(maze, bot.dict_path)
 
       menu.time = round(time.time() - t1,3)
       self.remember = bot.PathHasGone

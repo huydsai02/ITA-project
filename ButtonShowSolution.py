@@ -1,6 +1,5 @@
 from Button import *
 from Color import *
-import Logic
 pygame.init()
 
 class ButtonShowSolution(Button):
