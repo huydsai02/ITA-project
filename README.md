@@ -28,11 +28,11 @@ Run the file **GUI.py**
 
 ## CREDIT
 * Members
-  + Nguyễn Thế An
-  + Nguyễn Văn Huy
-  + Nguyễn Ngọc Khánh
-  + Bùi Hồng Nhật
-  + Trần Tuấn Phong
+  * Nguyễn Thế An
+  * Nguyễn Văn Huy
+  * Nguyễn Ngọc Khánh
+  * Bùi Hồng Nhật
+  * Trần Tuấn Phong
 * References
 
   + Professor Muriel Visani's slides
