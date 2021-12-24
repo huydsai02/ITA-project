@@ -19,7 +19,13 @@
 Open your termial, go to the address you want to install by the command `cd` + your directory to the address and clone our repository by the command `git clone https://github.com/huydsai02/ITA-project.git` 
 
 ## HOW TO USE
-Run the file **GUI.py** 
+Run the file **GUI.py**
+
+## ABOUT FUNCTIONS
+* ###**GeneralFunction.py**
+  + `FindValidDirection(pos, list_maze, direction = None)` recieves `pos` as position of a cell, `list_maze` as matrix form of the maze and return a list valid directions except the inverse of some directions in the argument `direction` which is a list.
+  + `Manhattan(x1, x2)` recieves `x1`, `x2` as two positions of two cells and return the Manhattan distance between the two cells.
+  + 
 
 ## CREDIT
 * Members
