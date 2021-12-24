@@ -22,7 +22,10 @@ Open your termial, go to the address you want to install by the command `cd` + y
 Run the file **GUI.py**
 
 ## ABOUT FUNCTIONS
+\begingroup
+\fontfamily{phv}\fontsize{16}{18}\selectfont
 * **GeneralFunction.py** 
+\endgroup
   * `FindValidDirection(pos, list_maze, direction = None)` recieves `pos` as position of a cell, `list_maze` as matrix form of the maze and return a list valid directions except the inverse of some directions in the argument `direction` which is a list.
   * `Manhattan(x1, x2)` recieves `x1`, `x2` as two positions of two cells and return the Manhattan distance between the two cells. 
 
