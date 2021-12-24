@@ -25,7 +25,7 @@ Run the file **GUI.py**
 * **GeneralFunction.py** 
   * `FindValidDirection(pos, list_maze, direction = None)` recieves `pos` as position of a cell, `list_maze` as matrix form of the maze and return a list valid directions except the inverse of some directions in the argument `direction` which is a list.
   * `Manhattan(x1, x2)` recieves `x1`, `x2` as two positions of two cells and return the Manhattan distance between the two cells. 
-  * `PriorPop(paths, points= [])` recieves `paths` as a list of paths in term of cells' possition, `points` as a list of some cells' possiton, consider `Manhattan(path[-1], point)` for each path in `paths` and each point in `points`, return the path that has the minimal `Manhattan(path[-1], point)` and remove it from `paths`.
+  * `PriorPop(paths, points= [])` recieves `paths` as a list of paths in term of possition of its cells, `points` as a list of some cells' possiton, consider `Manhattan(path[-1], point)` for each path in `paths` and each point in `points`, return the path that has the minimal `Manhattan(path[-1], point)` and remove it from `paths`.
 
 ## CREDIT
 * Members
@@ -35,8 +35,7 @@ Run the file **GUI.py**
   * Bùi Hồng Nhật
   * Trần Tuấn Phong
 * References
-
-  + Professor Muriel Visani's slides
+  * Professor Muriel Visani's slides
 
 
 
