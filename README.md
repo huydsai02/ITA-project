@@ -33,9 +33,18 @@ Run the file **GUI.py**
   * `PathAllPoint(maze, main_path, total_path)`
 
 * **BruteForce.py**
-  * 
+  * `MazeAnalysis(maze, alg)`
+  * `Calculate(point_add, old_info, dict_path, dict_prev, list_point)`
+  * `Optimal_solution(maze, dict_path)`
 
 * **Greedy.py**
+  * `Calculate(point_add, old_info, dict_path, dict_prev, list_point)`
+  * `PointScoreDivStep(dict_extra_path, list_point)`
+  * `HighestInOneAlley(inp, dict_extra_path, list_point, dict_score_div_step)`
+  * `TakeHighestEachAlley(list_point, dict_extra_path, dict_score_div_step, highest_result)`
+  * `HighestInAllAlley(list_info_alleys, highest_result)`
+  * `ExpandNode(list_point, dict_path, info_optimal_result, all_info_alleys, dict_score_div_step)`
+  * `Optimal_solution(maze, dict_path)`
 
 ## CREDIT
 * Members
