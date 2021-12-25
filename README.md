@@ -10,7 +10,7 @@
 ## DEMO IMAGES
 ![Maze Sample](https://github.com/huydsai02/ITA-project/blob/main/img/Screen%20Shot%202021-12-19%20at%2015.52.12.png)
 ![Maze Sample](https://github.com/huydsai02/ITA-project/blob/main/img/Screen%20Shot%202021-12-19%20at%2015.52.28.png)
-![Solution Sample](https://github.com/huydsai02/ITA-project/blob/main/img/Screen%20Shot%202021-12-19%20at%2015.53.10.png)
+![Solution Sample](https://drive.google.com/file/d/1yJ-ICpVoVS7w1RIgebaoWul7kw9w4zes/view)
 
 ## DEMO VIDEO
 [Video Sample (Click to download)](https://github.com/huydsai02/ITA-project/raw/main/img/Screen%20Recording%202021-12-19%20at%2016.02.07.mp4)
