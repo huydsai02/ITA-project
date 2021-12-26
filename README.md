@@ -8,12 +8,12 @@
   + In the future, some better heuristic searching might be added.  
 
 ## DEMO IMAGES
-![Maze Sample](https://github.com/huydsai02/ITA-project/blob/main/img/Screen%20Shot%202021-12-19%20at%2015.52.12.png)
-![Maze Sample](https://github.com/huydsai02/ITA-project/blob/main/img/Screen%20Shot%202021-12-19%20at%2015.52.28.png)
-![Solution Sample](https://github.com/huydsai02/ITA-project/blob/main/img/Screen%20Shot%202021-12-19%20at%2015.53.10.png)
+![Sample Maze](https://github.com/huydsai02/ITA-project/blob/main/img/Screen%20Shot%202021-12-19%20at%2015.52.12.png)
+![Sample Maze](https://github.com/huydsai02/ITA-project/blob/main/img/Screen%20Shot%202021-12-19%20at%2015.52.28.png)
+![Sample Solution](https://github.com/huydsai02/ITA-project/blob/main/img/Screen%20Shot%202021-12-19%20at%2015.53.10.png)
 
 ## DEMO VIDEO
-[Video Sample (Click to download)](https://github.com/huydsai02/ITA-project/raw/main/img/Screen%20Recording%202021-12-19%20at%2016.02.07.mp4)
+[Sample Video](https://github.com/huydsai02/ITA-project/raw/main/img/Screen%20Recording%202021-12-19%20at%2016.02.07.mp4)
 
 ## HOW TO INSTALL AND RUN
 Open your termial, go to the address you want to install by the command `cd` + your directory to the address and clone our repository by the command `git clone https://github.com/huydsai02/ITA-project.git` 
