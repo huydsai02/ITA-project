@@ -1,22 +1,8 @@
 # CAR IN MAZE
-* A car need to travel from the start position to the end position in a maze. While travelling, it can collect some points that are already in the maze. Finally, the car need to finish the route with the highest performance score.
-* Description:
+* A car need to travel from the start position to the end position in a maze. While travelling, it can collect some points that are already in the maze. Finally, the car need to finish the route with the highest performance score (total scores earned/total steps needed).
 
-  + Application: Our project can be a base to create some maze solver games; give a optimal route for shippers; ...
-  + In this project, our team have used some searching algorithms like DFS, BFS, A*, unifrom cost search, enumarate, ...
-  + Main challenging: We have spent a large time to solve the problem that is optimizing the performance score based on the formula: Total point collected / Total number of steps to travel the route.
-  + In the future, some better heuristic searching might be added.  
-
-## DEMO IMAGES
-![Sample Maze](https://github.com/huydsai02/ITA-project/blob/main/img/Screen%20Shot%202021-12-19%20at%2015.52.12.png)
-![Sample Maze](https://github.com/huydsai02/ITA-project/blob/main/img/Screen%20Shot%202021-12-19%20at%2015.52.28.png)
-![Sample Solution](https://github.com/huydsai02/ITA-project/blob/main/img/Screen%20Shot%202021-12-19%20at%2015.53.10.png)
-
-## DEMO VIDEO
-[Sample Video](https://github.com/huydsai02/ITA-project/raw/main/img/Screen%20Recording%202021-12-19%20at%2016.02.07.mp4)
-
-## HOW TO INSTALL AND RUN
-Open your termial, go to the address you want to install by the command `cd` + your directory to the address and clone our repository by the command `git clone https://github.com/huydsai02/ITA-project.git` 
+## DEMO SCREENSHOT
+In the submission.  
 
 ## HOW TO USE
 Run the file **GUI.py**
